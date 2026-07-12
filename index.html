@@ -32,7 +32,19 @@ header{border-bottom:1px solid var(--border);background:linear-gradient(180deg,#
 .field label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
 input,select{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 12px;font-family:var(--font);font-size:14px;outline:none}
 input:focus,select:focus{border-color:var(--gold)}
-input.sym{font-family:var(--mono);text-transform:uppercase;width:150px;font-weight:600;letter-spacing:1px;direction:ltr}
+input.sym{width:290px;font-weight:600}
+.combo{position:relative}
+.sug{position:absolute;top:calc(100% + 6px);right:0;width:380px;max-width:88vw;max-height:340px;overflow-y:auto;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.sug-item{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;border-bottom:1px solid rgba(31,43,69,.5);font-size:13px}
+.sug-item:last-child{border-bottom:none}
+.sug-item:hover,.sug-item.active{background:rgba(216,169,61,.10)}
+.sug-code{font-family:var(--mono);font-weight:600;color:var(--gold);min-width:52px;direction:ltr;text-align:left}
+.sug-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sug-sec{font-size:11px;color:var(--faint);white-space:nowrap;max-width:110px;overflow:hidden;text-overflow:ellipsis}
+.sug-badge{font-size:10.5px;padding:1px 8px;border-radius:5px;white-space:nowrap}
+.b-tasi{background:rgba(46,189,133,.13);color:var(--green)}
+.b-nomu{background:rgba(155,123,232,.14);color:var(--purple)}
+.b-us{background:rgba(91,141,239,.14);color:var(--blue)}
 button{cursor:pointer;border:none;border-radius:8px;font-family:var(--font);font-size:14px;font-weight:600;transition:background .15s,color .15s,border-color .15s}
 .btn-run{background:var(--gold);color:#1a1408;padding:10px 28px}
 .btn-run:hover{background:#e9bc52}
@@ -177,9 +189,10 @@ details.assume[open] summary::before{content:"▾ "}
       <p>تثليث مؤسسي: نماذج جوهرية + نسبية + سيناريوهات + طبقة فنية | معايير Damodaran يناير 2026</p>
     </div>
     <div class="run-panel">
-      <div class="field">
-        <label>رمز السهم (تداول بلاحقة SR. أو أمريكي)</label>
-        <input id="sym" class="sym" placeholder="2222.SR" value="2222.SR" dir="ltr">
+      <div class="field combo">
+        <label>ابحث باسم الشركة أو رمزها — تداول، نمو، وأشهر 200 أمريكية</label>
+        <input id="sym" class="sym" placeholder="مثال: أرامكو أو 2222 أو Apple" autocomplete="off">
+        <div class="sug hidden" id="sug"></div>
       </div>
       <button class="btn-run" id="btnRun" onclick="run()">حلّل السهم</button>
       <button class="btn-ghost" onclick="runDemo()">مثال توضيحي</button>
@@ -312,6 +325,7 @@ details.assume[open] summary::before{content:"▾ "}
   </div>
 </div>
 
+<script src="companies.js"></script>
 <script>
 "use strict";
 /* =====================================================================
@@ -771,7 +785,7 @@ async function fetchInputs(sym){
   dlog("التصنيف",`القطاع: ${prof.sector||"غير معروف"} → نوع الشركة: ${ARCH_LABEL[arch]} · الحجم: ${size}`,"ok");
 
   return {
-    ticker:sym, name:p.longName||meta.longName||sym, market, size, archetype:arch,
+    ticker:sym, name:p.longName||meta.longName||(DIR.find(d=>d.sym===sym)||{}).name||sym, market, size, archetype:arch,
     sector:prof.sector||"", industry:prof.industry||"",
     currency:p.currency||meta.currency||m.cur,
     chgPct:p.regularMarketChangePercent!=null?p.regularMarketChangePercent*100:null,
@@ -800,7 +814,68 @@ const fmt=(x,d=2)=>x==null||!isFinite(x)?"—":(+x).toLocaleString("en-US",{mini
 const fmtPct=(x,d=1)=>x==null?"—":((x>=0?"+":"")+(x*100).toFixed(d)+"%");
 const fmtM=x=>x==null?"—":fmt(x/1e6,0);
 
-function pick(s){$("sym").value=s;run();}
+function pick(s){$("sym").value=s;hideSug();run();}
+
+/* --------- القائمة المنسدلة: بحث بالاسم أو الرمز --------- */
+const DIR=[];
+(typeof SA_COMPANIES!=="undefined"?SA_COMPANIES:[]).forEach(c=>DIR.push({
+  sym:c.s+".SR", code:c.s, name:c.n, en:c.e||"", sec:c.sec||"", badge:c.m, cls:c.m==="نمو"?"b-nomu":"b-tasi"}));
+(typeof US_COMPANIES!=="undefined"?US_COMPANIES:[]).forEach(c=>DIR.push({
+  sym:c.s, code:c.s, name:c.n||c.e, en:c.e, sec:"", badge:"أمريكا", cls:"b-us"}));
+const POPULAR=["2222.SR","1120.SR","1180.SR","2010.SR","7010.SR","2280.SR","AAPL","MSFT","NVDA","GOOGL","AMZN","TSLA"];
+const norm=s=>(s||"").toString().toLowerCase()
+  .replace(/[أإآٱ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي").replace(/[ؤئ]/g,"ء")
+  .replace(/[ً-ْـ]/g,"").replace(/[.\-\s]/g,"");
+function searchDir(q){
+  const nq=norm(q);
+  if(!nq)return POPULAR.map(s=>DIR.find(d=>d.sym===s)).filter(Boolean);
+  const scored=[];
+  for(const d of DIR){
+    const code=d.code.toLowerCase(), name=norm(d.name), en=norm(d.en);
+    let sc=0;
+    if(code===nq||norm(d.sym)===nq)sc=120;
+    else if(code.startsWith(nq))sc=100;
+    else if(name.startsWith(nq))sc=80;
+    else if(name.includes(nq))sc=60;
+    else if(en.startsWith(nq))sc=50;
+    else if(en.includes(nq))sc=40;
+    if(sc)scored.push([sc,d]);
+  }
+  return scored.sort((a,b)=>b[0]-a[0]).slice(0,14).map(x=>x[1]);
+}
+let sugItems=[],sugIdx=-1;
+function showSug(){
+  const list=searchDir($("sym").value.trim());
+  sugItems=list;sugIdx=-1;
+  const el=$("sug");
+  if(!list.length){el.classList.add("hidden");return;}
+  el.innerHTML=list.map((d,i)=>`<div class="sug-item" data-i="${i}">
+    <span class="sug-code">${d.code}</span><span class="sug-name">${d.name}${d.en&&d.name!==d.en?` <span style="color:var(--faint);font-size:11px">${d.en}</span>`:""}</span>
+    ${d.sec?`<span class="sug-sec">${d.sec}</span>`:""}<span class="sug-badge ${d.cls}">${d.badge}</span></div>`).join("");
+  el.classList.remove("hidden");
+  el.querySelectorAll(".sug-item").forEach(it=>{
+    it.addEventListener("pointerdown",e=>{e.preventDefault();chooseSug(+it.dataset.i);});
+  });
+}
+function hideSug(){$("sug").classList.add("hidden");sugIdx=-1;}
+function chooseSug(i){
+  const d=sugItems[i];if(!d)return;
+  $("sym").value=d.sym;hideSug();run();
+}
+function markActive(){
+  document.querySelectorAll(".sug-item").forEach((it,i)=>it.classList.toggle("active",i===sugIdx));
+  const act=document.querySelector(".sug-item.active");
+  if(act)act.scrollIntoView({block:"nearest"});
+}
+function resolveSymbol(raw){
+  const v=raw.trim();
+  if(/^\d{4}$/.test(v))return v+".SR";
+  if(/^\d{4}\.SR$/i.test(v))return v.toUpperCase();
+  if(/^[A-Za-z][A-Za-z0-9.\-]{0,9}$/.test(v)&&DIR.some(d=>d.sym.toUpperCase()===v.toUpperCase()))return v.toUpperCase();
+  const hits=searchDir(v);
+  if(hits.length)return hits[0].sym;
+  return /^[A-Za-z0-9.\-^=]{1,12}$/.test(v)?v.toUpperCase():null;
+}
 function setStage(n,state){
   document.querySelectorAll(".pstep").forEach(el=>{
     const s=+el.dataset.s;
@@ -811,8 +886,10 @@ function setStage(n,state){
 function status(msg,err){const el=$("status");el.textContent=msg;el.classList.toggle("err",!!err);el.classList.remove("hidden");}
 
 async function run(){
-  const sym=$("sym").value.trim().toUpperCase();
-  if(!sym)return;
+  hideSug();
+  const sym=resolveSymbol($("sym").value);
+  if(!sym){status("لم أتعرف على الشركة — اكتب اسمها أو رمزها واختر من القائمة.",true);return;}
+  $("sym").value=sym;
   $("btnRun").disabled=true;
   $("results").classList.add("hidden");
   try{
@@ -1201,7 +1278,20 @@ function exportJson(){
   a.download="fair_value_"+(c.ticker||"stock").replace(/[^\w.]/g,"_")+".json";
   a.click();
 }
-$("sym").addEventListener("keydown",e=>{if(e.key==="Enter")run();});
+$("sym").addEventListener("input",showSug);
+$("sym").addEventListener("focus",showSug);
+$("sym").addEventListener("blur",()=>setTimeout(hideSug,150));
+$("sym").addEventListener("keydown",e=>{
+  const open=!$("sug").classList.contains("hidden");
+  if(e.key==="ArrowDown"&&open){e.preventDefault();sugIdx=Math.min(sugIdx+1,sugItems.length-1);markActive();}
+  else if(e.key==="ArrowUp"&&open){e.preventDefault();sugIdx=Math.max(sugIdx-1,0);markActive();}
+  else if(e.key==="Escape")hideSug();
+  else if(e.key==="Enter"){
+    e.preventDefault();
+    if(open&&sugIdx>=0)chooseSug(sugIdx);
+    else run();
+  }
+});
 </script>
 </body>
 </html>
