@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محرك القيمة العادلة | Fair Value Engine</title>
+<meta name="description" content="نظام تقييم متعدد النماذج: DCF، الدخل المتبقي، المضاعفات، سيناريوهات، طبقة فنية وتنبؤ بثلاثة آفاق — للسوق السعودي والأمريكي">
+<style>
+:root{
+  --bg:#0B1220; --surface:#121B2E; --surface2:#0E1626; --border:#1F2B45; --border2:#2A3A5E;
+  --text:#E8EDF7; --muted:#8FA0BF; --faint:#5A6A8A;
+  --gold:#D8A93D; --gold-mark:#B98328; --gold-dim:#8a6d2a;
+  --green:#2EBD85; --green-mark:#27A876; --red:#F0616D; --red-mark:#E14953;
+  --blue:#5B8DEF; --purple:#9B7BE8;
+  --font:"Segoe UI",Tahoma,system-ui,sans-serif; --mono:"Cascadia Mono","Consolas",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:15px;line-height:1.65}
+.container{max-width:1180px;margin:0 auto;padding:0 20px 70px}
+.num{font-family:var(--mono);direction:ltr;unicode-bidi:isolate}
+.hidden{display:none!important}
+a{color:var(--blue)}
+
+/* Header */
+header{border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0E1830 0%,var(--bg) 100%);padding:24px 0 20px;margin-bottom:20px}
+.header-inner{max-width:1180px;margin:0 auto;padding:0 20px;display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end;justify-content:space-between}
+.brand h1{font-size:25px;font-weight:700}
+.brand h1 b{color:var(--gold)}
+.brand p{color:var(--muted);font-size:12.5px;margin-top:4px}
+.run-panel{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
+input,select{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 12px;font-family:var(--font);font-size:14px;outline:none}
+input:focus,select:focus{border-color:var(--gold)}
+input.sym{font-family:var(--mono);text-transform:uppercase;width:150px;font-weight:600;letter-spacing:1px;direction:ltr}
+button{cursor:pointer;border:none;border-radius:8px;font-family:var(--font);font-size:14px;font-weight:600;transition:background .15s,color .15s,border-color .15s}
+.btn-run{background:var(--gold);color:#1a1408;padding:10px 28px}
+.btn-run:hover{background:#e9bc52}
+.btn-run:disabled{background:var(--gold-dim);cursor:wait}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);padding:9px 16px}
+.btn-ghost:hover{color:var(--text);border-color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;max-width:1180px;margin:14px auto 0;padding:0 20px}
+.chip{background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:20px;padding:5px 14px;font-size:12.5px;cursor:pointer}
+.chip:hover{color:var(--gold);border-color:var(--gold-dim)}
+.chip b{font-family:var(--mono);color:var(--text);font-weight:600;margin-left:5px}
+.chip:hover b{color:var(--gold)}
+
+/* Pipeline strip */
+.pipeline{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.pstep{flex:1;min-width:140px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12px;color:var(--faint);display:flex;align-items:center;gap:8px;transition:border-color .3s,color .3s}
+.pstep .pn{font-family:var(--mono);font-size:11px;border:1px solid var(--faint);border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.pstep.active{color:var(--gold);border-color:var(--gold-dim)}
+.pstep.active .pn{border-color:var(--gold);color:var(--gold)}
+.pstep.done{color:var(--green);border-color:rgba(46,189,133,.35)}
+.pstep.done .pn{border-color:var(--green);color:var(--green)}
+
+/* Sections */
+section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:18px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:11px}
+.sec-head h2{font-size:17px;font-weight:700}
+.sec-head h2 .n{color:var(--gold);font-family:var(--mono);font-size:13px;margin-left:7px}
+.sec-head .sub{font-size:12px;color:var(--muted)}
+
+/* Status / errors */
+#status{border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:18px;background:var(--surface2);font-size:13.5px;color:var(--muted)}
+#status.err{border-color:rgba(240,97,109,.5);color:var(--red)}
+.datalog{font-size:12.5px;color:var(--muted);line-height:2}
+.datalog .ok{color:var(--green)}
+.datalog .warn{color:var(--gold)}
+
+/* Stock card */
+.stock-card{display:flex;flex-wrap:wrap;gap:26px;align-items:center}
+.stock-id .name{font-size:20px;font-weight:700}
+.stock-id .meta{color:var(--muted);font-size:12.5px;margin-top:2px}
+.price-big{font-family:var(--mono);font-size:34px;font-weight:600;direction:ltr}
+.price-big small{font-size:14px;color:var(--muted);font-family:var(--font)}
+.chg{font-family:var(--mono);font-size:13.5px;padding:3px 10px;border-radius:6px;direction:ltr;unicode-bidi:isolate}
+.chg.up{color:var(--green);background:rgba(46,189,133,.1)}
+.chg.down{color:var(--red);background:rgba(240,97,109,.1)}
+.mini-stats{display:flex;gap:24px;flex-wrap:wrap;margin-right:auto}
+.ms{text-align:center}
+.ms .v{font-family:var(--mono);font-size:15px;font-weight:600;direction:ltr}
+.ms .k{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* Verdict */
+.verdict-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:14px}
+.vcell{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-align:center}
+.vcell .k{font-size:12px;color:var(--muted)}
+.vcell .v{font-family:var(--mono);font-size:27px;font-weight:600;margin-top:4px;direction:ltr}
+.vcell.gold .v{color:var(--gold)}
+.vcell.green .v{color:var(--green)}
+.vcell.red .v{color:var(--red)}
+.tagline{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.tag{font-size:15px;font-weight:700;padding:8px 20px;border-radius:10px}
+.tag-buy{background:rgba(46,189,133,.15);color:var(--green);border:1px solid rgba(46,189,133,.4)}
+.tag-sell{background:rgba(240,97,109,.15);color:var(--red);border:1px solid rgba(240,97,109,.4)}
+.tag-hold{background:rgba(216,169,61,.12);color:var(--gold);border:1px solid rgba(216,169,61,.4)}
+.warn{background:rgba(216,169,61,.08);border:1px solid rgba(216,169,61,.35);border-radius:8px;padding:8px 13px;margin-top:9px;font-size:13px;color:#e8cd8a}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{color:var(--muted);font-weight:500;font-size:12px;text-align:right;padding:8px 10px;border-bottom:1px solid var(--border)}
+td{padding:8px 10px;border-bottom:1px solid rgba(31,43,69,.55)}
+td.num,th.num{text-align:left}
+tr.group td{color:var(--gold);font-weight:600;font-size:12.5px;background:rgba(216,169,61,.05);border-bottom:1px solid var(--border)}
+tr.total td{background:rgba(216,169,61,.1);font-weight:700;color:var(--gold);border-top:2px solid var(--gold-dim)}
+.w-badge{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* Football field */
+.ff{position:relative;padding-bottom:56px}
+.ffrow{display:flex;align-items:center;margin:8px 0;position:relative;z-index:2}
+.fflabel{width:225px;font-size:12.5px;flex-shrink:0;padding-left:10px}
+.fflabel .w-badge{margin-right:6px}
+.fftrack{position:relative;flex:1;height:24px;background:#0d1526;border-radius:6px;direction:ltr}
+.ffbar{position:absolute;top:5px;height:14px;width:14px;border-radius:4px;background:var(--blue);cursor:pointer}
+.ffbar:hover{outline:2px solid var(--text)}
+.ffv{position:absolute;top:3px;font-size:11px;color:var(--muted);font-family:var(--mono);white-space:nowrap}
+.ffmarks{position:absolute;top:0;bottom:20px;left:0;right:225px;direction:ltr;z-index:1}
+.ffmark{position:absolute;top:0;bottom:0;border-left:2px dashed}
+.ffmark span{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:11px;white-space:nowrap;background:var(--surface2);padding:1px 8px;border-radius:4px;border:1px solid var(--border)}
+.ffmark.mprice{border-color:var(--red-mark);color:var(--red)}
+.ffmark.mfv{border-color:var(--gold-mark);color:var(--gold);bottom:-18px}
+.ffmark.mfv span{bottom:-44px}
+.ffmark.mbuy{border-color:var(--green-mark);color:var(--green)}
+.ffstats{font-size:12.5px;color:var(--muted);margin-top:26px}
+
+/* Grids */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:880px){.grid-2{grid-template-columns:1fr}}
+
+/* Sensitivity */
+.sens{direction:ltr}
+.sens th,.sens td{text-align:center;font-family:var(--mono);font-size:12.5px;padding:7px}
+.sens td.base{outline:2px solid var(--gold);border-radius:3px}
+
+/* Technical + chart */
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:10px}
+.legend i{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-left:6px}
+canvas{width:100%;display:block}
+.chart-wrap{position:relative}
+#tooltip{position:absolute;pointer-events:none;background:#0d1526;border:1px solid var(--border2);border-radius:8px;padding:7px 11px;font-size:12px;font-family:var(--mono);direction:ltr;white-space:nowrap;z-index:10;display:none;color:var(--text)}
+
+/* Forecast cards */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.fcard{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px}
+.fcard .fhead{font-weight:600;font-size:14px}
+.fcard .fh{color:var(--muted);font-size:11.5px;font-weight:400}
+.fcard .ftarget{font-family:var(--mono);font-size:26px;font-weight:600;margin:6px 0 2px;direction:ltr}
+.fcard .frange,.fcard .fdriver{font-size:12px;color:var(--muted);margin-top:3px}
+.dirchip{display:inline-block;font-size:12px;font-weight:700;padding:2px 10px;border-radius:6px;margin-top:6px}
+.dir-up{color:var(--green);background:rgba(46,189,133,.12)}
+.dir-down{color:var(--red);background:rgba(240,97,109,.12)}
+.dir-flat{color:var(--gold);background:rgba(216,169,61,.12)}
+
+/* Assumptions */
+details.assume{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 22px;margin-bottom:18px}
+details.assume summary{cursor:pointer;font-weight:700;font-size:15px;color:var(--gold);list-style:none}
+details.assume summary::before{content:"◂ "}
+details.assume[open] summary::before{content:"▾ "}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:16px}
+.agrid .field input,.agrid .field select{width:100%;font-family:var(--mono);font-size:13px;direction:ltr}
+.agrid .field select{font-family:var(--font);direction:rtl}
+.ahead{grid-column:1/-1;color:var(--muted);font-size:12px;font-weight:600;border-bottom:1px solid var(--border);padding-bottom:4px;margin-top:6px}
+.abtns{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.abtns .note{font-size:12px;color:var(--faint)}
+
+.foot{font-size:12px;color:var(--faint);border-top:1px solid var(--border);padding-top:14px;margin-top:10px;line-height:2}
+.foot b{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <h1>محرك <b>القيمة العادلة</b></h1>
+      <p>تثليث مؤسسي: نماذج جوهرية + نسبية + سيناريوهات + طبقة فنية | معايير Damodaran يناير 2026</p>
+    </div>
+    <div class="run-panel">
+      <div class="field">
+        <label>رمز السهم (تداول بلاحقة SR. أو أمريكي)</label>
+        <input id="sym" class="sym" placeholder="2222.SR" value="2222.SR" dir="ltr">
+      </div>
+      <button class="btn-run" id="btnRun" onclick="run()">حلّل السهم</button>
+      <button class="btn-ghost" onclick="runDemo()">مثال توضيحي</button>
+    </div>
+  </div>
+  <div class="chips">
+    <span class="chip" onclick="pick('2222.SR')">أرامكو <b>2222.SR</b></span>
+    <span class="chip" onclick="pick('1120.SR')">الراجحي <b>1120.SR</b></span>
+    <span class="chip" onclick="pick('2010.SR')">سابك <b>2010.SR</b></span>
+    <span class="chip" onclick="pick('7010.SR')">STC <b>7010.SR</b></span>
+    <span class="chip" onclick="pick('1180.SR')">الأهلي <b>1180.SR</b></span>
+    <span class="chip" onclick="pick('2280.SR')">المراعي <b>2280.SR</b></span>
+    <span class="chip" onclick="pick('AAPL')">Apple <b>AAPL</b></span>
+    <span class="chip" onclick="pick('MSFT')">Microsoft <b>MSFT</b></span>
+    <span class="chip" onclick="pick('NVDA')">NVIDIA <b>NVDA</b></span>
+    <span class="chip" onclick="pick('GOOGL')">Alphabet <b>GOOGL</b></span>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="pipeline" id="pipeline">
+    <div class="pstep" data-s="1"><span class="pn">1</span>البيانات والمعايير</div>
+    <div class="pstep" data-s="2"><span class="pn">2</span>معدل الخصم</div>
+    <div class="pstep" data-s="3"><span class="pn">3</span>النماذج الجوهرية والنسبية</div>
+    <div class="pstep" data-s="4"><span class="pn">4</span>الدمج والمتوسطات</div>
+    <div class="pstep" data-s="5"><span class="pn">5</span>الطبقة الفنية</div>
+    <div class="pstep" data-s="6"><span class="pn">6</span>التنبؤ بثلاثة آفاق</div>
+  </div>
+
+  <div id="status">أدخل رمز السهم واضغط «حلّل السهم». البيانات تُجلب مباشرة من Yahoo Finance عبر خادم وسيط خاص — بلا مفاتيح API. أو جرّب «مثال توضيحي» دون إنترنت.</div>
+
+  <div id="results" class="hidden">
+
+    <section id="sec-card">
+      <div class="stock-card">
+        <div class="stock-id">
+          <div class="name" id="coName">—</div>
+          <div class="meta" id="coMeta">—</div>
+        </div>
+        <div>
+          <div class="price-big"><span id="coPrice">—</span> <small id="coCur"></small></div>
+          <span class="chg" id="coChg"></span>
+        </div>
+        <div class="mini-stats" id="miniStats"></div>
+      </div>
+    </section>
+
+    <section id="sec-verdict">
+      <div class="sec-head"><h2>الخلاصة<span class="n">حزمة القيمة</span></h2><div class="sub" id="verdictSub"></div></div>
+      <div class="verdict-grid">
+        <div class="vcell"><div class="k">السعر الحالي</div><div class="v" id="vPrice">—</div></div>
+        <div class="vcell gold"><div class="k">القيمة العادلة (دمج + سيناريوهات)</div><div class="v" id="vFV">—</div></div>
+        <div class="vcell" id="vGapCell"><div class="k">الفجوة عن القيمة العادلة</div><div class="v" id="vGap">—</div></div>
+        <div class="vcell green"><div class="k">سعر الشراء الأقصى <span id="vMosLbl"></span></div><div class="v" id="vBuy">—</div></div>
+      </div>
+      <div class="tagline"><span class="tag" id="vTag">—</span><span style="font-size:13px;color:var(--muted)" id="vExplain"></span></div>
+      <div id="vWarnings"></div>
+    </section>
+
+    <section id="sec-ff">
+      <div class="sec-head"><h2>نطاق التقييم<span class="n">Football Field</span></h2><div class="sub">كل نموذج نقطة — التقارب ثقة والتباعد تحذير</div></div>
+      <div class="ff" id="ffChart"></div>
+      <div class="ffstats" id="ffStats"></div>
+    </section>
+
+    <section id="sec-models">
+      <div class="sec-head"><h2>النماذج والأوزان<span class="n">المرحلة 3 + 4</span></h2><div class="sub" id="archLbl"></div></div>
+      <table id="modelsTable"></table>
+    </section>
+
+    <div class="grid-2">
+      <section id="sec-rates">
+        <div class="sec-head"><h2>معدلات الخصم<span class="n">المرحلة 2</span></h2><div class="sub">متوسط طريقتين</div></div>
+        <table id="ratesTable"></table>
+      </section>
+      <section id="sec-scen">
+        <div class="sec-head"><h2>السيناريوهات<span class="n">20/60/20</span></h2><div class="sub">مرجحة بالاحتمالات</div></div>
+        <table id="scenTable"></table>
+        <div style="font-size:12.5px;color:var(--muted);margin-top:10px" id="reverseDcf"></div>
+      </section>
+    </div>
+
+    <section id="sec-sens">
+      <div class="sec-head"><h2>حساسية DCF<span class="n">WACC × g</span></h2><div class="sub">أخضر = أعلى من السعر الحالي، أحمر = أدنى</div></div>
+      <div style="overflow-x:auto"><table class="sens" id="sensTable"></table></div>
+    </section>
+
+    <section id="sec-tech">
+      <div class="sec-head"><h2>الطبقة الفنية<span class="n">المرحلة 5 — توقيت لا قيمة</span></h2><div class="sub" id="techSub"></div></div>
+      <div class="legend" id="chartLegend">
+        <span><i style="background:#5B8DEF"></i>السعر</span>
+        <span><i style="background:#B98328"></i>SMA50</span>
+        <span><i style="background:#9B7BE8"></i>SMA200</span>
+        <span><i style="background:repeating-linear-gradient(90deg,#B98328 0 5px,transparent 5px 9px)"></i>القيمة العادلة</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="priceChart" height="300"></canvas>
+        <div id="tooltip"></div>
+      </div>
+      <table id="techTable" style="margin-top:14px"></table>
+    </section>
+
+    <section id="sec-fc">
+      <div class="sec-head"><h2>التنبؤ بثلاثة آفاق<span class="n">المرحلة 6</span></h2><div class="sub">قصير: فني | متوسط: تقارب الفجوة | طويل: لبنات النمو والتوزيعات ورجوع التقييم</div></div>
+      <div class="fgrid" id="fcGrid"></div>
+    </section>
+
+    <details class="assume" id="assumePanel">
+      <summary>الافتراضات والمدخلات — عدّل وأعد الحساب فوراً (دون إعادة جلب)</summary>
+      <div class="agrid" id="agrid"></div>
+      <div class="abtns">
+        <button class="btn-run" onclick="recalc()">أعد الحساب</button>
+        <button class="btn-ghost" onclick="exportJson()">تصدير الحزمة JSON</button>
+        <span class="note">المبالغ الكبيرة بالمليون. النسب بالمئة. اترك الحقل فارغاً لتعطيل النموذج المرتبط.</span>
+      </div>
+    </details>
+
+    <details class="assume">
+      <summary>سجل جودة البيانات — ماذا جُلب وماذا نقص؟</summary>
+      <div class="datalog" id="datalog" style="margin-top:12px"></div>
+    </details>
+
+  </div>
+
+  <div class="foot">
+    <b>المنهجية:</b> تثليث بين النماذج الجوهرية (DCF-FCFF بقيمتين نهائيتين، FCFE، توزيعات ثنائي المرحلة، الدخل المتبقي RIM، قوة الأرباح EPV، رقم جراهم) والنسبية (P/E مبرر، EV/EBITDA، EV/Sales، P/B مبرر) — أوزان حسب نوع الشركة، متوسط مشذّب ووسيط، سيناريوهات 20/60/20، هامش أمان متدرج، DCF عكسي، طبقة فنية منفصلة عن القيمة، وتنبؤ بثلاثة آفاق بنطاقات.
+    <br><b>البيانات:</b> Yahoo Finance (قد تتأخر 15 دقيقة، وأساسيات الشركات السعودية الصغيرة قد تنقص — راجع سجل الجودة). معايير السوق من جدول Damodaran (يناير 2026).
+    <br><b>تنويه:</b> هذا النظام أداة دراسة كمية شخصية وليس توصية استثمارية ولا مستشاراً مالياً مرخصاً. المخرجات حساسة لجودة المدخلات والافتراضات — راجعها قبل أي قرار.
+  </div>
+</div>
+
+<script>
+"use strict";
+/* =====================================================================
+   المرحلة 1 — المعايير (Damodaran يناير 2026) + أوزان الدمج والسيناريوهات
+===================================================================== */
+const API = "https://fair-value.mohammed-almutlaq-1983-459.workers.dev";
+const MATURE_ERP = 0.0423, BOND_PLUS = 0.035;
+const MARKETS = {
+  SA:{name:"السعودية (تداول)", risk_free:0.0475, sds:0.0051, crp:0.0078, tax:0.20, g_cap:0.035, cur:"ريال", bench:"^TASI.SR"},
+  US:{name:"الولايات المتحدة", risk_free:0.0440, sds:0.0023, crp:0.0023, tax:0.25, g_cap:0.040, cur:"$", bench:"^GSPC"},
+};
+const MOS = {large:0.15, mid:0.25, small:0.40};
+const DISP_WARN=0.25, DISP_ADDON=0.10, MACRO_ADDON=0.05;
+const WEIGHTS = {
+  mature:  {dcf_fcff:.28, dcf_fcfe:.10, rim:.10, epv:.08, graham:.04, pe_peer:.10, ev_ebitda:.15, ev_sales:.05, pb_just:.05, ddm:.05},
+  growth:  {dcf_fcff:.35, dcf_fcfe:.10, rim:.05, epv:0,   graham:0,   pe_peer:.10, ev_ebitda:.15, ev_sales:.20, pb_just:0,   ddm:.05},
+  financial:{dcf_fcff:0,  dcf_fcfe:.10, rim:.35, epv:0,   graham:.05, pe_peer:.15, ev_ebitda:0,   ev_sales:0,   pb_just:.20, ddm:.15},
+  dividend:{dcf_fcff:.20, dcf_fcfe:.10, rim:.10, epv:.08, graham:.04, pe_peer:.10, ev_ebitda:.13, ev_sales:0,   pb_just:.05, ddm:.20},
+};
+const ARCH_LABEL = {mature:"ناضجة غير مالية", growth:"نمو / تقنية", financial:"بنك / مالية", dividend:"توزيعات مستقرة"};
+const SCENARIOS = {
+  bear:{label:"متشائم", prob:.20, gs:-0.02, mm:0.90, rs:+0.005},
+  base:{label:"أساسي",  prob:.60, gs:0,     mm:1.00, rs:0},
+  bull:{label:"متفائل", prob:.20, gs:+0.02, mm:1.08, rs:-0.005},
+};
+const MODEL_LABELS = {
+  dcf_fcff:"DCF — تدفقات المنشأة FCFF", dcf_fcfe:"DCF — تدفقات الملكية FCFE",
+  ddm:"خصم التوزيعات ثنائي المرحلة", rim:"الدخل المتبقي RIM",
+  epv:"قوة الأرباح EPV", graham:"رقم جراهم",
+  pe_peer:"مضاعف الربحية P/E", ev_ebitda:"EV/EBITDA", ev_sales:"EV/Sales", pb_just:"P/B المبرر",
+};
+const INTRINSIC = ["dcf_fcff","dcf_fcfe","ddm","rim","epv","graham"];
+
+/* =====================================================================
+   المرحلة 2 — معدلات الخصم (متوسط طريقتين) + WACC
+===================================================================== */
+function discountRates(c){
+  const m = MARKETS[c.market||"SA"];
+  const rf = (c.risk_free ?? m.risk_free) - m.sds;          // معدل نظيف من فرق التخلف
+  const beta = c.beta ?? 1.0;
+  const reCapm = rf + beta*MATURE_ERP + m.crp + (c.size_premium||0);
+  const reBond = c.cost_of_debt ? c.cost_of_debt + BOND_PLUS : null;
+  const res = [reCapm].concat(reBond?[reBond]:[]);
+  const re = res.reduce((a,b)=>a+b,0)/res.length;
+  const tax = c.tax_rate ?? m.tax;
+  const E = c.market_cap || c.price*c.shares;
+  const D = c.total_debt||0, V=E+D;
+  const wacc = V>0 ? (E/V)*re + (D/V)*(c.cost_of_debt||reCapm*0.6)*(1-tax) : re;
+  return {rf_clean:rf, beta, re_capm:reCapm, re_bond:reBond, ke:re, wacc, tax, g_cap:m.g_cap};
+}
+
+/* =====================================================================
+   أدوات مشتركة
+===================================================================== */
+const fade=(g0,g1,n)=> n===1?[g0]:Array.from({length:n},(_,i)=>g0+(g1-g0)*i/(n-1));
+const project=(b,gs)=>{let v=b;return gs.map(g=>(v*=1+g));};
+const pv=(fl,r)=>fl.reduce((s,f,t)=>s+f/Math.pow(1+r,t+1),0);
+const bridge=(ev,c)=>ev-(c.total_debt||0)+(c.cash||0)-(c.minority_interest||0)+(c.investments||0);
+
+/* =====================================================================
+   المرحلة 3أ — النماذج الجوهرية (كل نموذج يعيد null إن لم ينطبق)
+===================================================================== */
+function mDcfFcff(c,r,gs=0,mm=1,rs=0){
+  let f=c.fcff; if(f==null||f<=0)return null; f*=mm;
+  const wacc=r.wacc+rs, n=c.forecast_years||5;
+  const g1=(c.growth_stage1??0.05)+gs;
+  const gt=Math.min((c.growth_terminal??0.025)+gs*0.5, r.g_cap, wacc-0.005);
+  const flows=project(f,fade(g1,gt,n));
+  const tvG=flows[flows.length-1]*(1+gt)/(wacc-gt);
+  let ebN=null,tvE=null;
+  if(c.ebitda&&c.exit_multiple){ ebN=c.ebitda*mm; for(const g of fade(g1,gt,n))ebN*=1+g; tvE=ebN*c.exit_multiple; }
+  const tv=tvE?(tvG+tvE)/2:tvG;
+  const ev=pv(flows,wacc)+tv/Math.pow(1+wacc,n);
+  const vps=bridge(ev,c)/c.shares;
+  return {v:vps, d:{ev, tvG, tvE, tvShare:ev>0?(tv/Math.pow(1+wacc,n))/ev:null, impliedExit:ebN?tvG/ebN:null, wacc, gt}};
+}
+function mDcfFcfe(c,r,gs=0,mm=1,rs=0){
+  let f=c.fcfe; if(f==null||f<=0)return null; f*=mm;
+  const ke=r.ke+rs, n=c.forecast_years||5;
+  const g1=(c.growth_stage1??0.05)+gs;
+  const gt=Math.min((c.growth_terminal??0.025)+gs*0.5, r.g_cap, ke-0.005);
+  const flows=project(f,fade(g1,gt,n));
+  const tv=flows[flows.length-1]*(1+gt)/(ke-gt);
+  return {v:(pv(flows,ke)+tv/Math.pow(1+ke,n))/c.shares, d:{ke,gt}};
+}
+function mDdm(c,r,gs=0,mm=1,rs=0){
+  let d=c.dps; if(!d||d<=0)return null; d*=mm;
+  const ke=r.ke+rs, n=c.forecast_years||5;
+  const g1=(c.dividend_growth_stage1??c.growth_stage1??0.04)+gs;
+  const gt=Math.min(c.growth_terminal??0.025, r.g_cap, ke-0.005);
+  const divs=project(d,fade(g1,gt,n));
+  const tv=divs[divs.length-1]*(1+gt)/(ke-gt);
+  return {v:pv(divs,ke)+tv/Math.pow(1+ke,n), d:{ke,gt}};
+}
+function mRim(c,r,gs=0,mm=1,rs=0){
+  const b0=c.bvps; let e=c.eps;
+  if(!b0||b0<=0||e==null)return null; e*=mm;
+  const ke=r.ke+rs, n=c.forecast_years||5;
+  const g1=(c.growth_stage1??0.05)+gs;
+  let payout=c.payout_ratio ?? (e>0?(c.dps||0)/e:0);
+  payout=Math.min(Math.max(payout,0),1);
+  const omega=c.ri_persistence??0.60;
+  let b=b0, pvRi=0, ri=0, ei=e;
+  const path=fade(g1,Math.min(g1,r.g_cap),n);
+  for(let t=1;t<=n;t++){
+    ri=ei-ke*b;
+    pvRi+=ri/Math.pow(1+ke,t);
+    b=b+ei*(1-payout);
+    ei*=1+path[t-1];
+  }
+  const cv=(ri*omega/(1+ke-omega))/Math.pow(1+ke,n);
+  return {v:b0+pvRi+cv, d:{ke,omega,payout}};
+}
+function mEpv(c,r,gs=0,mm=1,rs=0){
+  let eb=c.ebit_normalized??c.ebit; if(eb==null||eb<=0)return null; eb*=mm;
+  const wacc=r.wacc+rs;
+  const ev=eb*(1-r.tax)/wacc;
+  return {v:bridge(ev,c)/c.shares, d:{wacc}};
+}
+function mGraham(c,r,gs=0,mm=1,rs=0){
+  const e=c.eps,b=c.bvps;
+  if(!e||!b||e<=0||b<=0)return null;
+  return {v:Math.sqrt(22.5*e*mm*b), d:{}};
+}
+
+/* =====================================================================
+   المرحلة 3ب — النماذج النسبية
+===================================================================== */
+function mPePeer(c,r,gs=0,mm=1,rs=0){
+  let e=c.eps_forward??c.eps; if(!e||e<=0)return null; e*=mm;
+  const ke=r.ke+rs;
+  const g=Math.min(c.growth_terminal??0.025, r.g_cap, ke-0.005);
+  const payout=Math.min(Math.max(c.payout_ratio??0.5,0.05),1);
+  const just=payout*(1+g)/(ke-g);
+  const pes=[just].concat(c.peer_pe?[c.peer_pe]:[]);
+  return {v:e*pes.reduce((a,b)=>a+b,0)/pes.length, d:{just, peer:c.peer_pe}};
+}
+function mEvEbitda(c,r,gs=0,mm=1,rs=0){
+  if(!c.ebitda||!c.peer_ev_ebitda)return null;
+  return {v:bridge(c.ebitda*mm*c.peer_ev_ebitda,c)/c.shares, d:{mult:c.peer_ev_ebitda}};
+}
+function mEvSales(c,r,gs=0,mm=1,rs=0){
+  if(!c.revenue||!c.peer_ev_sales)return null;
+  return {v:bridge(c.revenue*c.peer_ev_sales,c)/c.shares, d:{mult:c.peer_ev_sales}};
+}
+function mPbJust(c,r,gs=0,mm=1,rs=0){
+  const b=c.bvps, roe=c.roe;
+  if(!b||b<=0||roe==null)return null;
+  const ke=r.ke+rs;
+  const g=Math.min(c.growth_terminal??0.025, r.g_cap, ke-0.005);
+  const roeA=roe*mm;
+  if(roeA<=g)return null;
+  const pbStar=(roeA-g)/(ke-g);
+  const pbs=[pbStar].concat(c.peer_pb?[c.peer_pb]:[]);
+  return {v:b*pbs.reduce((a,x)=>a+x,0)/pbs.length, d:{just:pbStar, roe:roeA}};
+}
+const MODELS = {dcf_fcff:mDcfFcff, dcf_fcfe:mDcfFcfe, ddm:mDdm, rim:mRim, epv:mEpv, graham:mGraham,
+                pe_peer:mPePeer, ev_ebitda:mEvEbitda, ev_sales:mEvSales, pb_just:mPbJust};
+
+function runAll(c,r,gs=0,mm=1,rs=0){
+  const out={};
+  for(const k in MODELS){
+    let res=null;
+    try{res=MODELS[k](c,r,gs,mm,rs);}catch(e){res=null;}
+    if(res&&isFinite(res.v)&&res.v>0)out[k]=res;
+  }
+  return out;
+}
+
+/* DCF عكسي — النمو الذي يسعّره السوق ضمنياً */
+function reverseDcf(c,r){
+  if(c.fcff==null||c.fcff<=0)return null;
+  const price=c.price;
+  const valAt=g=>{const cc=Object.assign({},c,{growth_stage1:g});const x=mDcfFcff(cc,r);return x?x.v:null;};
+  let lo=-0.30,hi=0.60;
+  const vLo=valAt(lo),vHi=valAt(hi);
+  if(vLo==null||vHi==null||!(vLo<=price&&price<=vHi))return null;
+  for(let i=0;i<60;i++){const mid=(lo+hi)/2;const v=valAt(mid);if(v==null)return null;if(v<price)lo=mid;else hi=mid;}
+  return (lo+hi)/2;
+}
+
+/* =====================================================================
+   المرحلة 4 — الدمج: مرجح + مشذّب + وسيط، سيناريوهات، حساسية
+===================================================================== */
+function ensemble(mv,arch){
+  const vals={}; for(const k in mv)vals[k]=mv[k].v;
+  const keys=Object.keys(vals);
+  if(!keys.length)return null;
+  const w=WEIGHTS[arch]||WEIGHTS.mature;
+  const avail={}; for(const k of keys)if((w[k]||0)>0)avail[k]=w[k];
+  let weighted;
+  const aKeys=Object.keys(avail);
+  if(aKeys.length){const tot=aKeys.reduce((s,k)=>s+avail[k],0);weighted=aKeys.reduce((s,k)=>s+vals[k]*avail[k]/tot,0);}
+  else weighted=keys.reduce((s,k)=>s+vals[k],0)/keys.length;
+  const sorted=keys.map(k=>vals[k]).sort((a,b)=>a-b);
+  const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
+  const trimmed=sorted.length>=4?mean(sorted.slice(1,-1)):mean(sorted);
+  const med=sorted.length%2?sorted[(sorted.length-1)/2]:(sorted[sorted.length/2-1]+sorted[sorted.length/2])/2;
+  const fv=(weighted+trimmed+med)/3;
+  return {weighted, trimmed, median:med, fair_value:fv, min:sorted[0], max:sorted[sorted.length-1],
+          dispersion:med>0?(sorted[sorted.length-1]-sorted[0])/med:null, n:sorted.length, weights:avail};
+}
+function sensitivity(c,r){
+  if(!mDcfFcff(c,r))return null;
+  const shifts=[-0.01,-0.005,0,0.005,0.01];
+  const rows=shifts.map(dw=>shifts.map(dg=>{
+    const cc=Object.assign({},c,{growth_terminal:(c.growth_terminal??0.025)+dg});
+    const x=mDcfFcff(cc,r,0,1,dw);
+    return x?x.v:null;
+  }));
+  return {shifts, rows, baseWacc:r.wacc, baseG:c.growth_terminal??0.025};
+}
+
+/* =====================================================================
+   المرحلة 5 — الطبقة الفنية
+===================================================================== */
+const sma=(p,n)=>p.length<n?null:p.slice(-n).reduce((a,b)=>a+b,0)/n;
+function smaSeries(p,n){const out=new Array(p.length).fill(null);let s=0;for(let i=0;i<p.length;i++){s+=p[i];if(i>=n)s-=p[i-n];if(i>=n-1)out[i]=s/n;}return out;}
+function emaSeries(p,n){if(p.length<n)return null;const k=2/(n+1);let e=p.slice(0,n).reduce((a,b)=>a+b,0)/n;const out=[e];for(let i=n;i<p.length;i++){e=p[i]*k+e*(1-k);out.push(e);}return out;}
+function rsiW(p,n=14){
+  if(p.length<n+1)return null;
+  let g=0,l=0;
+  for(let i=1;i<=n;i++){const d=p[i]-p[i-1];g+=Math.max(d,0);l+=Math.max(-d,0);}
+  let ag=g/n,al=l/n;
+  for(let i=n+1;i<p.length;i++){const d=p[i]-p[i-1];ag=(ag*(n-1)+Math.max(d,0))/n;al=(al*(n-1)+Math.max(-d,0))/n;}
+  if(al===0)return 100;
+  return 100-100/(1+ag/al);
+}
+function macdHist(p,f=12,s=26,sig=9){
+  if(p.length<s+sig)return null;
+  const ef=emaSeries(p,f),es=emaSeries(p,s);
+  const line=es.map((v,i)=>ef[ef.length-es.length+i]-v);
+  if(line.length<sig)return null;
+  const sl=emaSeries(line,sig);
+  return line[line.length-1]-sl[sl.length-1];
+}
+const mom121=p=>p.length<252?null:p[p.length-21]/p[p.length-252]-1;
+function annVol(p,lb=252){
+  const px=p.slice(-Math.min(lb,p.length));
+  if(px.length<30)return null;
+  const rets=[];for(let i=1;i<px.length;i++)rets.push(Math.log(px[i]/px[i-1]));
+  const mu=rets.reduce((a,b)=>a+b,0)/rets.length;
+  const va=rets.reduce((s,x)=>s+(x-mu)*(x-mu),0)/(rets.length-1);
+  return Math.sqrt(va)*Math.sqrt(252);
+}
+function techSnapshot(p){
+  if(!p||p.length<60)return null;
+  const price=p[p.length-1], s50=sma(p,50), s200=sma(p,200);
+  const r=rsiW(p), hist=macdHist(p), mom=mom121(p), vol=annVol(p);
+  const parts=[],ws=[];
+  if(s50&&s200){parts.push(price>s50&&s50>s200?1:(price<s50&&s50<s200?-1:(price>s200?0.4:-0.4)));ws.push(0.30);}
+  if(hist!=null&&price>0){parts.push(Math.max(Math.min(hist/(price*0.01),1),-1));ws.push(0.20);}
+  if(r!=null){parts.push(Math.max(Math.min((50-r)/20,1),-1));ws.push(0.20);}
+  if(mom!=null){parts.push(Math.max(Math.min(mom/0.30,1),-1));ws.push(0.30);}
+  const score=ws.length?parts.reduce((s,x,i)=>s+x*ws[i],0)/ws.reduce((a,b)=>a+b,0):0;
+  return {price,s50,s200,golden:!!(s50&&s200&&s50>s200),rsi:r,macd:hist,mom,vol,score};
+}
+
+/* =====================================================================
+   المرحلة 6 — التنبؤ بثلاثة آفاق (نقطة + نطاق)
+===================================================================== */
+function forecasts(price,fv,c,tech){
+  const vol=(tech&&tech.vol)||0.25, score=(tech&&tech.score)||0, mom=(tech&&tech.mom)||0;
+  const dy=price>0?(c.dps||0)/price:0;
+  const gE=c.growth_stage1??0.05;
+  const gap=price>0?fv/price-1:0;
+  const band=(t,y)=>{const s=vol*Math.sqrt(y);return [t*(1-s),t*(1+s)];};
+  const dir=er=>er>0.03?"صاعد":(er<-0.03?"هابط":"عرضي");
+  const erS=score*vol*Math.sqrt(0.25)*0.5;
+  const tS=price*(1+erS);
+  let erM=0.40*gap+dy+0.15*Math.max(Math.min(mom,0.5),-0.5);
+  erM=Math.max(Math.min(erM,0.60),-0.45);
+  const tM=price*(1+erM);
+  const rev=price>0?Math.pow(Math.max(fv,0.01)/price,1/5)-1:0;
+  const erL=gE*0.7+dy+rev*0.8;
+  const tL=price*Math.pow(1+erL,5);
+  const [loS,hiS]=band(tS,0.25),[loM,hiM]=band(tM,1),[loL,hiL]=band(tL,2);
+  return {
+    short:{h:"1–3 أشهر", er:erS, t:tS, lo:loS, hi:hiS, dir:dir(erS), drv:"الدرجة الفنية والزخم", annual:false},
+    medium:{h:"12 شهراً", er:erM, t:tM, lo:loM, hi:hiM, dir:dir(erM), drv:"إغلاق 40% من فجوة القيمة + التوزيعات + الزخم", annual:false},
+    long:{h:"5 سنوات", er:erL, t:tL, lo:loL, hi:hiL, dir:dir(erL), drv:"نمو الأرباح + التوزيعات + رجوع التقييم", annual:true},
+  };
+}
+
+/* =====================================================================
+   المحرك — evaluate(c) → حزمة تقييم كاملة
+===================================================================== */
+function evaluate(c){
+  const price=c.price, arch=c.archetype||"mature";
+  const rates=discountRates(c);
+  const mv=runAll(c,rates);
+  const impliedG=reverseDcf(c,rates);
+  const ens=ensemble(mv,arch);
+  if(!ens)throw new Error("لا يوجد نموذج واحد قابل للتشغيل — أكمل المدخلات من لوحة الافتراضات.");
+  const scen={};
+  for(const k in SCENARIOS){
+    const s=SCENARIOS[k];
+    const e=ensemble(runAll(c,rates,s.gs,s.mm,s.rs),arch);
+    scen[k]={fv:e?e.fair_value:null, prob:s.prob, label:s.label};
+  }
+  const pw=Object.values(scen).filter(s=>s.fv);
+  const probFv=pw.length?pw.reduce((s,x)=>s+x.fv*x.prob,0)/pw.reduce((s,x)=>s+x.prob,0):ens.fair_value;
+  const fv=(ens.fair_value+probFv)/2;
+  let mos=MOS[c.size||"large"]??0.25;
+  const warnings=[];
+  if(ens.dispersion&&ens.dispersion>DISP_WARN){mos+=DISP_ADDON;warnings.push(`تباعد النماذج ${Math.round(ens.dispersion*100)}٪ يتجاوز عتبة 25٪ — أعد فحص الافتراضات ووسّع هامش الأمان قبل أي قرار.`);}
+  if(c.macro_stretched!==false){mos+=MACRO_ADDON;warnings.push("مؤشرات التقييم الكلية (بافيت/CAPE) في مناطق مرتفعة تاريخياً — أضيف 5٪ لهامش الأمان.");}
+  const tvShare=mv.dcf_fcff&&mv.dcf_fcff.d.tvShare;
+  if(tvShare&&tvShare>0.80)warnings.push(`القيمة النهائية تمثل ${Math.round(tvShare*100)}٪ من قيمة DCF — حساسية مفرطة للافتراضات الأبدية.`);
+  const buyBelow=fv*(1-mos);
+  const tech=techSnapshot(c.price_history);
+  const fc=forecasts(price,fv,c,tech);
+  const upside=fv/price-1;
+  let verdict,tag;
+  if(upside>mos){verdict="مقيّم بأقل من قيمته — ضمن هامش الأمان";tag="buy";}
+  else if(upside>0){verdict="أقل من القيمة العادلة لكن خارج هامش الأمان — انتظار";tag="hold";}
+  else if(upside>-0.10){verdict="قريب من القيمة العادلة";tag="hold";}
+  else{verdict="مقيّم بأعلى من قيمته";tag="sell";}
+  return {c, rates, models:mv, impliedG, ens, scen, probFv, fair_value:fv, upside,
+          mos, buyBelow, verdict, tag, warnings, sens:sensitivity(c,rates), tech, fc};
+}
+
+/* =====================================================================
+   جلب البيانات وبناء المدخلات (Yahoo عبر الوركر)
+===================================================================== */
+const LOG=[];
+function dlog(src,msg,cls){LOG.push({src,msg,cls});}
+async function jget(url){
+  const r=await fetch(url);
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  return r.json();
+}
+function latestFund(fund,type){
+  const item=(fund.timeseries&&fund.timeseries.result||[]).find(x=>x.meta&&x.meta.type&&x.meta.type[0]===type);
+  if(!item||!item[type])return null;
+  const arr=item[type].filter(x=>x&&x.reportedValue&&x.reportedValue.raw!=null);
+  return arr.length?{v:arr[arr.length-1].reportedValue.raw, hist:arr.map(x=>x.reportedValue.raw)}:null;
+}
+function calcBeta(closesA,tsA,closesB,tsB){
+  const mapB={};tsB.forEach((t,i)=>{if(closesB[i]!=null)mapB[new Date(t*1000).toISOString().slice(0,10)]=closesB[i];});
+  const pa=[],pb=[];
+  tsA.forEach((t,i)=>{const d=new Date(t*1000).toISOString().slice(0,10);if(closesA[i]!=null&&mapB[d]!=null){pa.push(closesA[i]);pb.push(mapB[d]);}});
+  if(pa.length<120)return null;
+  const ra=[],rb=[];
+  for(let i=1;i<pa.length;i++){ra.push(pa[i]/pa[i-1]-1);rb.push(pb[i]/pb[i-1]-1);}
+  const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
+  const ma=mean(ra),mb=mean(rb);
+  let cov=0,varB=0;
+  for(let i=0;i<ra.length;i++){cov+=(ra[i]-ma)*(rb[i]-mb);varB+=(rb[i]-mb)*(rb[i]-mb);}
+  if(varB===0)return null;
+  return Math.max(0.3,Math.min(2.0,cov/varB));
+}
+function detectArchetype(sector,payout){
+  if(!sector)return "mature";
+  if(/financial/i.test(sector))return "financial";
+  if(/utilit|communication/i.test(sector))return "dividend";
+  if(/technolog/i.test(sector))return "growth";
+  if(payout!=null&&payout>0.7)return "dividend";
+  return "mature";
+}
+async function fetchInputs(sym){
+  LOG.length=0;
+  const market=sym.endsWith(".SR")?"SA":"US";
+  const m=MARKETS[market];
+  const [sumRes,chartRes,fundRes,benchRes]=await Promise.allSettled([
+    jget(`${API}/api/summary?symbol=${sym}`),
+    jget(`${API}/api/chart?symbol=${sym}&range=2y&interval=1d`),
+    jget(`${API}/api/fundamentals?symbol=${sym}`),
+    jget(`${API}/api/chart?symbol=${encodeURIComponent(m.bench)}&range=2y&interval=1d`),
+  ]);
+  const sum=sumRes.status==="fulfilled"?(sumRes.value.quoteSummary&&sumRes.value.quoteSummary.result||[])[0]:null;
+  const chart=chartRes.status==="fulfilled"?(chartRes.value.chart&&chartRes.value.chart.result||[])[0]:null;
+  const fund=fundRes.status==="fulfilled"?fundRes.value:null;
+  const bench=benchRes.status==="fulfilled"?(benchRes.value.chart&&benchRes.value.chart.result||[])[0]:null;
+  dlog("الملخص",sum?"الملف والمؤشرات والقوائم ✓":"فشل جلب الملخص — سيُعتمد على الرسم والقوائم فقط",sum?"ok":"warn");
+  if(!chart)throw new Error("تعذر جلب أسعار الرمز "+sym+" — تحقق من الرمز.");
+  const ts=chart.timestamp||[];
+  const closesRaw=(chart.indicators.quote[0].close||[]);
+  const closes=[],cts=[];
+  closesRaw.forEach((x,i)=>{if(x!=null){closes.push(x);cts.push(ts[i]);}});
+  dlog("الأسعار",`${closes.length} إغلاق يومي (سنتان) ✓`,"ok");
+  const meta=chart.meta||{};
+  const p=sum&&sum.price||{};
+  const ks=sum&&sum.defaultKeyStatistics||{};
+  const sd=sum&&sum.summaryDetail||{};
+  const fd=sum&&sum.financialData||{};
+  const prof=sum&&sum.summaryProfile||{};
+
+  const price=fd.currentPrice??p.regularMarketPrice??meta.regularMarketPrice??closes[closes.length-1];
+  let shares=ks.sharesOutstanding;
+  if(!shares){const so=latestFund(fund,"annualBasicAverageShares");if(so)shares=so.v;}
+  if(!shares&&(p.marketCap||sd.marketCap))shares=(p.marketCap||sd.marketCap)/price;
+  if(!shares)throw new Error("تعذر تحديد عدد الأسهم — أدخل البيانات يدوياً من لوحة الافتراضات.");
+
+  // القوائم المالية السنوية
+  const F=t=>latestFund(fund,t);
+  const ebit=F("annualEBIT"), da=F("annualDepreciationAndAmortization")||F("annualReconciledDepreciation");
+  const capex=F("annualCapitalExpenditure"), ocf=F("annualOperatingCashFlow"), fcfY=F("annualFreeCashFlow");
+  const rev=F("annualTotalRevenue"), ni=F("annualNetIncome"), eq=F("annualStockholdersEquity");
+  const debtF=F("annualTotalDebt"), cashF=F("annualCashAndCashEquivalents"), intExp=F("annualInterestExpense");
+  const ebitdaF=F("annualEBITDA");
+  dlog("القوائم",fund?`قوائم سنوية: ${["EBIT","D&A","Capex","OCF","FCF","الإيرادات","صافي الربح","حقوق الملكية"].filter((_,i)=>[ebit,da,capex,ocf,fcfY,rev,ni,eq][i]).join("، ")} ✓`:"فشل جلب القوائم","ok");
+
+  const tax=m.tax;
+  let fcff=null;
+  if(ebit&&ebit.v>0){fcff=ebit.v*(1-tax)+(da?da.v:0)+(capex?capex.v:0);dlog("FCFF","محسوب: EBIT×(1−t) + إهلاك − نفقات رأسمالية ✓","ok");}
+  else dlog("FCFF","EBIT غير متاح — نموذج FCFF معطل (عدّله يدوياً إن أردت)","warn");
+  let fcfe=fd.freeCashflow??(fcfY?fcfY.v:null);
+  if(fcfe==null&&ocf&&capex)fcfe=ocf.v+capex.v;
+
+  // التوزيعات: dividendRate أو مجموع 12 شهراً من أحداث الرسم
+  let dps=sd.dividendRate??null;
+  if(dps==null&&chart.events&&chart.events.dividends){
+    const yr=Date.now()/1000-366*24*3600;
+    dps=Object.values(chart.events.dividends).filter(d=>d.date>yr).reduce((s,d)=>s+d.amount,0)||null;
+    if(dps)dlog("التوزيعات","محسوبة من أحداث آخر 12 شهراً ✓","ok");
+  }
+
+  // بيتا: للسعودية تُحسب مقابل تاسي (بيتا Yahoo غير موثوقة للرموز السعودية)
+  let beta=null;
+  if(market==="SA"){
+    if(bench){const bts=bench.timestamp||[],bcl=bench.indicators.quote[0].close||[];beta=calcBeta(closesRaw,ts,bcl,bts);}
+    if(beta!=null)dlog("بيتا",`محسوبة مقابل مؤشر تاسي (سنتان يومي): ${beta.toFixed(2)} ✓`,"ok");
+    else{beta=1.0;dlog("بيتا","تعذر حسابها مقابل تاسي — اعتُمد 1.00","warn");}
+  }else{
+    beta=ks.beta??sd.beta??null;
+    if(beta==null&&bench){const bts=bench.timestamp||[],bcl=bench.indicators.quote[0].close||[];beta=calcBeta(closesRaw,ts,bcl,bts);}
+    if(beta==null){beta=1.0;dlog("بيتا","غير متاحة — اعتُمد 1.00","warn");}
+  }
+
+  // النمو: تقدير المحللين +5 سنوات ← نمو الأرباح ← CAGR تاريخي
+  let g1=null,gSrc="";
+  const et=sum&&sum.earningsTrend&&sum.earningsTrend.trend||[];
+  const g5=et.find(x=>x.period==="+5y");
+  if(g5&&g5.growth!=null){g1=g5.growth;gSrc="تقدير المحللين +5 سنوات";}
+  else if(fd.earningsGrowth!=null){g1=fd.earningsGrowth;gSrc="نمو الأرباح الأخير";}
+  else if(ni&&ni.hist.length>=3&&ni.hist[0]>0&&ni.hist[ni.hist.length-1]>0){
+    g1=Math.pow(ni.hist[ni.hist.length-1]/ni.hist[0],1/(ni.hist.length-1))-1;gSrc="CAGR صافي الربح التاريخي";
+  }
+  g1=Math.max(Math.min(g1??0.05,0.20),-0.05);
+  dlog("النمو",`g المرحلة الأولى = ${(g1*100).toFixed(1)}٪ (${gSrc||"افتراضي 5٪"}) — قصّ على [−5٪، +20٪]`,"ok");
+
+  const mcap=p.marketCap??sd.marketCap??price*shares;
+  const mcapUsd=market==="SA"?mcap/3.75:mcap;
+  const size=mcapUsd>10e9?"large":(mcapUsd>2e9?"mid":"small");
+  const totalDebt=fd.totalDebt??(debtF?debtF.v:0);
+  const cash=fd.totalCash??(cashF?cashF.v:0);
+  const ebitda=fd.ebitda??(ebitdaF?ebitdaF.v:null);
+  const ev=ks.enterpriseValue??(mcap+totalDebt-cash);
+  const evEb=ebitda&&ev?ev/ebitda:null;
+  const payout=sd.payoutRatio??ks.payoutRatio??null;
+  const roe=fd.returnOnEquity??(ni&&eq&&eq.v>0?ni.v/eq.v:null);
+  const bvps=ks.bookValue??(eq&&eq.v>0?eq.v/shares:null);
+  const eps=ks.trailingEps??(ni&&ni.v?ni.v/shares:null);
+  const costDebt=(intExp&&totalDebt>0&&intExp.v!==0)?Math.min(Math.max(Math.abs(intExp.v)/totalDebt,0.02),0.12):null;
+  const arch=detectArchetype(prof.sector,payout);
+  dlog("التصنيف",`القطاع: ${prof.sector||"غير معروف"} → نوع الشركة: ${ARCH_LABEL[arch]} · الحجم: ${size}`,"ok");
+
+  return {
+    ticker:sym, name:p.longName||meta.longName||sym, market, size, archetype:arch,
+    sector:prof.sector||"", industry:prof.industry||"",
+    currency:p.currency||meta.currency||m.cur,
+    chgPct:p.regularMarketChangePercent!=null?p.regularMarketChangePercent*100:null,
+    price:+price, shares:+shares, market_cap:+mcap, beta:+beta,
+    total_debt:+totalDebt, cash:+cash, cost_of_debt:costDebt,
+    eps:eps??null, eps_forward:ks.forwardEps??null, bvps:bvps??null, roe:roe??null,
+    dps:dps??0, payout_ratio:payout,
+    revenue:rev?rev.v:(fd.totalRevenue??null), ebitda, ebit:ebit?ebit.v:null,
+    fcff, fcfe,
+    growth_stage1:g1, growth_terminal:0.025, forecast_years:5,
+    exit_multiple:evEb?Math.max(4,Math.min(14,+evEb.toFixed(1))):null,
+    peer_pe:ks.forwardPE??sd.forwardPE??null,
+    peer_ev_ebitda:evEb?+evEb.toFixed(1):null,
+    peer_ev_sales:null, peer_pb:null,
+    macro_stretched:true,
+    price_history:closes, price_ts:cts,
+  };
+}
+
+/* =====================================================================
+   واجهة المستخدم
+===================================================================== */
+let CUR=null; // آخر مدخلات (c) + حزمة (pkg)
+const $=id=>document.getElementById(id);
+const fmt=(x,d=2)=>x==null||!isFinite(x)?"—":(+x).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const fmtPct=(x,d=1)=>x==null?"—":((x>=0?"+":"")+(x*100).toFixed(d)+"%");
+const fmtM=x=>x==null?"—":fmt(x/1e6,0);
+
+function pick(s){$("sym").value=s;run();}
+function setStage(n,state){
+  document.querySelectorAll(".pstep").forEach(el=>{
+    const s=+el.dataset.s;
+    el.classList.toggle("done",s<n||(s===n&&state==="done"));
+    el.classList.toggle("active",s===n&&state!=="done");
+  });
+}
+function status(msg,err){const el=$("status");el.textContent=msg;el.classList.toggle("err",!!err);el.classList.remove("hidden");}
+
+async function run(){
+  const sym=$("sym").value.trim().toUpperCase();
+  if(!sym)return;
+  $("btnRun").disabled=true;
+  $("results").classList.add("hidden");
+  try{
+    setStage(1);status("المرحلة 1: جلب الأسعار والقوائم المالية والمعايير لـ "+sym+" …");
+    const c=await fetchInputs(sym);
+    setStage(2);status("المراحل 2–6: معدلات الخصم، النماذج، الدمج، الطبقة الفنية، التنبؤ …");
+    await new Promise(r=>setTimeout(r,30));
+    const pkg=evaluate(c);
+    CUR={c,pkg};
+    setStage(6,"done");
+    $("status").classList.add("hidden");
+    renderAll();
+  }catch(e){
+    status("خطأ: "+e.message+" — جرّب رمزاً آخر أو «مثال توضيحي».",true);
+    setStage(0);
+  }
+  $("btnRun").disabled=false;
+}
+
+function runDemo(){
+  // مثال توضيحي: شركة صناعية سعودية (بيانات افتراضية) + مسار سعري مولّد حتمياً
+  let seed=42;const rnd=()=>{seed=(seed*1103515245+12345)%2147483648;return seed/2147483648;};
+  const ph=[];let v=46;
+  for(let i=0;i<505;i++){v*=1+(rnd()-0.485)*0.018;ph.push(+v.toFixed(2));}
+  const scale=54/ph[ph.length-1];
+  const hist=ph.map(x=>+(x*scale).toFixed(2));
+  const now=Date.now()/1000;
+  const c={
+    ticker:"XXXX.SR", name:"شركة صناعية سعودية (مثال توضيحي)", market:"SA", size:"large",
+    archetype:"mature", sector:"Industrials", currency:"SAR", chgPct:null,
+    price:54, shares:1e9, market_cap:54e9, beta:0.85,
+    total_debt:12e9, cash:3e9, cost_of_debt:0.055,
+    revenue:20e9, ebitda:5.2e9, ebit:3.6e9, fcff:2.6e9, fcfe:2.1e9,
+    eps:2.3, eps_forward:2.5, bvps:18, roe:0.13, dps:1.2, payout_ratio:0.52,
+    growth_stage1:0.06, growth_terminal:0.028, forecast_years:5, exit_multiple:9,
+    peer_pe:19, peer_ev_ebitda:10, peer_ev_sales:2.6, peer_pb:2.4,
+    macro_stretched:true, price_history:hist,
+    price_ts:hist.map((_,i)=>now-(hist.length-i)*86400*1.4),
+  };
+  LOG.length=0;dlog("وضع تجريبي","بيانات افتراضية لأغراض العرض — ليست شركة حقيقية","warn");
+  CUR={c,pkg:evaluate(c)};
+  setStage(6,"done");
+  $("status").classList.add("hidden");
+  renderAll();
+}
+
+function recalc(){
+  if(!CUR)return;
+  const c=readAssumptions();
+  try{
+    CUR={c,pkg:evaluate(c)};
+    renderAll();
+  }catch(e){status("خطأ في الحساب: "+e.message,true);}
+}
+
+/* --------- العرض --------- */
+function renderAll(){
+  const {c,pkg}=CUR;
+  $("results").classList.remove("hidden");
+  renderCard(c,pkg);renderVerdict(c,pkg);renderFF(c,pkg);renderModels(c,pkg);
+  renderRates(pkg);renderScen(c,pkg);renderSens(c,pkg);renderTech(c,pkg);
+  renderFc(c,pkg);renderAssumptions(c);renderLog();
+}
+function renderCard(c,pkg){
+  $("coName").textContent=c.name;
+  $("coMeta").innerHTML=`<span class="num">${c.ticker}</span> · ${MARKETS[c.market].name}${c.sector?" · "+c.sector:""} · ${ARCH_LABEL[c.archetype]}`;
+  $("coPrice").textContent=fmt(c.price);
+  $("coCur").textContent=c.currency==="SAR"?"ريال":c.currency;
+  const chg=$("coChg");
+  if(c.chgPct!=null){chg.textContent=(c.chgPct>=0?"+":"")+c.chgPct.toFixed(2)+"%";chg.className="chg "+(c.chgPct>=0?"up":"down");chg.style.display="";}
+  else chg.style.display="none";
+  $("miniStats").innerHTML=[
+    ["القيمة السوقية",fmtM(c.market_cap)+" م"],
+    ["بيتا",fmt(c.beta,2)],
+    ["ربحية السهم",fmt(c.eps)],
+    ["ق. دفترية",fmt(c.bvps)],
+    ["ROE",c.roe!=null?(c.roe*100).toFixed(1)+"%":"—"],
+    ["التوزيعات",fmt(c.dps)],
+  ].map(([k,v])=>`<div class="ms"><div class="v num">${v}</div><div class="k">${k}</div></div>`).join("");
+}
+function renderVerdict(c,pkg){
+  $("vPrice").textContent=fmt(c.price);
+  $("vFV").textContent=fmt(pkg.fair_value);
+  $("vGap").textContent=fmtPct(pkg.upside);
+  $("vGapCell").className="vcell "+(pkg.upside>=0?"green":"red");
+  $("vBuy").textContent=fmt(pkg.buyBelow);
+  $("vMosLbl").textContent=`(هامش أمان ${Math.round(pkg.mos*100)}٪)`;
+  const tag=$("vTag");
+  tag.textContent=pkg.verdict;
+  tag.className="tag tag-"+(pkg.tag==="buy"?"buy":pkg.tag==="sell"?"sell":"hold");
+  $("vExplain").textContent=`${pkg.ens.n} نماذج · تباعد ${pkg.ens.dispersion!=null?Math.round(pkg.ens.dispersion*100)+"٪":"—"} · القيمة = متوسط (الدمج الأساسي ${fmt(pkg.ens.fair_value)}، المرجح بالسيناريوهات ${fmt(pkg.probFv)})`;
+  $("verdictSub").textContent="تاريخ التحليل: "+new Date().toLocaleDateString("ar-SA-u-nu-latn");
+  $("vWarnings").innerHTML=pkg.warnings.map(w=>`<div class="warn">⚠ ${w}</div>`).join("");
+}
+function renderFF(c,pkg){
+  const rows=Object.entries(pkg.models).map(([k,m])=>({k,label:MODEL_LABELS[k],v:m.v})).sort((a,b)=>b.v-a.v);
+  const all=rows.map(r=>r.v).concat([c.price,pkg.fair_value,pkg.buyBelow]);
+  const lo=Math.min(...all)*0.93, hi=Math.max(...all)*1.05;
+  const X=v=>((v-lo)/(hi-lo)*100).toFixed(1);
+  const w=WEIGHTS[c.archetype]||WEIGHTS.mature;
+  let html=rows.map(r=>{
+    const x=+X(r.v);
+    return `<div class="ffrow"><div class="fflabel">${r.label}<span class="w-badge">${w[r.k]?Math.round(w[r.k]*100)+"٪":""}</span></div>
+    <div class="fftrack"><div class="ffbar" style="left:calc(${x}% - 7px)" data-tip="${r.label}: ${fmt(r.v)} (${fmtPct(r.v/c.price-1)} عن السعر)"></div>
+    <span class="ffv" style="left:calc(${x}% + 11px)">${fmt(r.v)}</span></div></div>`;
+  }).join("");
+  html+=`<div class="ffmarks">
+    <div class="ffmark mprice" style="left:${X(c.price)}%"><span>السعر ${fmt(c.price)}</span></div>
+    <div class="ffmark mfv" style="left:${X(pkg.fair_value)}%"><span>القيمة العادلة ${fmt(pkg.fair_value)}</span></div>
+    <div class="ffmark mbuy" style="left:${X(pkg.buyBelow)}%"><span>سعر الشراء ${fmt(pkg.buyBelow)}</span></div>
+  </div>`;
+  $("ffChart").innerHTML=html;
+  $("ffStats").innerHTML=`متوسط مرجح: <b class="num">${fmt(pkg.ens.weighted)}</b> · متوسط مشذّب: <b class="num">${fmt(pkg.ens.trimmed)}</b> · وسيط: <b class="num">${fmt(pkg.ens.median)}</b> · المدى: <span class="num">${fmt(pkg.ens.min)} – ${fmt(pkg.ens.max)}</span> · عدد النماذج: <span class="num">${pkg.ens.n}</span>`;
+  // tooltips
+  document.querySelectorAll(".ffbar").forEach(el=>{
+    el.addEventListener("mouseenter",e=>showTip(el,el.dataset.tip));
+    el.addEventListener("mouseleave",hideTip);
+  });
+}
+function renderModels(c,pkg){
+  $("archLbl").textContent=`أوزان نوع «${ARCH_LABEL[c.archetype]}» — تُعاد معايرتها على النماذج المتاحة`;
+  const w=WEIGHTS[c.archetype]||WEIGHTS.mature;
+  const row=(k)=>{
+    const m=pkg.models[k];
+    const note=m&&k==="dcf_fcff"&&m.d.tvShare!=null?`القيمة النهائية ${Math.round(m.d.tvShare*100)}٪ من EV`
+      :m&&k==="pe_peer"?`مبرر ${fmt(m.d.just,1)}×${m.d.peer?" · أقران "+fmt(m.d.peer,1)+"×":""}`
+      :m&&k==="pb_just"?`مبرر ${fmt(m.d.just,2)}×`
+      :m&&(k==="ev_ebitda"||k==="ev_sales")?`مضاعف ${fmt(m.d.mult,1)}×`:"";
+    return `<tr><td>${MODEL_LABELS[k]}</td>
+      <td class="num">${m?fmt(m.v):"<span style='color:var(--faint)'>غير منطبق</span>"}</td>
+      <td class="num">${m?fmtPct(m.v/c.price-1):"—"}</td>
+      <td class="num w-badge">${w[k]?Math.round(w[k]*100)+"٪":"0٪"}</td>
+      <td style="font-size:12px;color:var(--muted)">${note}</td></tr>`;
+  };
+  let html=`<tr><th>النموذج</th><th class="num">القيمة/سهم</th><th class="num">عن السعر</th><th class="num">الوزن</th><th>ملاحظة</th></tr>`;
+  html+=`<tr class="group"><td colspan="5">المرحلة 3أ — النماذج الجوهرية</td></tr>`;
+  html+=INTRINSIC.map(row).join("");
+  html+=`<tr class="group"><td colspan="5">المرحلة 3ب — النماذج النسبية</td></tr>`;
+  html+=Object.keys(MODEL_LABELS).filter(k=>!INTRINSIC.includes(k)).map(row).join("");
+  html+=`<tr class="total"><td>القيمة العادلة النهائية (دمج ثلاثي × سيناريوهات)</td><td class="num">${fmt(pkg.fair_value)}</td><td class="num">${fmtPct(pkg.upside)}</td><td colspan="2"></td></tr>`;
+  $("modelsTable").innerHTML=html;
+}
+function renderRates(pkg){
+  const r=pkg.rates;
+  $("ratesTable").innerHTML=[
+    ["المعدل الخالي من المخاطر (نظيف من فرق التخلف)",(r.rf_clean*100).toFixed(2)+"%"],
+    ["بيتا المستخدمة",fmt(r.beta,2)],
+    ["تكلفة حقوق الملكية — CAPM + علاوة الدولة",(r.re_capm*100).toFixed(2)+"%"],
+    ["تكلفة حقوق الملكية — عائد الدين + 3.5%",r.re_bond?(r.re_bond*100).toFixed(2)+"%":"—"],
+    ["<b>تكلفة حقوق الملكية المعتمدة (المتوسط)</b>","<b>"+(r.ke*100).toFixed(2)+"%</b>"],
+    ["<b>WACC</b>","<b>"+(r.wacc*100).toFixed(2)+"%</b>"],
+    ["سقف النمو الأبدي g (نمو الناتج الاسمي)",(r.g_cap*100).toFixed(1)+"%"],
+  ].map(([k,v])=>`<tr><td>${k}</td><td class="num">${v}</td></tr>`).join("");
+}
+function renderScen(c,pkg){
+  let html=`<tr><th>سيناريو</th><th class="num">الاحتمال</th><th class="num">القيمة العادلة</th></tr>`;
+  html+=["bear","base","bull"].map(k=>{
+    const s=pkg.scen[k];
+    return `<tr><td>${s.label}</td><td class="num">${Math.round(s.prob*100)}%</td><td class="num">${fmt(s.fv)}</td></tr>`;
+  }).join("");
+  html+=`<tr class="total"><td>المرجح بالاحتمالات</td><td class="num">—</td><td class="num">${fmt(pkg.probFv)}</td></tr>`;
+  $("scenTable").innerHTML=html;
+  const el=$("reverseDcf");
+  if(pkg.impliedG!=null){
+    const a=c.growth_stage1??0.05;
+    el.innerHTML=`<b style="color:var(--gold)">DCF عكسي:</b> السوق يسعّر ضمنياً نمواً قدره <b class="num">${(pkg.impliedG*100).toFixed(1)}٪</b> مقابل افتراضك <b class="num">${(a*100).toFixed(1)}٪</b> — ${pkg.impliedG>a?"توقعات السوق أعلى من توقعاتك (تفاؤل مُسعَّر)":"توقعات السوق أدنى من توقعاتك (تشاؤم مُسعَّر)"}.`;
+  }else el.innerHTML=`<b style="color:var(--gold)">DCF عكسي:</b> السعر الحالي خارج نطاق الحل [−30٪، +60٪] أو نموذج FCFF غير متاح.`;
+}
+function renderSens(c,pkg){
+  const s=pkg.sens;
+  const sec=$("sec-sens");
+  if(!s){sec.classList.add("hidden");return;}
+  sec.classList.remove("hidden");
+  let html=`<tr><th></th>${s.shifts.map(dg=>`<th>g ${((s.baseG+dg)*100).toFixed(1)}%</th>`).join("")}</tr>`;
+  s.rows.forEach((row,i)=>{
+    html+=`<tr><th>WACC ${((s.baseWacc+s.shifts[i])*100).toFixed(1)}%</th>`;
+    row.forEach((v,j)=>{
+      const isBase=s.shifts[i]===0&&s.shifts[j]===0;
+      let bg="";
+      if(v!=null){const r=v/c.price-1;const a=Math.min(Math.abs(r),0.5)*0.55;bg=`background:rgba(${r>=0?"39,168,118":"225,73,83"},${a.toFixed(2)})`;}
+      html+=`<td class="${isBase?"base":""}" style="${bg}">${v!=null?fmt(v):"—"}</td>`;
+    });
+    html+=`</tr>`;
+  });
+  $("sensTable").innerHTML=html;
+}
+function renderTech(c,pkg){
+  const t=pkg.tech, sec=$("sec-tech");
+  if(!t){sec.classList.add("hidden");return;}
+  sec.classList.remove("hidden");
+  $("techSub").textContent=`الدرجة المركبة: ${t.score>=0?"+":""}${t.score.toFixed(2)} (من −1 إلى +1) — اتجاه 30٪ + زخم 30٪ + MACD 20٪ + RSI ارتدادي 20٪`;
+  drawChart(c,pkg);
+  $("techTable").innerHTML=[
+    ["الدرجة الفنية المركبة",`<b>${t.score>=0?"+":""}${t.score.toFixed(2)}</b>`],
+    ["SMA50 / SMA200",`${fmt(t.s50)} / ${fmt(t.s200)} — ${t.golden?"تقاطع ذهبي ✓":"لا تقاطع ذهبي"}`],
+    ["RSI(14) وايلدر",t.rsi!=null?t.rsi.toFixed(1)+(t.rsi>70?" (تشبع شرائي)":t.rsi<30?" (تشبع بيعي)":""):"—"],
+    ["MACD هيستوغرام",t.macd!=null?fmt(t.macd,3):"—"],
+    ["زخم 12−1 شهراً",t.mom!=null?fmtPct(t.mom):"—"],
+    ["التقلب السنوي",t.vol!=null?(t.vol*100).toFixed(1)+"%":"—"],
+  ].map(([k,v])=>`<tr><td>${k}</td><td class="num">${v}</td></tr>`).join("");
+}
+function renderFc(c,pkg){
+  const F=pkg.fc;
+  $("fcGrid").innerHTML=[F.short,F.medium,F.long].map(f=>{
+    const cls=f.dir==="صاعد"?"dir-up":f.dir==="هابط"?"dir-down":"dir-flat";
+    const icon=f.dir==="صاعد"?"▲":f.dir==="هابط"?"▼":"◆";
+    return `<div class="fcard">
+      <div class="fhead">${f===F.short?"قصير الأجل":f===F.medium?"متوسط الأجل":"طويل الأجل"} <span class="fh">${f.h}</span></div>
+      <div class="ftarget">${fmt(f.t)}</div>
+      <div class="frange">النطاق: <span class="num">${fmt(f.lo)} – ${fmt(f.hi)}</span></div>
+      <div class="frange">${f.annual?"عائد سنوي متوقع":"عائد متوقع"}: <b class="num">${fmtPct(f.er)}</b></div>
+      <span class="dirchip ${cls}">${icon} ${f.dir}</span>
+      <div class="fdriver">المحرك: ${f.drv}</div>
+    </div>`;
+  }).join("");
+}
+
+/* --------- الرسم البياني (canvas) --------- */
+let chartState=null;
+function drawChart(c,pkg){
+  const cv=$("priceChart"), wrap=cv.parentElement;
+  const W=wrap.clientWidth||900, H=300, dpr=window.devicePixelRatio||1;
+  cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+"px";
+  const ctx=cv.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+  const p=c.price_history;if(!p||p.length<10)return;
+  const s50=smaSeries(p,50),s200=smaSeries(p,200);
+  const fv=pkg.fair_value;
+  let lo=Math.min(...p),hi=Math.max(...p);
+  if(fv>lo*0.4&&fv<hi*2.2){lo=Math.min(lo,fv);hi=Math.max(hi,fv);}
+  const pad=(hi-lo)*0.07;lo-=pad;hi+=pad;
+  const ML=8,MR=52,MT=10,MB=22;
+  const X=i=>ML+i/(p.length-1)*(W-ML-MR);
+  const Y=v=>MT+(1-(v-lo)/(hi-lo))*(H-MT-MB);
+  // grid + y labels
+  ctx.strokeStyle="rgba(31,43,69,.6)";ctx.fillStyle="#5A6A8A";ctx.font="10.5px Consolas,monospace";ctx.lineWidth=1;
+  for(let i=0;i<=3;i++){
+    const v=lo+(hi-lo)*i/3, y=Y(v);
+    ctx.beginPath();ctx.moveTo(ML,y);ctx.lineTo(W-MR,y);ctx.stroke();
+    ctx.fillText(fmt(v,v<10?2:1),W-MR+6,y+3);
+  }
+  const line=(series,color,width,dash)=>{
+    ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash||[]);
+    ctx.beginPath();let started=false;
+    series.forEach((v,i)=>{if(v==null)return;const x=X(i),y=Y(v);if(!started){ctx.moveTo(x,y);started=true;}else ctx.lineTo(x,y);});
+    ctx.stroke();ctx.setLineDash([]);
+  };
+  // fair value dashed line
+  if(fv>lo&&fv<hi){
+    ctx.strokeStyle="#B98328";ctx.setLineDash([5,4]);ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(ML,Y(fv));ctx.lineTo(W-MR,Y(fv));ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle="#D8A93D";ctx.fillText("FV "+fmt(fv,1),W-MR+6,Y(fv)+3);
+  }
+  line(s200,"#9B7BE8",1.6);
+  line(s50,"#B98328",1.6);
+  line(p,"#5B8DEF",2);
+  // x labels (dates)
+  if(c.price_ts&&c.price_ts.length===p.length){
+    ctx.fillStyle="#5A6A8A";
+    [0,Math.floor(p.length/2),p.length-1].forEach(i=>{
+      const d=new Date(c.price_ts[i]*1000);
+      const lbl=d.toISOString().slice(0,7);
+      ctx.fillText(lbl,Math.min(Math.max(X(i)-18,ML),W-MR-52),H-6);
+    });
+  }
+  chartState={p,s50,s200,X,Y,W,H,ML,MR,c};
+}
+function showTip(el,text){
+  const tip=$("tooltip");
+  tip.textContent=text;tip.style.display="block";
+  const wrapRect=el.closest("section").getBoundingClientRect();
+  const r=el.getBoundingClientRect();
+  const parent=el.closest(".ff")||el.closest(".chart-wrap");
+  const pr=parent.getBoundingClientRect();
+  tip.remove();parent.style.position="relative";parent.appendChild(tip);
+  tip.style.left=Math.max(0,r.left-pr.left-40)+"px";
+  tip.style.top=(r.top-pr.top-34)+"px";
+}
+function hideTip(){$("tooltip").style.display="none";}
+$("priceChart").addEventListener("pointermove",e=>{
+  if(!chartState)return;
+  const {p,s50,s200,X,Y,ML,MR,W,c}=chartState;
+  const rect=e.currentTarget.getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const i=Math.round((x-ML)/(W-ML-MR)*(p.length-1));
+  if(i<0||i>=p.length){hideTip();return;}
+  const tip=$("tooltip");
+  const d=c.price_ts&&c.price_ts[i]?new Date(c.price_ts[i]*1000).toISOString().slice(0,10):"#"+i;
+  tip.innerHTML=`${d}<br>السعر ${fmt(p[i])}${s50[i]!=null?" · S50 "+fmt(s50[i],1):""}${s200[i]!=null?" · S200 "+fmt(s200[i],1):""}`;
+  tip.style.display="block";
+  const wrap=e.currentTarget.parentElement;
+  tip.remove();wrap.appendChild(tip);
+  tip.style.left=Math.min(Math.max(x-60,0),wrap.clientWidth-150)+"px";
+  tip.style.top="8px";
+});
+$("priceChart").addEventListener("pointerleave",hideTip);
+window.addEventListener("resize",()=>{if(CUR)drawChart(CUR.c,CUR.pkg);});
+
+/* --------- لوحة الافتراضات --------- */
+const AFIELDS=[
+  ["h","التصنيف"],
+  ["archetype","نوع الشركة","select",Object.entries(ARCH_LABEL)],
+  ["size","الحجم (هامش الأمان)","select",[["large","كبيرة (15٪)"],["mid","متوسطة (25٪)"],["small","صغيرة (40٪)"]]],
+  ["macro_stretched","تشدد كلي (بافيت/CAPE) +5٪","select",[["1","نعم"],["0","لا"]]],
+  ["h","النمو والتوقع"],
+  ["growth_stage1","نمو المرحلة الأولى ٪","pct"],
+  ["growth_terminal","النمو الأبدي g ٪","pct"],
+  ["forecast_years","سنوات التوقع","num"],
+  ["exit_multiple","مضاعف الخروج EV/EBITDA","num"],
+  ["h","معدلات الخصم"],
+  ["beta","بيتا","num"],
+  ["risk_free","المعدل الخالي من المخاطر ٪","pct"],
+  ["cost_of_debt","تكلفة الدين ٪","pct"],
+  ["tax_rate","الضريبة/الزكاة ٪","pct"],
+  ["h","لكل سهم"],
+  ["price","السعر","num"],
+  ["eps","ربحية السهم","num"],
+  ["eps_forward","ربحية متوقعة","num"],
+  ["bvps","القيمة الدفترية","num"],
+  ["roe","ROE ٪","pct"],
+  ["dps","التوزيعات النقدية","num"],
+  ["payout_ratio","نسبة التوزيع ٪","pct"],
+  ["h","مجاميع (بالمليون)"],
+  ["shares","عدد الأسهم","mln"],
+  ["total_debt","إجمالي الدين","mln"],
+  ["cash","النقد","mln"],
+  ["revenue","الإيرادات","mln"],
+  ["ebitda","EBITDA","mln"],
+  ["ebit","EBIT","mln"],
+  ["fcff","FCFF","mln"],
+  ["fcfe","FCFE","mln"],
+  ["h","مضاعفات الأقران"],
+  ["peer_pe","P/E الأقران","num"],
+  ["peer_ev_ebitda","EV/EBITDA الأقران","num"],
+  ["peer_ev_sales","EV/Sales الأقران","num"],
+  ["peer_pb","P/B الأقران","num"],
+];
+function renderAssumptions(c){
+  $("agrid").innerHTML=AFIELDS.map(f=>{
+    if(f[0]==="h")return `<div class="ahead">${f[1]}</div>`;
+    const [key,label,type,opts]=f;
+    if(type==="select"){
+      let val=key==="macro_stretched"?(c[key]!==false?"1":"0"):(c[key]??"");
+      return `<div class="field"><label>${label}</label><select id="a_${key}">${opts.map(([v,l])=>`<option value="${v}" ${String(val)===String(v)?"selected":""}>${l}</option>`).join("")}</select></div>`;
+    }
+    let v=c[key];
+    if(v!=null){
+      if(type==="pct")v=+(v*100).toFixed(2);
+      else if(type==="mln")v=+(v/1e6).toFixed(1);
+      else v=+(+v).toFixed(4);
+    }
+    return `<div class="field"><label>${label}</label><input id="a_${key}" type="number" step="any" value="${v??""}"></div>`;
+  }).join("");
+}
+function readAssumptions(){
+  const c=Object.assign({},CUR.c);
+  for(const f of AFIELDS){
+    if(f[0]==="h")continue;
+    const [key,,type]=f;
+    const el=$("a_"+key);if(!el)continue;
+    if(type==="select"){
+      c[key]=key==="macro_stretched"?el.value==="1":el.value;
+      continue;
+    }
+    const raw=el.value.trim();
+    if(raw===""){c[key]=null;continue;}
+    let v=parseFloat(raw);
+    if(!isFinite(v)){c[key]=null;continue;}
+    if(type==="pct")v/=100;
+    else if(type==="mln")v*=1e6;
+    c[key]=v;
+  }
+  if(c.forecast_years)c.forecast_years=Math.max(3,Math.min(15,Math.round(c.forecast_years)));
+  c.market_cap=c.price*c.shares;
+  return c;
+}
+function renderLog(){
+  $("datalog").innerHTML=LOG.map(l=>`<div class="${l.cls}">${l.cls==="ok"?"✓":"⚠"} <b>${l.src}:</b> ${l.msg}</div>`).join("")||"<div>لا سجل — وضع يدوي.</div>";
+}
+function exportJson(){
+  if(!CUR)return;
+  const {c,pkg}=CUR;
+  const clean=Object.assign({},pkg,{c:Object.assign({},c,{price_history:undefined,price_ts:undefined})});
+  const blob=new Blob([JSON.stringify(clean,null,1)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="fair_value_"+(c.ticker||"stock").replace(/[^\w.]/g,"_")+".json";
+  a.click();
+}
+$("sym").addEventListener("keydown",e=>{if(e.key==="Enter")run();});
+</script>
+</body>
+</html>
