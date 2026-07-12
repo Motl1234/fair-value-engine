@@ -176,6 +176,41 @@ details.assume[open] summary::before{content:"▾ "}
 .abtns{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .abtns .note{font-size:12px;color:var(--faint)}
 
+/* Recommendation */
+.rec-box{margin-top:16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden}
+.rec-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.rec-badge{font-size:19px;font-weight:800;padding:8px 26px;border-radius:10px}
+.rec-title{font-size:13px;color:var(--muted)}
+.rec-box ul{margin:4px 18px 0 0;padding:0}
+.rec-box li{font-size:13.5px;color:var(--text);margin:6px 0;line-height:1.8}
+.rec-box li::marker{color:var(--gold)}
+.lock-overlay{position:absolute;inset:0;background:rgba(11,18,32,.72);backdrop-filter:blur(7px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:5;text-align:center;padding:16px}
+.lock-overlay .lk{font-size:26px}
+.lock-overlay p{font-size:13.5px;color:var(--muted);max-width:420px}
+.skel{height:12px;border-radius:6px;background:linear-gradient(90deg,#1a2540,#22304f,#1a2540);margin:10px 0}
+
+/* Subscription modal */
+.modal-back{position:fixed;inset:0;background:rgba(4,8,16,.72);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:26px;max-width:480px;width:100%;max-height:92vh;overflow-y:auto}
+.modal h3{font-size:19px;margin-bottom:4px}
+.modal h3 b{color:var(--gold)}
+.modal .mprice{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--gold);margin:10px 0 2px;direction:ltr;text-align:right}
+.modal .mprice small{font-size:14px;color:var(--muted);font-family:var(--font)}
+.modal ul.feats{margin:10px 18px 14px 0;padding:0;font-size:13.5px}
+.modal ul.feats li{margin:5px 0}
+.modal ul.feats li::marker{color:var(--green)}
+.modal ol.steps{margin:8px 18px 14px 0;padding:0;font-size:13px;color:var(--muted)}
+.modal ol.steps li{margin:7px 0;line-height:1.8}
+.modal .mrow{display:flex;gap:8px;margin-top:8px}
+.modal input{flex:1;font-family:var(--mono);direction:ltr;text-transform:uppercase;font-size:13px}
+.modal .msg{font-size:13px;margin-top:10px;min-height:20px}
+.modal .msg.ok{color:var(--green)}
+.modal .msg.err{color:var(--red)}
+.modal .mclose{margin-top:14px;width:100%}
+.subchip{background:rgba(46,189,133,.12);color:var(--green);border:1px solid rgba(46,189,133,.35);border-radius:8px;padding:9px 14px;font-size:12.5px;font-weight:600}
+.btn-gold-line{background:transparent;color:var(--gold);border:1px solid var(--gold-dim);padding:9px 16px}
+.btn-gold-line:hover{background:rgba(216,169,61,.1)}
+
 .foot{font-size:12px;color:var(--faint);border-top:1px solid var(--border);padding-top:14px;margin-top:10px;line-height:2}
 .foot b{color:var(--muted)}
 </style>
@@ -196,6 +231,7 @@ details.assume[open] summary::before{content:"▾ "}
       </div>
       <button class="btn-run" id="btnRun" onclick="run()">حلّل السهم</button>
       <button class="btn-ghost" onclick="runDemo()">مثال توضيحي</button>
+      <button class="btn-gold-line" id="btnSub" onclick="openSub()">★ الاشتراك المميز</button>
     </div>
   </div>
   <div class="chips">
@@ -242,7 +278,12 @@ details.assume[open] summary::before{content:"▾ "}
     </section>
 
     <section id="sec-verdict">
-      <div class="sec-head"><h2>الخلاصة<span class="n">حزمة القيمة</span></h2><div class="sub" id="verdictSub"></div></div>
+      <div class="sec-head"><h2>الخلاصة<span class="n">حزمة القيمة</span></h2>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <div class="sub" id="verdictSub"></div>
+          <button class="btn-gold-line" onclick="downloadPdf()">⬇ تقرير PDF</button>
+        </div>
+      </div>
       <div class="verdict-grid">
         <div class="vcell"><div class="k">السعر الحالي</div><div class="v" id="vPrice">—</div></div>
         <div class="vcell gold"><div class="k">القيمة العادلة (دمج + سيناريوهات)</div><div class="v" id="vFV">—</div></div>
@@ -251,6 +292,7 @@ details.assume[open] summary::before{content:"▾ "}
       </div>
       <div class="tagline"><span class="tag" id="vTag">—</span><span style="font-size:13px;color:var(--muted)" id="vExplain"></span></div>
       <div id="vWarnings"></div>
+      <div id="recWrap"></div>
     </section>
 
     <section id="sec-ff">
@@ -322,6 +364,31 @@ details.assume[open] summary::before{content:"▾ "}
     <b>المنهجية:</b> تثليث بين النماذج الجوهرية (DCF-FCFF بقيمتين نهائيتين، FCFE، توزيعات ثنائي المرحلة، الدخل المتبقي RIM، قوة الأرباح EPV، رقم جراهم) والنسبية (P/E مبرر، EV/EBITDA، EV/Sales، P/B مبرر) — أوزان حسب نوع الشركة، متوسط مشذّب ووسيط، سيناريوهات 20/60/20، هامش أمان متدرج، DCF عكسي، طبقة فنية منفصلة عن القيمة، وتنبؤ بثلاثة آفاق بنطاقات.
     <br><b>البيانات:</b> Yahoo Finance (قد تتأخر 15 دقيقة، وأساسيات الشركات السعودية الصغيرة قد تنقص — راجع سجل الجودة). معايير السوق من جدول Damodaran (يناير 2026).
     <br><b>تنويه:</b> هذا النظام أداة دراسة كمية شخصية وليس توصية استثمارية ولا مستشاراً مالياً مرخصاً. المخرجات حساسة لجودة المدخلات والافتراضات — راجعها قبل أي قرار.
+  </div>
+</div>
+
+<div class="modal-back hidden" id="subModal">
+  <div class="modal">
+    <h3>الاشتراك <b>المميز</b></h3>
+    <div style="font-size:13px;color:var(--muted)">توصية استثمارية مفصلة + تقرير PDF احترافي لكل سهم</div>
+    <div class="mprice">50 <small>ريال / شهر</small></div>
+    <ul class="feats">
+      <li>توصية صريحة: شراء / احتفاظ / بيع — مع أسبابها الكمية</li>
+      <li>تقرير PDF احترافي بالرسومات البيانية قابل للحفظ والمشاركة</li>
+      <li>كل التحديثات المستقبلية للمنهجية والنماذج</li>
+    </ul>
+    <div style="font-weight:700;font-size:14px;margin-top:6px">خطوات الاشتراك:</div>
+    <ol class="steps">
+      <li id="payStep">حوّل قيمة الاشتراك (50 ريالاً) — <span id="payHow">تواصل مع مشغّل الموقع لمعرفة وسيلة الدفع (تحويل بنكي / STC Pay)</span></li>
+      <li>بعد تأكيد الدفع تصلك <b>شفرة تفعيل</b> خاصة بك</li>
+      <li>أدخل الشفرة هنا وفعّل اشتراكك فوراً</li>
+    </ol>
+    <div class="mrow">
+      <input id="subCode" placeholder="FV-XXXX-XXXXX-XXXXXXXXXX" autocomplete="off">
+      <button class="btn-run" onclick="activateSub()">تفعيل</button>
+    </div>
+    <div class="msg" id="subMsg"></div>
+    <button class="btn-ghost mclose" onclick="closeSub()">إغلاق</button>
   </div>
 </div>
 
@@ -611,6 +678,35 @@ function forecasts(price,fv,c,tech){
 }
 
 /* =====================================================================
+   التوصية — شراء / احتفاظ / بيع مع الأسباب الكمية
+===================================================================== */
+function recommendation(c,pkg){
+  const up=pkg.upside, mos=pkg.mos, disp=pkg.ens.dispersion, ts=pkg.tech?pkg.tech.score:null;
+  let rec,cls;
+  if(up>mos){rec="شراء";cls="buy";}
+  else if(up<-0.10){rec="بيع";cls="sell";}
+  else{rec="احتفاظ";cls="hold";}
+  let note=null;
+  if(rec==="شراء"&&disp!=null&&disp>0.60){
+    rec="احتفاظ";cls="hold";
+    note="خُفضت التوصية من «شراء» إلى «احتفاظ»: تباعد النماذج شديد ("+Math.round(disp*100)+"٪) — قاعدة قرار المنهجية: لا شراء عند تباعد مفرط قبل إعادة فحص الافتراضات.";
+  }
+  const reasons=[];
+  reasons.push(`القيمة العادلة ${fmt(pkg.fair_value)} مقابل السعر ${fmt(c.price)} — فجوة ${fmtPct(up)} والمطلوب لهامش الأمان ${Math.round(mos*100)}٪+ (سعر شراء أقصى ${fmt(pkg.buyBelow)}).`);
+  if(disp!=null)reasons.push(disp>0.25
+    ?`تباعد النماذج ${Math.round(disp*100)}٪ يتجاوز عتبة 25٪ — الثقة أقل والافتراضات تحتاج مراجعة.`
+    :`تقارب جيد بين النماذج (تباعد ${Math.round(disp*100)}٪ فقط) — ثقة أعلى في التقدير.`);
+  if(ts!=null)reasons.push(`الطبقة الفنية ${ts>=0.15?"داعمة للتوقيت":ts<=-0.15?"ضاغطة على التوقيت":"محايدة"} — درجة مركبة ${ts>=0?"+":""}${ts.toFixed(2)}${pkg.tech.golden?" مع تقاطع ذهبي":""}.`);
+  reasons.push(`توقع 12 شهراً: ${fmt(pkg.fc.medium.t)} (${fmtPct(pkg.fc.medium.er)}) — اتجاه ${pkg.fc.medium.dir}؛ وطويل الأجل ${fmtPct(pkg.fc.long.er)} سنوياً.`);
+  if(pkg.impliedG!=null){
+    const a=c.growth_stage1??0.05;
+    reasons.push(`DCF العكسي: السوق يسعّر نمواً ${(pkg.impliedG*100).toFixed(1)}٪ مقابل افتراضنا ${(a*100).toFixed(1)}٪ — ${pkg.impliedG>a?"تفاؤل مُسعَّر يرفع مخاطر الخيبة":"تشاؤم مُسعَّر قد يتيح فرصة"}.`);
+  }
+  if(c.macro_stretched!==false)reasons.push("البيئة الكلية: مؤشرات التقييم العامة (بافيت/CAPE) في مناطق مرتفعة تاريخياً — تشدد إضافي في هامش الأمان.");
+  return {rec,cls,reasons,note};
+}
+
+/* =====================================================================
    المحرك — evaluate(c) → حزمة تقييم كاملة
 ===================================================================== */
 function evaluate(c){
@@ -644,8 +740,10 @@ function evaluate(c){
   else if(upside>0){verdict="أقل من القيمة العادلة لكن خارج هامش الأمان — انتظار";tag="hold";}
   else if(upside>-0.10){verdict="قريب من القيمة العادلة";tag="hold";}
   else{verdict="مقيّم بأعلى من قيمته";tag="sell";}
-  return {c, rates, models:mv, impliedG, ens, scen, probFv, fair_value:fv, upside,
+  const pkg={c, rates, models:mv, impliedG, ens, scen, probFv, fair_value:fv, upside,
           mos, buyBelow, verdict, tag, warnings, sens:sensitivity(c,rates), tech, fc};
+  pkg.rec=recommendation(c,pkg);
+  return pkg;
 }
 
 /* =====================================================================
@@ -983,6 +1081,26 @@ function renderVerdict(c,pkg){
   $("vExplain").textContent=`${pkg.ens.n} نماذج · تباعد ${pkg.ens.dispersion!=null?Math.round(pkg.ens.dispersion*100)+"٪":"—"} · القيمة = متوسط (الدمج الأساسي ${fmt(pkg.ens.fair_value)}، المرجح بالسيناريوهات ${fmt(pkg.probFv)})`;
   $("verdictSub").textContent="تاريخ التحليل: "+new Date().toLocaleDateString("ar-SA-u-nu-latn");
   $("vWarnings").innerHTML=pkg.warnings.map(w=>`<div class="warn">⚠ ${w}</div>`).join("");
+  renderRec(c,pkg);
+}
+function renderRec(c,pkg){
+  const wrap=$("recWrap");
+  if(!isPremium()){
+    wrap.innerHTML=`<div class="rec-box">
+      <div class="rec-head"><span class="rec-badge tag-hold">■ ■ ■</span><span class="rec-title">التوصية التفصيلية</span></div>
+      <div class="skel" style="width:88%"></div><div class="skel" style="width:72%"></div><div class="skel" style="width:80%"></div><div class="skel" style="width:64%"></div>
+      <div class="lock-overlay"><div class="lk">🔒</div>
+        <p><b>التوصية الصريحة (شراء / احتفاظ / بيع) بأسبابها الكمية + تقرير PDF الاحترافي</b> — حصرية للمشتركين</p>
+        <button class="btn-run" onclick="openSub()">اشترك الآن — 50 ريال/شهر</button>
+      </div></div>`;
+    return;
+  }
+  const r=pkg.rec;
+  wrap.innerHTML=`<div class="rec-box">
+    <div class="rec-head"><span class="rec-badge tag-${r.cls}">${r.rec}</span><span class="rec-title">التوصية وفق المنهجية الكمية — ليست نصيحة استثمارية شخصية</span></div>
+    ${r.note?`<div class="warn">ℹ ${r.note}</div>`:""}
+    <ul>${r.reasons.map(x=>`<li>${x}</li>`).join("")}</ul>
+  </div>`;
 }
 function renderFF(c,pkg){
   const rows=Object.entries(pkg.models).map(([k,m])=>({k,label:MODEL_LABELS[k],v:m.v})).sort((a,b)=>b.v-a.v);
@@ -1278,6 +1396,219 @@ function exportJson(){
   a.download="fair_value_"+(c.ticker||"stock").replace(/[^\w.]/g,"_")+".json";
   a.click();
 }
+/* =====================================================================
+   الاشتراك المميز — 50 ريال/شهر بشفرة تفعيل يتحقق منها الخادم
+===================================================================== */
+const PAYMENT_LINK="";   // ضع هنا رابط دفع جاهز (Moyasar / Tap / STC Pay) إن توفر
+function getSub(){
+  try{
+    const s=JSON.parse(localStorage.getItem("fv_sub"));
+    if(s&&s.expires>=new Date().toISOString().slice(0,10))return s;
+  }catch(e){}
+  return null;
+}
+const isPremium=()=>!!getSub();
+function updateSubUI(){
+  const b=$("btnSub"), s=getSub();
+  if(s){b.className="subchip";b.textContent="★ مشترك حتى "+s.expires;}
+  else{b.className="btn-gold-line";b.textContent="★ الاشتراك المميز";}
+}
+function openSub(){
+  const s=getSub();
+  $("subMsg").className="msg";
+  $("subMsg").textContent=s?("اشتراكك فعّال حتى "+s.expires):"";
+  if(PAYMENT_LINK)$("payHow").innerHTML=`<a href="${PAYMENT_LINK}" target="_blank" rel="noopener">ادفع من هنا مباشرة</a>`;
+  $("subModal").classList.remove("hidden");
+}
+function closeSub(){$("subModal").classList.add("hidden");}
+async function activateSub(){
+  const code=$("subCode").value.trim();
+  const msg=$("subMsg");
+  if(!code){msg.className="msg err";msg.textContent="أدخل شفرة التفعيل أولاً.";return;}
+  msg.className="msg";msg.textContent="جارٍ التحقق…";
+  try{
+    const r=await fetch(API+"/api/activate?code="+encodeURIComponent(code));
+    const j=await r.json();
+    if(j.ok){
+      localStorage.setItem("fv_sub",JSON.stringify({code,expires:j.expires}));
+      msg.className="msg ok";msg.textContent="تم التفعيل ✓ اشتراكك سارٍ حتى "+j.expires;
+      updateSubUI();
+      if(CUR)renderRec(CUR.c,CUR.pkg);
+      setTimeout(closeSub,1600);
+    }else{msg.className="msg err";msg.textContent="فشل التفعيل: "+(j.reason||"شفرة غير صالحة");}
+  }catch(e){msg.className="msg err";msg.textContent="تعذر الاتصال بالخادم — حاول مجدداً.";}
+}
+$("subModal").addEventListener("click",e=>{if(e.target.id==="subModal")closeSub();});
+
+/* =====================================================================
+   تقرير PDF احترافي — صفحة طباعة فاتحة برسومات SVG
+===================================================================== */
+function downloadPdf(){
+  if(!CUR)return;
+  if(!isPremium()){openSub();return;}
+  const html=buildReport(CUR.c,CUR.pkg);
+  const old=document.getElementById("printFrame");
+  if(old)old.remove();
+  const fr=document.createElement("iframe");
+  fr.id="printFrame";
+  fr.style.cssText="position:fixed;left:-10000px;top:0;width:900px;height:1200px;visibility:hidden";
+  document.body.appendChild(fr);
+  fr.onload=()=>setTimeout(()=>{
+    try{fr.contentWindow.focus();fr.contentWindow.print();}
+    catch(e){status("تعذر فتح نافذة الطباعة: "+e.message,true);}
+  },300);
+  fr.srcdoc=html;
+}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function svgFF(c,pkg){
+  const rows=Object.entries(pkg.models).map(([k,m])=>({label:MODEL_LABELS[k],v:m.v})).sort((a,b)=>b.v-a.v);
+  const all=rows.map(r=>r.v).concat([c.price,pkg.fair_value,pkg.buyBelow]);
+  const lo=Math.min(...all)*0.92, hi=Math.max(...all)*1.06;
+  const W=680,LB=200,RB=10,rowH=26,H=rows.length*rowH+66;
+  const X=v=>LB+((v-lo)/(hi-lo))*(W-LB-RB);
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:Segoe UI,Tahoma,sans-serif">`;
+  rows.forEach((r,i)=>{
+    const y=18+i*rowH;
+    s+=`<text x="${LB-8}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#444">${esc(r.label)}</text>`;
+    s+=`<line x1="${LB}" y1="${y}" x2="${W-RB}" y2="${y}" stroke="#e7e2d5" stroke-width="1"/>`;
+    s+=`<rect x="${X(r.v)-5}" y="${y-6}" width="10" height="12" rx="3" fill="#2456b8"/>`;
+    s+=`<text x="${X(r.v)+9}" y="${y+4}" font-size="10" fill="#666">${fmt(r.v)}</text>`;
+  });
+  const yb=rows.length*rowH+14;
+  const mark=(v,color,label,dy)=>{
+    s+=`<line x1="${X(v)}" y1="8" x2="${X(v)}" y2="${yb}" stroke="${color}" stroke-width="1.6" stroke-dasharray="5 3"/>`;
+    s+=`<text x="${X(v)}" y="${yb+dy}" text-anchor="middle" font-size="10.5" font-weight="700" fill="${color}">${label} ${fmt(v)}</text>`;
+  };
+  mark(c.price,"#a32d2d","السعر",14);
+  mark(pkg.fair_value,"#0e6e56","القيمة العادلة",30);
+  mark(pkg.buyBelow,"#b07a17","سعر الشراء",46);
+  return s+"</svg>";
+}
+function svgScen(pkg){
+  const rows=["bear","base","bull"].map(k=>pkg.scen[k]).filter(s=>s.fv);
+  const hi=Math.max(...rows.map(r=>r.fv))*1.15;
+  const W=340,LB=70,H=rows.length*30+14;
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:Segoe UI,Tahoma,sans-serif">`;
+  rows.forEach((r,i)=>{
+    const y=10+i*30, w=(r.fv/hi)*(W-LB-58);
+    s+=`<text x="${LB-6}" y="${y+12}" text-anchor="end" font-size="10.5" fill="#444">${r.label} ${Math.round(r.prob*100)}٪</text>`;
+    s+=`<rect x="${LB}" y="${y}" width="${w}" height="16" rx="4" fill="${i===0?"#a32d2d":i===1?"#b07a17":"#0e6e56"}" opacity="0.85"/>`;
+    s+=`<text x="${LB+w+6}" y="${y+12}" font-size="10.5" fill="#333">${fmt(r.fv)}</text>`;
+  });
+  return s+"</svg>";
+}
+function svgFc(c,pkg){
+  const F=[["قصير 1–3 أشهر",pkg.fc.short],["متوسط 12 شهراً",pkg.fc.medium],["طويل 5 سنوات",pkg.fc.long]];
+  const all=F.flatMap(([,f])=>[f.lo,f.hi]).concat([c.price]);
+  const lo=Math.min(...all)*0.95, hi=Math.max(...all)*1.05;
+  const W=680,LB=140,RB=44,H=F.length*32+30;
+  const X=v=>LB+((v-lo)/(hi-lo))*(W-LB-RB);
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:Segoe UI,Tahoma,sans-serif">`;
+  s+=`<line x1="${X(c.price)}" y1="6" x2="${X(c.price)}" y2="${H-22}" stroke="#a32d2d" stroke-width="1.4" stroke-dasharray="5 3"/>`;
+  s+=`<text x="${X(c.price)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#a32d2d">السعر ${fmt(c.price)}</text>`;
+  F.forEach(([lbl,f],i)=>{
+    const y=20+i*32;
+    const col=f.dir==="صاعد"?"#0e6e56":f.dir==="هابط"?"#a32d2d":"#b07a17";
+    s+=`<text x="${LB-8}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#444">${lbl}</text>`;
+    s+=`<line x1="${X(f.lo)}" y1="${y}" x2="${X(f.hi)}" y2="${y}" stroke="#c9c2b0" stroke-width="4" stroke-linecap="round"/>`;
+    s+=`<circle cx="${X(f.t)}" cy="${y}" r="6" fill="${col}"/>`;
+    s+=`<text x="${X(f.t)}" y="${y-9}" text-anchor="middle" font-size="10" font-weight="700" fill="${col}">${fmt(f.t)}</text>`;
+  });
+  return s+"</svg>";
+}
+function buildReport(c,pkg){
+  const r=pkg.rec, rt=pkg.rates, cur=c.currency==="SAR"?"ريال":c.currency;
+  const recColor=r.cls==="buy"?"#0e6e56":r.cls==="sell"?"#a32d2d":"#b07a17";
+  const recBg=r.cls==="buy"?"#eaf3ec":r.cls==="sell"?"#f7e9e9":"#fbf1dc";
+  const w=WEIGHTS[c.archetype]||WEIGHTS.mature;
+  const modelRows=Object.keys(MODEL_LABELS).map(k=>{
+    const m=pkg.models[k];
+    return `<tr><td>${MODEL_LABELS[k]}</td><td class="n">${m?fmt(m.v):"—"}</td><td class="n">${m?fmtPct(m.v/c.price-1):"—"}</td><td class="n">${w[k]?Math.round(w[k]*100)+"٪":"—"}</td></tr>`;
+  }).join("");
+  const t=pkg.tech;
+  return `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="utf-8"><title>تقرير القيمة العادلة — ${esc(c.name)}</title>
+<style>
+@page{size:A4;margin:13mm}
+*{box-sizing:border-box}
+body{font-family:"Segoe UI",Tahoma,sans-serif;color:#14261f;margin:0;font-size:12.5px;line-height:1.7;background:#fff}
+h1{font-size:20px;margin:0 0 2px}
+h2{font-size:14px;color:#0e6e56;margin:16px 0 7px;border-bottom:1.5px solid #dcd6c8;padding-bottom:4px}
+.sub{color:#6b6a60;font-size:11px}
+.hero{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0;border:1px solid #dcd6c8;border-radius:10px;padding:12px 16px}
+.hero div{min-width:110px}
+.hero .k{font-size:10.5px;color:#6b6a60}
+.hero .v{font-size:19px;font-weight:700;direction:ltr;font-family:Consolas,monospace}
+.rec{display:flex;align-items:center;gap:14px;background:${recBg};border:1.5px solid ${recColor};border-radius:10px;padding:10px 16px;margin:10px 0}
+.rec .b{font-size:22px;font-weight:800;color:${recColor}}
+.rec .t{font-size:11px;color:#555}
+ul.rs{margin:6px 18px 0 0;padding:0}
+ul.rs li{margin:4px 0}
+table{border-collapse:collapse;width:100%;font-size:11.5px}
+td,th{border:1px solid #dcd6c8;padding:4px 8px;text-align:right}
+th{background:#f2efe6;font-weight:600}
+td.n,th.n{direction:ltr;text-align:center;font-family:Consolas,monospace}
+.warn{background:#fbf1dc;border:1px solid #e3c684;border-radius:6px;padding:6px 10px;margin:6px 0;font-size:11.5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.foot{margin-top:18px;font-size:10px;color:#6b6a60;border-top:1px solid #dcd6c8;padding-top:8px;line-height:1.8}
+.card{border:1px solid #dcd6c8;border-radius:10px;padding:10px 12px}
+.nobreak{break-inside:avoid}
+</style></head><body>
+<h1>تقرير القيمة العادلة — ${esc(c.name)} <span style="color:#6b6a60;font-size:14px">(${c.ticker})</span></h1>
+<div class="sub">${MARKETS[c.market].name}${c.sector?" · "+esc(c.sector):""} · نوع الشركة: ${ARCH_LABEL[c.archetype]} · تاريخ التقرير: ${new Date().toLocaleDateString("ar-SA-u-nu-latn")} · معايير Damodaran يناير 2026 · العملة: ${cur}</div>
+
+<div class="rec nobreak"><span class="b">التوصية: ${r.rec}</span><span class="t">وفق منهجية كمية متعددة النماذج — ${pkg.ens.n} نماذج، تباعد ${pkg.ens.dispersion!=null?Math.round(pkg.ens.dispersion*100)+"٪":"—"}</span></div>
+
+<div class="hero nobreak">
+<div><div class="k">السعر الحالي</div><div class="v">${fmt(c.price)}</div></div>
+<div><div class="k">القيمة العادلة</div><div class="v" style="color:#0e6e56">${fmt(pkg.fair_value)}</div></div>
+<div><div class="k">الفجوة</div><div class="v" style="color:${pkg.upside>=0?"#0e6e56":"#a32d2d"}">${fmtPct(pkg.upside)}</div></div>
+<div><div class="k">سعر الشراء الأقصى (أمان ${Math.round(pkg.mos*100)}٪)</div><div class="v" style="color:#b07a17">${fmt(pkg.buyBelow)}</div></div>
+</div>
+
+<h2>أسباب التوصية</h2>
+${r.note?`<div class="warn">ℹ ${esc(r.note)}</div>`:""}
+<ul class="rs">${r.reasons.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+${pkg.warnings.map(x=>`<div class="warn">⚠ ${esc(x)}</div>`).join("")}
+
+<h2>نطاق التقييم — كل نموذج نقطة (Football Field)</h2>
+<div class="nobreak">${svgFF(c,pkg)}</div>
+
+<div class="grid2 nobreak">
+<div><h2>النماذج والأوزان</h2>
+<table><tr><th>النموذج</th><th class="n">القيمة</th><th class="n">عن السعر</th><th class="n">الوزن</th></tr>${modelRows}
+<tr><th>القيمة العادلة النهائية</th><th class="n">${fmt(pkg.fair_value)}</th><th class="n">${fmtPct(pkg.upside)}</th><th></th></tr></table></div>
+<div><h2>السيناريوهات المرجحة (20/60/20)</h2>
+<div class="card">${svgScen(pkg)}<div style="font-size:11px;color:#555;margin-top:4px">المرجح بالاحتمالات: <b>${fmt(pkg.probFv)}</b></div></div>
+<h2>معدلات الخصم</h2>
+<table>
+<tr><td>المعدل الخالي من المخاطر (نظيف)</td><td class="n">${(rt.rf_clean*100).toFixed(2)}%</td></tr>
+<tr><td>بيتا</td><td class="n">${fmt(rt.beta,2)}</td></tr>
+<tr><td>تكلفة حقوق الملكية (متوسط طريقتين)</td><td class="n">${(rt.ke*100).toFixed(2)}%</td></tr>
+<tr><td>WACC</td><td class="n">${(rt.wacc*100).toFixed(2)}%</td></tr>
+${pkg.impliedG!=null?`<tr><td>النمو المسعّر ضمنياً (DCF عكسي)</td><td class="n">${(pkg.impliedG*100).toFixed(1)}%</td></tr>`:""}
+</table></div>
+</div>
+
+<h2>التنبؤ بثلاثة آفاق — نقطة مركزية ونطاق</h2>
+<div class="nobreak">${svgFc(c,pkg)}
+<table style="margin-top:6px"><tr><th>الأفق</th><th class="n">الهدف</th><th class="n">النطاق</th><th class="n">العائد المتوقع</th><th>الاتجاه</th><th>المحرك</th></tr>
+${[["قصير (1–3 أشهر)",pkg.fc.short],["متوسط (12 شهراً)",pkg.fc.medium],["طويل (5 سنوات)",pkg.fc.long]].map(([l,f])=>
+`<tr><td>${l}</td><td class="n">${fmt(f.t)}</td><td class="n">${fmt(f.lo)} – ${fmt(f.hi)}</td><td class="n">${fmtPct(f.er)}${f.annual?" سنوياً":""}</td><td>${f.dir}</td><td style="font-size:10.5px">${f.drv}</td></tr>`).join("")}
+</table></div>
+
+${t?`<h2>الطبقة الفنية (توقيت لا قيمة)</h2>
+<table class="nobreak"><tr><th>الدرجة المركبة</th><th class="n">SMA50/200</th><th class="n">RSI(14)</th><th class="n">زخم 12−1</th><th class="n">التقلب السنوي</th></tr>
+<tr><td class="n">${t.score>=0?"+":""}${t.score.toFixed(2)}</td><td class="n">${fmt(t.s50)} / ${fmt(t.s200)}${t.golden?" ✓":""}</td><td class="n">${t.rsi!=null?t.rsi.toFixed(1):"—"}</td><td class="n">${t.mom!=null?fmtPct(t.mom):"—"}</td><td class="n">${t.vol!=null?(t.vol*100).toFixed(1)+"%":"—"}</td></tr></table>`:""}
+
+<div class="foot">
+<b>المنهجية:</b> تثليث مؤسسي بين نماذج جوهرية (DCF بقيمتين نهائيتين، FCFE، توزيعات، دخل متبقٍ RIM، قوة أرباح EPV، رقم جراهم) ونسبية (P/E وP/B مبررة، مضاعفات أقران) بأوزان حسب نوع الشركة، مع سيناريوهات مرجحة وهامش أمان متدرج وطبقة فنية منفصلة.
+<b>تنويه مهم:</b> هذا التقرير ناتج نموذج كمي آلي لأغراض الدراسة وليس نصيحة استثمارية شخصية ولا يصدر عن مستشار مالي مرخص. الأسواق تنطوي على مخاطر، والنتائج حساسة لجودة البيانات والافتراضات — راجعها قبل أي قرار. بيانات الأسعار قد تتأخر 15 دقيقة (Yahoo Finance).
+<br>محرك القيمة العادلة — motl1234.github.io/fair-value-engine
+</div>
+</body></html>`;
+}
+
+updateSubUI();
 $("sym").addEventListener("input",showSug);
 $("sym").addEventListener("focus",showSug);
 $("sym").addEventListener("blur",()=>setTimeout(hideSug,150));
