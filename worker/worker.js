@@ -55,10 +55,49 @@ const FUND_TYPES = [
   "annualTotalDebt", "annualCashAndCashEquivalents", "annualInterestExpense",
 ].join(",");
 
+const JSON_HDRS = { "Content-Type": "application/json; charset=utf-8", ...CORS };
+
+async function hmacHex(secret, msg) {
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(msg));
+  return [...new Uint8Array(sig)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+// صيغة الشفرة: FV-<أيام الانتهاء base36>-<عشوائي 5>-<توقيع 10>
+async function makeCode(env, months) {
+  const expDays = Math.floor(Date.now() / 86400000) + Math.round(months * 30);
+  const nonce = [...crypto.getRandomValues(new Uint8Array(3))].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 5).toUpperCase();
+  const sig = (await hmacHex(env.CODE_SECRET, expDays + "|" + nonce)).slice(0, 10).toUpperCase();
+  return { code: `FV-${expDays.toString(36).toUpperCase()}-${nonce}-${sig}`, expires: new Date(expDays * 86400000).toISOString().slice(0, 10) };
+}
+async function verifyCode(env, code) {
+  const m = /^FV-([0-9A-Z]+)-([0-9A-F]{5})-([0-9A-F]{10})$/i.exec((code || "").trim());
+  if (!m) return { ok: false, reason: "صيغة غير صحيحة" };
+  const expDays = parseInt(m[1], 36);
+  if (!isFinite(expDays)) return { ok: false, reason: "صيغة غير صحيحة" };
+  const sig = (await hmacHex(env.CODE_SECRET, expDays + "|" + m[2].toUpperCase())).slice(0, 10).toUpperCase();
+  if (sig !== m[3].toUpperCase()) return { ok: false, reason: "شفرة غير صالحة" };
+  if (Date.now() > expDays * 86400000) return { ok: false, reason: "شفرة منتهية" };
+  return { ok: true, expires: new Date(expDays * 86400000).toISOString().slice(0, 10) };
+}
+
 export default {
-  async fetch(req) {
+  async fetch(req, env) {
     const url = new URL(req.url);
     if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
+
+    // الاشتراكات
+    if (url.pathname === "/api/activate") {
+      const res = await verifyCode(env, url.searchParams.get("code"));
+      return new Response(JSON.stringify(res), { status: res.ok ? 200 : 400, headers: JSON_HDRS });
+    }
+    if (url.pathname === "/api/gencode") {
+      if (url.searchParams.get("admin") !== env.ADMIN_KEY || !env.ADMIN_KEY) {
+        return new Response(JSON.stringify({ error: "غير مصرح" }), { status: 403, headers: JSON_HDRS });
+      }
+      const months = Math.min(Math.max(parseFloat(url.searchParams.get("months") || "1"), 0.1), 24);
+      const out = await makeCode(env, months);
+      return new Response(JSON.stringify(out), { headers: JSON_HDRS });
+    }
 
     const symbol = (url.searchParams.get("symbol") || "").trim().toUpperCase();
     if (!symbol || !/^[A-Z0-9.\-^=]{1,12}$/.test(symbol)) {
