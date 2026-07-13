@@ -53,6 +53,7 @@ const FUND_TYPES = [
   "annualCapitalExpenditure", "annualDepreciationAndAmortization", "annualReconciledDepreciation",
   "annualTotalRevenue", "annualNetIncome", "annualDilutedEPS", "annualStockholdersEquity",
   "annualTotalDebt", "annualCashAndCashEquivalents", "annualInterestExpense",
+  "annualOrdinarySharesNumber", "annualShareIssued", "annualBasicAverageShares", "annualDilutedAverageShares",
 ].join(",");
 
 const JSON_HDRS = { "Content-Type": "application/json; charset=utf-8", ...CORS };
