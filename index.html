@@ -54,7 +54,7 @@ button{cursor:pointer;border:none;border-radius:8px;font-family:var(--font);font
 .chips{display:flex;flex-wrap:wrap;gap:8px;max-width:1180px;margin:14px auto 0;padding:0 20px}
 .chip{background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:20px;padding:5px 14px;font-size:12.5px;cursor:pointer}
 .chip:hover{color:var(--gold);border-color:var(--gold-dim)}
-.chip b{font-family:var(--mono);color:var(--text);font-weight:600;margin-left:5px}
+.chip b{font-family:var(--mono);color:var(--text);font-weight:600;margin-inline-start:5px}
 .chip:hover b{color:var(--gold)}
 
 /* Pipeline strip */
@@ -70,7 +70,7 @@ button{cursor:pointer;border:none;border-radius:8px;font-family:var(--font);font
 section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:18px}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:11px}
 .sec-head h2{font-size:17px;font-weight:700}
-.sec-head h2 .n{color:var(--gold);font-family:var(--mono);font-size:13px;margin-left:7px}
+.sec-head h2 .n{color:var(--gold);font-family:var(--mono);font-size:13px;margin-inline-end:7px;margin-inline-start:7px}
 .sec-head .sub{font-size:12px;color:var(--muted)}
 
 /* Status / errors */
@@ -111,9 +111,9 @@ section{background:var(--surface);border:1px solid var(--border);border-radius:1
 
 /* Tables */
 table{width:100%;border-collapse:collapse;font-size:13.5px}
-th{color:var(--muted);font-weight:500;font-size:12px;text-align:right;padding:8px 10px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-weight:500;font-size:12px;text-align:start;padding:8px 10px;border-bottom:1px solid var(--border)}
 td{padding:8px 10px;border-bottom:1px solid rgba(31,43,69,.55)}
-td.num,th.num{text-align:left}
+td.num,th.num{text-align:end}
 tr.group td{color:var(--gold);font-weight:600;font-size:12.5px;background:rgba(216,169,61,.05);border-bottom:1px solid var(--border)}
 tr.total td{background:rgba(216,169,61,.1);font-weight:700;color:var(--gold);border-top:2px solid var(--gold-dim)}
 .w-badge{font-family:var(--mono);font-size:11px;color:var(--muted)}
@@ -121,13 +121,13 @@ tr.total td{background:rgba(216,169,61,.1);font-weight:700;color:var(--gold);bor
 /* Football field */
 .ff{position:relative;padding-bottom:56px}
 .ffrow{display:flex;align-items:center;margin:8px 0;position:relative;z-index:2}
-.fflabel{width:225px;font-size:12.5px;flex-shrink:0;padding-left:10px}
-.fflabel .w-badge{margin-right:6px}
+.fflabel{width:225px;font-size:12.5px;flex-shrink:0;padding-inline-end:10px}
+.fflabel .w-badge{margin-inline-start:6px}
 .fftrack{position:relative;flex:1;height:24px;background:#0d1526;border-radius:6px;direction:ltr}
 .ffbar{position:absolute;top:5px;height:14px;width:14px;border-radius:4px;background:var(--blue);cursor:pointer}
 .ffbar:hover{outline:2px solid var(--text)}
 .ffv{position:absolute;top:3px;font-size:11px;color:var(--muted);font-family:var(--mono);white-space:nowrap}
-.ffmarks{position:absolute;top:0;bottom:20px;left:0;right:225px;direction:ltr;z-index:1}
+.ffmarks{position:absolute;top:0;bottom:20px;inset-inline-start:225px;inset-inline-end:0;direction:ltr;z-index:1}
 .ffmark{position:absolute;top:0;bottom:0;border-left:2px dashed}
 .ffmark span{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:11px;white-space:nowrap;background:var(--surface2);padding:1px 8px;border-radius:4px;border:1px solid var(--border)}
 .ffmark.mprice{border-color:var(--red-mark);color:var(--red)}
@@ -147,7 +147,7 @@ tr.total td{background:rgba(216,169,61,.1);font-weight:700;color:var(--gold);bor
 
 /* Technical + chart */
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:10px}
-.legend i{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-left:6px}
+.legend i{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-inline-end:6px}
 canvas{width:100%;display:block}
 .chart-wrap{position:relative}
 #tooltip{position:absolute;pointer-events:none;background:#0d1526;border:1px solid var(--border2);border-radius:8px;padding:7px 11px;font-size:12px;font-family:var(--mono);direction:ltr;white-space:nowrap;z-index:10;display:none;color:var(--text)}
@@ -194,7 +194,7 @@ details.assume[open] summary::before{content:"▾ "}
 .modal{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:26px;max-width:480px;width:100%;max-height:92vh;overflow-y:auto}
 .modal h3{font-size:19px;margin-bottom:4px}
 .modal h3 b{color:var(--gold)}
-.modal .mprice{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--gold);margin:10px 0 2px;direction:ltr;text-align:right}
+.modal .mprice{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--gold);margin:10px 0 2px;direction:ltr;text-align:start}
 .modal .mprice small{font-size:14px;color:var(--muted);font-family:var(--font)}
 .modal ul.feats{margin:10px 18px 14px 0;padding:0;font-size:13.5px}
 .modal ul.feats li{margin:5px 0}
@@ -220,46 +220,36 @@ details.assume[open] summary::before{content:"▾ "}
 <header>
   <div class="header-inner">
     <div class="brand">
-      <h1>محرك <b>القيمة العادلة</b></h1>
-      <p>تثليث مؤسسي: نماذج جوهرية + نسبية + سيناريوهات + طبقة فنية | معايير Damodaran يناير 2026</p>
+      <h1 data-i18n-html="brand">محرك <b>القيمة العادلة</b></h1>
+      <p data-i18n="tagline"></p>
     </div>
     <div class="run-panel">
       <div class="field combo">
-        <label>ابحث باسم الشركة أو رمزها — تداول، نمو، وأشهر 200 أمريكية</label>
-        <input id="sym" class="sym" placeholder="مثال: أرامكو أو 2222 أو Apple" autocomplete="off">
+        <label data-i18n="searchLabel"></label>
+        <input id="sym" class="sym" data-i18n-ph="searchPh" autocomplete="off">
         <div class="sug hidden" id="sug"></div>
       </div>
-      <button class="btn-run" id="btnRun" onclick="run()">حلّل السهم</button>
-      <button class="btn-ghost" onclick="runDemo()">مثال توضيحي</button>
-      <button class="btn-gold-line" id="btnSub" onclick="openSub()">★ الاشتراك المميز</button>
+      <button class="btn-run" id="btnRun" onclick="run()" data-i18n="analyze"></button>
+      <button class="btn-ghost" onclick="runDemo()" data-i18n="demo"></button>
+      <button class="btn-gold-line" id="btnSub" onclick="openSub()">★</button>
+      <button class="btn-ghost" id="btnLang" onclick="setLang(LANG==='ar'?'en':'ar')">EN</button>
     </div>
   </div>
-  <div class="chips">
-    <span class="chip" onclick="pick('2222.SR')">أرامكو <b>2222.SR</b></span>
-    <span class="chip" onclick="pick('1120.SR')">الراجحي <b>1120.SR</b></span>
-    <span class="chip" onclick="pick('2010.SR')">سابك <b>2010.SR</b></span>
-    <span class="chip" onclick="pick('7010.SR')">STC <b>7010.SR</b></span>
-    <span class="chip" onclick="pick('1180.SR')">الأهلي <b>1180.SR</b></span>
-    <span class="chip" onclick="pick('2280.SR')">المراعي <b>2280.SR</b></span>
-    <span class="chip" onclick="pick('AAPL')">Apple <b>AAPL</b></span>
-    <span class="chip" onclick="pick('MSFT')">Microsoft <b>MSFT</b></span>
-    <span class="chip" onclick="pick('NVDA')">NVIDIA <b>NVDA</b></span>
-    <span class="chip" onclick="pick('GOOGL')">Alphabet <b>GOOGL</b></span>
-  </div>
+  <div class="chips" id="chips"></div>
 </header>
 
 <div class="container">
 
   <div class="pipeline" id="pipeline">
-    <div class="pstep" data-s="1"><span class="pn">1</span>البيانات والمعايير</div>
-    <div class="pstep" data-s="2"><span class="pn">2</span>معدل الخصم</div>
-    <div class="pstep" data-s="3"><span class="pn">3</span>النماذج الجوهرية والنسبية</div>
-    <div class="pstep" data-s="4"><span class="pn">4</span>الدمج والمتوسطات</div>
-    <div class="pstep" data-s="5"><span class="pn">5</span>الطبقة الفنية</div>
-    <div class="pstep" data-s="6"><span class="pn">6</span>التنبؤ بثلاثة آفاق</div>
+    <div class="pstep" data-s="1"><span class="pn">1</span><span data-i18n="steps.0"></span></div>
+    <div class="pstep" data-s="2"><span class="pn">2</span><span data-i18n="steps.1"></span></div>
+    <div class="pstep" data-s="3"><span class="pn">3</span><span data-i18n="steps.2"></span></div>
+    <div class="pstep" data-s="4"><span class="pn">4</span><span data-i18n="steps.3"></span></div>
+    <div class="pstep" data-s="5"><span class="pn">5</span><span data-i18n="steps.4"></span></div>
+    <div class="pstep" data-s="6"><span class="pn">6</span><span data-i18n="steps.5"></span></div>
   </div>
 
-  <div id="status">أدخل رمز السهم واضغط «حلّل السهم». البيانات تُجلب مباشرة من Yahoo Finance عبر خادم وسيط خاص — بلا مفاتيح API. أو جرّب «مثال توضيحي» دون إنترنت.</div>
+  <div id="status"></div>
 
   <div id="results" class="hidden">
 
@@ -278,17 +268,17 @@ details.assume[open] summary::before{content:"▾ "}
     </section>
 
     <section id="sec-verdict">
-      <div class="sec-head"><h2>الخلاصة<span class="n">حزمة القيمة</span></h2>
+      <div class="sec-head"><h2><span data-i18n="secVerdict"></span><span class="n" data-i18n="nVerdict"></span></h2>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
           <div class="sub" id="verdictSub"></div>
-          <button class="btn-gold-line" onclick="downloadPdf()">⬇ تقرير PDF</button>
+          <button class="btn-gold-line" onclick="downloadPdf()" data-i18n="pdfBtn"></button>
         </div>
       </div>
       <div class="verdict-grid">
-        <div class="vcell"><div class="k">السعر الحالي</div><div class="v" id="vPrice">—</div></div>
-        <div class="vcell gold"><div class="k">القيمة العادلة (دمج + سيناريوهات)</div><div class="v" id="vFV">—</div></div>
-        <div class="vcell" id="vGapCell"><div class="k">الفجوة عن القيمة العادلة</div><div class="v" id="vGap">—</div></div>
-        <div class="vcell green"><div class="k">سعر الشراء الأقصى <span id="vMosLbl"></span></div><div class="v" id="vBuy">—</div></div>
+        <div class="vcell"><div class="k" data-i18n="kPrice"></div><div class="v" id="vPrice">—</div></div>
+        <div class="vcell gold"><div class="k" data-i18n="kFV"></div><div class="v" id="vFV">—</div></div>
+        <div class="vcell" id="vGapCell"><div class="k" data-i18n="kGap"></div><div class="v" id="vGap">—</div></div>
+        <div class="vcell green"><div class="k"><span data-i18n="kBuy"></span> <span id="vMosLbl"></span></div><div class="v" id="vBuy">—</div></div>
       </div>
       <div class="tagline"><span class="tag" id="vTag">—</span><span style="font-size:13px;color:var(--muted)" id="vExplain"></span></div>
       <div id="vWarnings"></div>
@@ -296,40 +286,40 @@ details.assume[open] summary::before{content:"▾ "}
     </section>
 
     <section id="sec-ff">
-      <div class="sec-head"><h2>نطاق التقييم<span class="n">Football Field</span></h2><div class="sub">كل نموذج نقطة — التقارب ثقة والتباعد تحذير</div></div>
+      <div class="sec-head"><h2><span data-i18n="secFF"></span><span class="n" data-i18n="nFF"></span></h2><div class="sub" data-i18n="subFF"></div></div>
       <div class="ff" id="ffChart"></div>
       <div class="ffstats" id="ffStats"></div>
     </section>
 
     <section id="sec-models">
-      <div class="sec-head"><h2>النماذج والأوزان<span class="n">المرحلة 3 + 4</span></h2><div class="sub" id="archLbl"></div></div>
+      <div class="sec-head"><h2><span data-i18n="secModels"></span><span class="n" data-i18n="nModels"></span></h2><div class="sub" id="archLbl"></div></div>
       <table id="modelsTable"></table>
     </section>
 
     <div class="grid-2">
       <section id="sec-rates">
-        <div class="sec-head"><h2>معدلات الخصم<span class="n">المرحلة 2</span></h2><div class="sub">متوسط طريقتين</div></div>
+        <div class="sec-head"><h2><span data-i18n="secRates"></span><span class="n" data-i18n="nRates"></span></h2><div class="sub" data-i18n="subRates"></div></div>
         <table id="ratesTable"></table>
       </section>
       <section id="sec-scen">
-        <div class="sec-head"><h2>السيناريوهات<span class="n">20/60/20</span></h2><div class="sub">مرجحة بالاحتمالات</div></div>
+        <div class="sec-head"><h2><span data-i18n="secScen"></span><span class="n" data-i18n="nScen"></span></h2><div class="sub" data-i18n="subScen"></div></div>
         <table id="scenTable"></table>
         <div style="font-size:12.5px;color:var(--muted);margin-top:10px" id="reverseDcf"></div>
       </section>
     </div>
 
     <section id="sec-sens">
-      <div class="sec-head"><h2>حساسية DCF<span class="n">WACC × g</span></h2><div class="sub">أخضر = أعلى من السعر الحالي، أحمر = أدنى</div></div>
+      <div class="sec-head"><h2><span data-i18n="secSens"></span><span class="n" data-i18n="nSens"></span></h2><div class="sub" data-i18n="subSens"></div></div>
       <div style="overflow-x:auto"><table class="sens" id="sensTable"></table></div>
     </section>
 
     <section id="sec-tech">
-      <div class="sec-head"><h2>الطبقة الفنية<span class="n">المرحلة 5 — توقيت لا قيمة</span></h2><div class="sub" id="techSub"></div></div>
+      <div class="sec-head"><h2><span data-i18n="secTech"></span><span class="n" data-i18n="nTech"></span></h2><div class="sub" id="techSub"></div></div>
       <div class="legend" id="chartLegend">
-        <span><i style="background:#5B8DEF"></i>السعر</span>
+        <span><i style="background:#5B8DEF"></i><span data-i18n="legend.price"></span></span>
         <span><i style="background:#B98328"></i>SMA50</span>
         <span><i style="background:#9B7BE8"></i>SMA200</span>
-        <span><i style="background:repeating-linear-gradient(90deg,#B98328 0 5px,transparent 5px 9px)"></i>القيمة العادلة</span>
+        <span><i style="background:repeating-linear-gradient(90deg,#B98328 0 5px,transparent 5px 9px)"></i><span data-i18n="legend.fv"></span></span>
       </div>
       <div class="chart-wrap">
         <canvas id="priceChart" height="300"></canvas>
@@ -339,56 +329,56 @@ details.assume[open] summary::before{content:"▾ "}
     </section>
 
     <section id="sec-fc">
-      <div class="sec-head"><h2>التنبؤ بثلاثة آفاق<span class="n">المرحلة 6</span></h2><div class="sub">قصير: فني | متوسط: تقارب الفجوة | طويل: لبنات النمو والتوزيعات ورجوع التقييم</div></div>
+      <div class="sec-head"><h2><span data-i18n="secFc"></span><span class="n" data-i18n="nFc"></span></h2><div class="sub" data-i18n="subFc"></div></div>
       <div class="fgrid" id="fcGrid"></div>
     </section>
 
     <details class="assume" id="assumePanel">
-      <summary>الافتراضات والمدخلات — عدّل وأعد الحساب فوراً (دون إعادة جلب)</summary>
+      <summary data-i18n="assumeSummary"></summary>
       <div class="agrid" id="agrid"></div>
       <div class="abtns">
-        <button class="btn-run" onclick="recalc()">أعد الحساب</button>
-        <button class="btn-ghost" onclick="exportJson()">تصدير الحزمة JSON</button>
-        <span class="note">المبالغ الكبيرة بالمليون. النسب بالمئة. اترك الحقل فارغاً لتعطيل النموذج المرتبط.</span>
+        <button class="btn-run" onclick="recalc()" data-i18n="recalc"></button>
+        <button class="btn-ghost" onclick="exportJson()" data-i18n="exportJ"></button>
+        <span class="note" data-i18n="assumeNote"></span>
       </div>
     </details>
 
     <details class="assume">
-      <summary>سجل جودة البيانات — ماذا جُلب وماذا نقص؟</summary>
+      <summary data-i18n="logSummary"></summary>
       <div class="datalog" id="datalog" style="margin-top:12px"></div>
     </details>
 
   </div>
 
   <div class="foot">
-    <b>المنهجية:</b> تثليث بين النماذج الجوهرية (DCF-FCFF بقيمتين نهائيتين، FCFE، توزيعات ثنائي المرحلة، الدخل المتبقي RIM، قوة الأرباح EPV، رقم جراهم) والنسبية (P/E مبرر، EV/EBITDA، EV/Sales، P/B مبرر) — أوزان حسب نوع الشركة، متوسط مشذّب ووسيط، سيناريوهات 20/60/20، هامش أمان متدرج، DCF عكسي، طبقة فنية منفصلة عن القيمة، وتنبؤ بثلاثة آفاق بنطاقات.
-    <br><b>البيانات:</b> Yahoo Finance (قد تتأخر 15 دقيقة، وأساسيات الشركات السعودية الصغيرة قد تنقص — راجع سجل الجودة). معايير السوق من جدول Damodaran (يناير 2026).
-    <br><b>تنويه:</b> هذا النظام أداة دراسة كمية شخصية وليس توصية استثمارية ولا مستشاراً مالياً مرخصاً. المخرجات حساسة لجودة المدخلات والافتراضات — راجعها قبل أي قرار.
+    <span data-i18n-html="footMeth"></span>
+    <br><span data-i18n-html="footData"></span>
+    <br><span data-i18n-html="footDisc"></span>
   </div>
 </div>
 
 <div class="modal-back hidden" id="subModal">
   <div class="modal">
-    <h3>الاشتراك <b>المميز</b></h3>
-    <div style="font-size:13px;color:var(--muted)">توصية استثمارية مفصلة + تقرير PDF احترافي لكل سهم</div>
-    <div class="mprice">50 <small>ريال / شهر</small></div>
+    <h3 data-i18n-html="mTitle"></h3>
+    <div style="font-size:13px;color:var(--muted)" data-i18n="mSub"></div>
+    <div class="mprice">50 <small data-i18n="mPer"></small></div>
     <ul class="feats">
-      <li>توصية صريحة: شراء / احتفاظ / بيع — مع أسبابها الكمية</li>
-      <li>تقرير PDF احترافي بالرسومات البيانية قابل للحفظ والمشاركة</li>
-      <li>كل التحديثات المستقبلية للمنهجية والنماذج</li>
+      <li data-i18n="feats.0"></li>
+      <li data-i18n="feats.1"></li>
+      <li data-i18n="feats.2"></li>
     </ul>
-    <div style="font-weight:700;font-size:14px;margin-top:6px">خطوات الاشتراك:</div>
+    <div style="font-weight:700;font-size:14px;margin-top:6px" data-i18n="stepsTitle"></div>
     <ol class="steps">
-      <li id="payStep">حوّل قيمة الاشتراك (50 ريالاً) — <span id="payHow">تواصل مع مشغّل الموقع لمعرفة وسيلة الدفع (تحويل بنكي / STC Pay)</span></li>
-      <li>بعد تأكيد الدفع تصلك <b>شفرة تفعيل</b> خاصة بك</li>
-      <li>أدخل الشفرة هنا وفعّل اشتراكك فوراً</li>
+      <li id="payStep"><span data-i18n="step1"></span><span id="payHow"></span></li>
+      <li data-i18n-html="step2"></li>
+      <li data-i18n="step3"></li>
     </ol>
     <div class="mrow">
       <input id="subCode" placeholder="FV-XXXX-XXXXX-XXXXXXXXXX" autocomplete="off">
-      <button class="btn-run" onclick="activateSub()">تفعيل</button>
+      <button class="btn-run" onclick="activateSub()" data-i18n="activate"></button>
     </div>
     <div class="msg" id="subMsg"></div>
-    <button class="btn-ghost mclose" onclick="closeSub()">إغلاق</button>
+    <button class="btn-ghost mclose" onclick="closeSub()" data-i18n="close"></button>
   </div>
 </div>
 
@@ -419,12 +409,254 @@ const SCENARIOS = {
   bull:{label:"متفائل", prob:.20, gs:+0.02, mm:1.08, rs:-0.005},
 };
 const MODEL_LABELS = {
-  dcf_fcff:"DCF — تدفقات المنشأة FCFF", dcf_fcfe:"DCF — تدفقات الملكية FCFE",
-  ddm:"خصم التوزيعات ثنائي المرحلة", rim:"الدخل المتبقي RIM",
-  epv:"قوة الأرباح EPV", graham:"رقم جراهم",
-  pe_peer:"مضاعف الربحية P/E", ev_ebitda:"EV/EBITDA", ev_sales:"EV/Sales", pb_just:"P/B المبرر",
+  dcf_fcff:["DCF — تدفقات المنشأة FCFF","DCF — Firm FCFF"],
+  dcf_fcfe:["DCF — تدفقات الملكية FCFE","DCF — Equity FCFE"],
+  ddm:["خصم التوزيعات ثنائي المرحلة","Two-Stage Dividend Discount"],
+  rim:["الدخل المتبقي RIM","Residual Income (RIM)"],
+  epv:["قوة الأرباح EPV","Earnings Power Value"],
+  graham:["رقم جراهم","Graham Number"],
+  pe_peer:["مضاعف الربحية P/E","P/E Multiple"],
+  ev_ebitda:["EV/EBITDA","EV/EBITDA"],
+  ev_sales:["EV/Sales","EV/Sales"],
+  pb_just:["P/B المبرر","Justified P/B"],
 };
 const INTRINSIC = ["dcf_fcff","dcf_fcfe","ddm","rim","epv","graham"];
+
+/* =====================================================================
+   الترجمة — عربي / English
+===================================================================== */
+const STR={
+ar:{
+  title:"محرك القيمة العادلة | Fair Value Engine",
+  brand:'محرك <b>القيمة العادلة</b>',
+  tagline:"تثليث مؤسسي: نماذج جوهرية + نسبية + سيناريوهات + طبقة فنية | معايير Damodaran يناير 2026",
+  searchLabel:"ابحث باسم الشركة أو رمزها — تداول، نمو، وأشهر 200 أمريكية",
+  searchPh:"مثال: أرامكو أو 2222 أو Apple",
+  analyze:"حلّل السهم", demo:"مثال توضيحي", subBtn:"★ الاشتراك المميز",
+  subUntil:e=>"★ مشترك حتى "+e,
+  steps:["البيانات والمعايير","معدل الخصم","النماذج الجوهرية والنسبية","الدمج والمتوسطات","الطبقة الفنية","التنبؤ بثلاثة آفاق"],
+  statusIdle:"أدخل رمز السهم واضغط «حلّل السهم». البيانات تُجلب مباشرة من Yahoo Finance عبر خادم وسيط خاص — بلا مفاتيح API. أو جرّب «مثال توضيحي» دون إنترنت.",
+  statusFetch:s=>`المرحلة 1: جلب الأسعار والقوائم المالية والمعايير لـ ${s} …`,
+  statusCalc:"المراحل 2–6: معدلات الخصم، النماذج، الدمج، الطبقة الفنية، التنبؤ …",
+  errRun:m=>"خطأ: "+m+" — جرّب رمزاً آخر أو «مثال توضيحي».",
+  errCalc:m=>"خطأ في الحساب: "+m,
+  errNoCompany:"لم أتعرف على الشركة — اكتب اسمها أو رمزها واختر من القائمة.",
+  errNoModel:"لا يوجد نموذج واحد قابل للتشغيل — أكمل المدخلات من لوحة الافتراضات.",
+  errPrices:s=>`تعذر جلب أسعار الرمز ${s} — تحقق من الرمز.`,
+  errShares:"تعذر تحديد عدد الأسهم — أدخل البيانات يدوياً من لوحة الافتراضات.",
+  markets:{SA:"السعودية (تداول)",US:"الولايات المتحدة"}, riyal:"ريال",
+  arch:{mature:"ناضجة غير مالية",growth:"نمو / تقنية",financial:"بنك / مالية",dividend:"توزيعات مستقرة"},
+  ms:{mcap:"القيمة السوقية",beta:"بيتا",eps:"ربحية السهم",bvps:"ق. دفترية",roe:"ROE",dps:"التوزيعات",mln:" م"},
+  secVerdict:"الخلاصة",nVerdict:"حزمة القيمة",pdfBtn:"⬇ تقرير PDF",dateLbl:"تاريخ التحليل: ",
+  kPrice:"السعر الحالي",kFV:"القيمة العادلة (دمج + سيناريوهات)",kGap:"الفجوة عن القيمة العادلة",kBuy:"سعر الشراء الأقصى",
+  mosLbl:m=>`(هامش أمان ${m}٪)`,
+  verdicts:{buy:"مقيّم بأقل من قيمته — ضمن هامش الأمان",wait:"أقل من القيمة العادلة لكن خارج هامش الأمان — انتظار",near:"قريب من القيمة العادلة",over:"مقيّم بأعلى من قيمته"},
+  explain:(n,d,e,p)=>`${n} نماذج · تباعد ${d} · القيمة = متوسط (الدمج الأساسي ${e}، المرجح بالسيناريوهات ${p})`,
+  warn:{disp:d=>`تباعد النماذج ${d}٪ يتجاوز عتبة 25٪ — أعد فحص الافتراضات ووسّع هامش الأمان قبل أي قرار.`,
+        macro:"مؤشرات التقييم الكلية (بافيت/CAPE) في مناطق مرتفعة تاريخياً — أضيف 5٪ لهامش الأمان.",
+        tv:t=>`القيمة النهائية تمثل ${t}٪ من قيمة DCF — حساسية مفرطة للافتراضات الأبدية.`},
+  rec:{buy:"شراء",hold:"احتفاظ",sell:"بيع"},
+  recTitle:"التوصية وفق المنهجية الكمية — ليست نصيحة استثمارية شخصية",
+  recLockHead:"التوصية التفصيلية",
+  recLockP:"<b>التوصية الصريحة (شراء / احتفاظ / بيع) بأسبابها الكمية + تقرير PDF الاحترافي</b> — حصرية للمشتركين",
+  recLockBtn:"اشترك الآن — 50 ريال/شهر",
+  recNote:d=>`خُفضت التوصية من «شراء» إلى «احتفاظ»: تباعد النماذج شديد (${d}٪) — قاعدة قرار المنهجية: لا شراء عند تباعد مفرط قبل إعادة فحص الافتراضات.`,
+  r1:(fv,p,up,m,bb)=>`القيمة العادلة ${fv} مقابل السعر ${p} — فجوة ${up} والمطلوب لهامش الأمان ${m}٪+ (سعر شراء أقصى ${bb}).`,
+  r2hi:d=>`تباعد النماذج ${d}٪ يتجاوز عتبة 25٪ — الثقة أقل والافتراضات تحتاج مراجعة.`,
+  r2lo:d=>`تقارب جيد بين النماذج (تباعد ${d}٪ فقط) — ثقة أعلى في التقدير.`,
+  r3:(state,sc,g)=>`الطبقة الفنية ${state} — درجة مركبة ${sc}${g?" مع تقاطع ذهبي":""}.`,
+  techSupport:"داعمة للتوقيت",techDrag:"ضاغطة على التوقيت",techNeutral:"محايدة",
+  r4:(t,er,dir,erL)=>`توقع 12 شهراً: ${t} (${er}) — اتجاه ${dir}؛ وطويل الأجل ${erL} سنوياً.`,
+  r5:(ig,a,hi)=>`DCF العكسي: السوق يسعّر نمواً ${ig}٪ مقابل افتراضنا ${a}٪ — ${hi?"تفاؤل مُسعَّر يرفع مخاطر الخيبة":"تشاؤم مُسعَّر قد يتيح فرصة"}.`,
+  r6:"البيئة الكلية: مؤشرات التقييم العامة (بافيت/CAPE) في مناطق مرتفعة تاريخياً — تشدد إضافي في هامش الأمان.",
+  secFF:"نطاق التقييم",nFF:"Football Field",subFF:"كل نموذج نقطة — التقارب ثقة والتباعد تحذير",
+  mPrice:"السعر",mFV:"القيمة العادلة",mBuy:"سعر الشراء",
+  ffStats:(w,t,m,mn,mx,n)=>`متوسط مرجح: <b class="num">${w}</b> · متوسط مشذّب: <b class="num">${t}</b> · وسيط: <b class="num">${m}</b> · المدى: <span class="num">${mn} – ${mx}</span> · عدد النماذج: <span class="num">${n}</span>`,
+  tipVs:" عن السعر",
+  secModels:"النماذج والأوزان",nModels:"المرحلة 3 + 4",
+  archW:a=>`أوزان نوع «${a}» — تُعاد معايرتها على النماذج المتاحة`,
+  thModel:"النموذج",thVal:"القيمة/سهم",thVs:"عن السعر",thW:"الوزن",thNote:"ملاحظة",
+  grpIntr:"المرحلة 3أ — النماذج الجوهرية",grpRel:"المرحلة 3ب — النماذج النسبية",
+  na:"غير منطبق",finalRow:"القيمة العادلة النهائية (دمج ثلاثي × سيناريوهات)",
+  noteTv:t=>`القيمة النهائية ${t}٪ من EV`,noteJust:(j,p)=>`مبرر ${j}×`+(p?` · أقران ${p}×`:""),noteMult:m=>`مضاعف ${m}×`,
+  secRates:"معدلات الخصم",nRates:"المرحلة 2",subRates:"متوسط طريقتين",
+  rateRows:{rf:"المعدل الخالي من المخاطر (نظيف من فرق التخلف)",beta:"بيتا المستخدمة",capm:"تكلفة حقوق الملكية — CAPM + علاوة الدولة",bond:"تكلفة حقوق الملكية — عائد الدين + 3.5%",ke:"تكلفة حقوق الملكية المعتمدة (المتوسط)",wacc:"WACC",gcap:"سقف النمو الأبدي g (نمو الناتج الاسمي)"},
+  secScen:"السيناريوهات",nScen:"20/60/20",subScen:"مرجحة بالاحتمالات",
+  thScen:"سيناريو",thProb:"الاحتمال",thFV:"القيمة العادلة",
+  scen:{bear:"متشائم",base:"أساسي",bull:"متفائل"},probW:"المرجح بالاحتمالات",
+  revTitle:"DCF عكسي:",
+  rev:(i,a,hi)=>`السوق يسعّر ضمنياً نمواً قدره <b class="num">${i}٪</b> مقابل افتراضك <b class="num">${a}٪</b> — ${hi?"توقعات السوق أعلى من توقعاتك (تفاؤل مُسعَّر)":"توقعات السوق أدنى من توقعاتك (تشاؤم مُسعَّر)"}.`,
+  revNA:"السعر الحالي خارج نطاق الحل [−30٪، +60٪] أو نموذج FCFF غير متاح.",
+  secSens:"حساسية DCF",nSens:"WACC × g",subSens:"أخضر = أعلى من السعر الحالي، أحمر = أدنى",
+  secTech:"الطبقة الفنية",nTech:"المرحلة 5 — توقيت لا قيمة",
+  techSub:s=>`الدرجة المركبة: ${s} (من −1 إلى +1) — اتجاه 30٪ + زخم 30٪ + MACD 20٪ + RSI ارتدادي 20٪`,
+  legend:{price:"السعر",s50:"SMA50",s200:"SMA200",fv:"القيمة العادلة"},
+  techRows:{score:"الدرجة الفنية المركبة",sma:"SMA50 / SMA200",rsi:"RSI(14) وايلدر",macd:"MACD هيستوغرام",mom:"زخم 12−1 شهراً",vol:"التقلب السنوي"},
+  golden:"تقاطع ذهبي ✓",noGolden:"لا تقاطع ذهبي",ob:" (تشبع شرائي)",os:" (تشبع بيعي)",
+  secFc:"التنبؤ بثلاثة آفاق",nFc:"المرحلة 6",subFc:"قصير: فني | متوسط: تقارب الفجوة | طويل: لبنات النمو والتوزيعات ورجوع التقييم",
+  fcNames:{short:"قصير الأجل",medium:"متوسط الأجل",long:"طويل الأجل"},
+  fcH:{short:"1–3 أشهر",medium:"12 شهراً",long:"5 سنوات"},
+  fcRows:{short:"قصير (1–3 أشهر)",medium:"متوسط (12 شهراً)",long:"طويل (5 سنوات)"},
+  rangeLbl:"النطاق: ",erLbl:"عائد متوقع",erALbl:"عائد سنوي متوقع",perYear:" سنوياً",
+  dirs:{up:"صاعد",down:"هابط",flat:"عرضي"},
+  drv:{s:"الدرجة الفنية والزخم",m:"إغلاق 40% من فجوة القيمة + التوزيعات + الزخم",l:"نمو الأرباح + التوزيعات + رجوع التقييم"},
+  drvLbl:"المحرك: ",
+  assumeSummary:"الافتراضات والمدخلات — عدّل وأعد الحساب فوراً (دون إعادة جلب)",
+  recalc:"أعد الحساب",exportJ:"تصدير الحزمة JSON",
+  assumeNote:"المبالغ الكبيرة بالمليون. النسب بالمئة. اترك الحقل فارغاً لتعطيل النموذج المرتبط.",
+  logSummary:"سجل جودة البيانات — ماذا جُلب وماذا نقص؟",logEmpty:"لا سجل — وضع يدوي.",
+  lSum:"الملخص",lSumOk:"الملف والمؤشرات والقوائم ✓",lSumFail:"فشل جلب الملخص — سيُعتمد على الرسم والقوائم فقط",
+  lPrices:"الأسعار",lPricesOk:n=>`${n} إغلاق يومي (سنتان) ✓`,
+  lStmts:"القوائم",lStmtsOk:"القوائم السنوية ✓",lStmtsFail:"فشل جلب القوائم",
+  lFcff:"FCFF",lFcffOk:"محسوب: EBIT×(1−t) + إهلاك − نفقات رأسمالية ✓",lFcffNone:"EBIT غير متاح — نموذج FCFF معطل (عدّله يدوياً إن أردت)",
+  lDiv:"التوزيعات",lDivOk:"محسوبة من أحداث آخر 12 شهراً ✓",
+  lBeta:"بيتا",lBetaTasi:b=>`محسوبة مقابل مؤشر تاسي (سنتان يومي): ${b} ✓`,lBetaTasiFail:"تعذر حسابها مقابل تاسي — اعتُمد 1.00",lBetaNA:"غير متاحة — اعتُمد 1.00",
+  lGrowth:"النمو",lGrowthMsg:(g,src)=>`g المرحلة الأولى = ${g}٪ (${src}) — قصّ على [−5٪، +20٪]`,
+  srcAnalyst:"تقدير المحللين +5 سنوات",srcRecent:"نمو الأرباح الأخير",srcCagr:"CAGR صافي الربح التاريخي",srcDefault:"افتراضي 5٪",
+  lClass:"التصنيف",lClassMsg:(sec,a,sz)=>`القطاع: ${sec} → نوع الشركة: ${a} · الحجم: ${sz}`,unknownSector:"غير معروف",
+  lDemo:"وضع تجريبي",lDemoMsg:"بيانات افتراضية لأغراض العرض — ليست شركة حقيقية",
+  demoName:"شركة صناعية سعودية (مثال توضيحي)",
+  mTitle:'الاشتراك <b>المميز</b>',mSub:"توصية استثمارية مفصلة + تقرير PDF احترافي لكل سهم",mPer:"ريال / شهر",
+  feats:["توصية صريحة: شراء / احتفاظ / بيع — مع أسبابها الكمية","تقرير PDF احترافي بالرسومات البيانية قابل للحفظ والمشاركة","كل التحديثات المستقبلية للمنهجية والنماذج"],
+  stepsTitle:"خطوات الاشتراك:",
+  step1:"حوّل قيمة الاشتراك (50 ريالاً) — ",payDefault:"تواصل مع مشغّل الموقع لمعرفة وسيلة الدفع (تحويل بنكي / STC Pay)",payHere:"ادفع من هنا مباشرة",
+  step2:"بعد تأكيد الدفع تصلك <b>شفرة تفعيل</b> خاصة بك",step3:"أدخل الشفرة هنا وفعّل اشتراكك فوراً",
+  activate:"تفعيل",close:"إغلاق",
+  msgEnter:"أدخل شفرة التفعيل أولاً.",msgChk:"جارٍ التحقق…",msgOk:e=>"تم التفعيل ✓ اشتراكك سارٍ حتى "+e,msgFail:r=>"فشل التفعيل: "+r,msgConn:"تعذر الاتصال بالخادم — حاول مجدداً.",
+  subActive:e=>"اشتراكك فعّال حتى "+e,codeInvalid:"شفرة غير صالحة",
+  popupErr:m=>"تعذر فتح نافذة الطباعة: "+m,
+  footMeth:'<b>المنهجية:</b> تثليث بين النماذج الجوهرية (DCF-FCFF بقيمتين نهائيتين، FCFE، توزيعات ثنائي المرحلة، الدخل المتبقي RIM، قوة الأرباح EPV، رقم جراهم) والنسبية (P/E مبرر، EV/EBITDA، EV/Sales، P/B مبرر) — أوزان حسب نوع الشركة، متوسط مشذّب ووسيط، سيناريوهات 20/60/20، هامش أمان متدرج، DCF عكسي، طبقة فنية منفصلة عن القيمة، وتنبؤ بثلاثة آفاق بنطاقات.',
+  footData:'<b>البيانات:</b> Yahoo Finance (قد تتأخر 15 دقيقة، وأساسيات الشركات السعودية الصغيرة قد تنقص — راجع سجل الجودة). معايير السوق من جدول Damodaran (يناير 2026).',
+  footDisc:'<b>تنويه:</b> هذا النظام أداة دراسة كمية شخصية وليس توصية استثمارية ولا مستشاراً مالياً مرخصاً. المخرجات حساسة لجودة المدخلات والافتراضات — راجعها قبل أي قرار.',
+  rptTitle:n=>`تقرير القيمة العادلة — ${n}`,
+  rptMeta:(mk,sec,a,d,cur)=>`${mk}${sec?" · "+sec:""} · نوع الشركة: ${a} · تاريخ التقرير: ${d} · معايير Damodaran يناير 2026 · العملة: ${cur}`,
+  rptRec:"التوصية: ",rptRecSub:(n,d)=>`وفق منهجية كمية متعددة النماذج — ${n} نماذج، تباعد ${d}`,
+  rptBuyK:m=>`سعر الشراء الأقصى (أمان ${m}٪)`,
+  hReasons:"أسباب التوصية",hFF:"نطاق التقييم — كل نموذج نقطة (Football Field)",hModels:"النماذج والأوزان",hScen:"السيناريوهات المرجحة (20/60/20)",hRates:"معدلات الخصم",hFc:"التنبؤ بثلاثة آفاق — نقطة مركزية ونطاق",hTech:"الطبقة الفنية (توقيت لا قيمة)",
+  pdfImplied:"النمو المسعّر ضمنياً (DCF عكسي)",pdfRf:"المعدل الخالي من المخاطر (نظيف)",pdfKe:"تكلفة حقوق الملكية (متوسط طريقتين)",
+  thHorizon:"الأفق",thTarget:"الهدف",thRange:"النطاق",thEr:"العائد المتوقع",thDir:"الاتجاه",thDrv:"المحرك",
+  rptFinal:"القيمة العادلة النهائية",
+  rptFootMeth:'<b>المنهجية:</b> تثليث مؤسسي بين نماذج جوهرية (DCF بقيمتين نهائيتين، FCFE، توزيعات، دخل متبقٍ RIM، قوة أرباح EPV، رقم جراهم) ونسبية (P/E وP/B مبررة، مضاعفات أقران) بأوزان حسب نوع الشركة، مع سيناريوهات مرجحة وهامش أمان متدرج وطبقة فنية منفصلة.',
+  rptFootDisc:'<b>تنويه مهم:</b> هذا التقرير ناتج نموذج كمي آلي لأغراض الدراسة وليس نصيحة استثمارية شخصية ولا يصدر عن مستشار مالي مرخص. الأسواق تنطوي على مخاطر، والنتائج حساسة لجودة البيانات والافتراضات — راجعها قبل أي قرار. بيانات الأسعار قد تتأخر 15 دقيقة (Yahoo Finance).',
+},
+en:{
+  title:"Fair Value Engine | محرك القيمة العادلة",
+  brand:'Fair <b>Value Engine</b>',
+  tagline:"Institutional triangulation: intrinsic + relative models + scenarios + technical layer | Damodaran Jan-2026 parameters",
+  searchLabel:"Search by company name or ticker — TASI, Nomu & top-200 US",
+  searchPh:"e.g. Aramco, 2222 or Apple",
+  analyze:"Analyze",demo:"Demo example",subBtn:"★ Premium",
+  subUntil:e=>"★ Subscribed until "+e,
+  steps:["Data & parameters","Discount rate","Intrinsic & relative models","Blending & averages","Technical layer","Three-horizon forecast"],
+  statusIdle:"Enter a ticker and press “Analyze”. Data is fetched live from Yahoo Finance via a private proxy — no API keys. Or try the offline demo.",
+  statusFetch:s=>`Stage 1: fetching prices, financial statements and parameters for ${s} …`,
+  statusCalc:"Stages 2–6: discount rates, models, blending, technical layer, forecast …",
+  errRun:m=>"Error: "+m+" — try another ticker or the demo.",
+  errCalc:m=>"Calculation error: "+m,
+  errNoCompany:"Company not recognized — type its name or ticker and pick from the list.",
+  errNoModel:"No model could run — complete the inputs in the assumptions panel.",
+  errPrices:s=>`Could not fetch prices for ${s} — check the ticker.`,
+  errShares:"Could not determine share count — enter data manually in the assumptions panel.",
+  markets:{SA:"Saudi Arabia (Tadawul)",US:"United States"},riyal:"SAR",
+  arch:{mature:"Mature non-financial",growth:"Growth / Tech",financial:"Bank / Financial",dividend:"Stable dividend"},
+  ms:{mcap:"Market cap",beta:"Beta",eps:"EPS",bvps:"Book value",roe:"ROE",dps:"Dividend",mln:" M"},
+  secVerdict:"Summary",nVerdict:"Valuation package",pdfBtn:"⬇ PDF Report",dateLbl:"Analysis date: ",
+  kPrice:"Current price",kFV:"Fair value (blend + scenarios)",kGap:"Gap to fair value",kBuy:"Max buy price",
+  mosLbl:m=>`(${m}% margin of safety)`,
+  verdicts:{buy:"Undervalued — inside the margin of safety",wait:"Below fair value but outside the margin of safety — wait",near:"Near fair value",over:"Overvalued"},
+  explain:(n,d,e,p)=>`${n} models · dispersion ${d} · value = average of base blend ${e} and scenario-weighted ${p}`,
+  warn:{disp:d=>`Model dispersion ${d}% exceeds the 25% threshold — recheck assumptions and widen the margin of safety before any decision.`,
+        macro:"Macro valuation gauges (Buffett/CAPE) are at historic highs — 5% added to the margin of safety.",
+        tv:t=>`Terminal value is ${t}% of the DCF — excessive sensitivity to perpetual assumptions.`},
+  rec:{buy:"BUY",hold:"HOLD",sell:"SELL"},
+  recTitle:"Recommendation per the quantitative methodology — not personal investment advice",
+  recLockHead:"Detailed recommendation",
+  recLockP:"<b>The explicit Buy / Hold / Sell call with its quantitative reasons + the professional PDF report</b> — subscribers only",
+  recLockBtn:"Subscribe — 50 SAR/month",
+  recNote:d=>`Downgraded from “Buy” to “Hold”: extreme model dispersion (${d}%) — methodology rule: no buying under excessive dispersion before rechecking assumptions.`,
+  r1:(fv,p,up,m,bb)=>`Fair value ${fv} vs price ${p} — a ${up} gap, while the required margin of safety is ${m}%+ (max buy price ${bb}).`,
+  r2hi:d=>`Model dispersion ${d}% exceeds the 25% threshold — lower confidence; assumptions need review.`,
+  r2lo:d=>`Good model convergence (only ${d}% dispersion) — higher confidence in the estimate.`,
+  r3:(state,sc,g)=>`Technical layer is ${state} — composite score ${sc}${g?" with a golden cross":""}.`,
+  techSupport:"supportive for timing",techDrag:"a drag on timing",techNeutral:"neutral",
+  r4:(t,er,dir,erL)=>`12-month projection: ${t} (${er}) — ${dir} bias; long-term ${erL} annualized.`,
+  r5:(ig,a,hi)=>`Reverse DCF: the market prices ${ig}% growth vs our ${a}% assumption — ${hi?"priced-in optimism raises disappointment risk":"priced-in pessimism may offer opportunity"}.`,
+  r6:"Macro backdrop: broad valuation gauges (Buffett/CAPE) at historic highs — extra strictness in the margin of safety.",
+  secFF:"Valuation range",nFF:"Football Field",subFF:"Each model is a point — convergence builds confidence, divergence warns",
+  mPrice:"Price",mFV:"Fair value",mBuy:"Buy price",
+  ffStats:(w,t,m,mn,mx,n)=>`Weighted mean: <b class="num">${w}</b> · Trimmed mean: <b class="num">${t}</b> · Median: <b class="num">${m}</b> · Range: <span class="num">${mn} – ${mx}</span> · Models: <span class="num">${n}</span>`,
+  tipVs:" vs price",
+  secModels:"Models & weights",nModels:"Stage 3 + 4",
+  archW:a=>`“${a}” weights — recalibrated over available models`,
+  thModel:"Model",thVal:"Value/share",thVs:"vs price",thW:"Weight",thNote:"Note",
+  grpIntr:"Stage 3a — Intrinsic models",grpRel:"Stage 3b — Relative models",
+  na:"n/a",finalRow:"Final fair value (triple blend × scenarios)",
+  noteTv:t=>`terminal value ${t}% of EV`,noteJust:(j,p)=>`justified ${j}×`+(p?` · peers ${p}×`:""),noteMult:m=>`multiple ${m}×`,
+  secRates:"Discount rates",nRates:"Stage 2",subRates:"Average of two methods",
+  rateRows:{rf:"Risk-free rate (cleaned of default spread)",beta:"Beta used",capm:"Cost of equity — CAPM + country premium",bond:"Cost of equity — bond yield + 3.5%",ke:"Cost of equity adopted (average)",wacc:"WACC",gcap:"Perpetual growth cap g (nominal GDP growth)"},
+  secScen:"Scenarios",nScen:"20/60/20",subScen:"Probability-weighted",
+  thScen:"Scenario",thProb:"Probability",thFV:"Fair value",
+  scen:{bear:"Bear",base:"Base",bull:"Bull"},probW:"Probability-weighted",
+  revTitle:"Reverse DCF:",
+  rev:(i,a,hi)=>`The market implicitly prices <b class="num">${i}%</b> growth vs your <b class="num">${a}%</b> assumption — ${hi?"market expectations exceed yours (priced-in optimism)":"market expectations are below yours (priced-in pessimism)"}.`,
+  revNA:"Current price is outside the solution range [−30%, +60%] or the FCFF model is unavailable.",
+  secSens:"DCF sensitivity",nSens:"WACC × g",subSens:"Green = above current price, red = below",
+  secTech:"Technical layer",nTech:"Stage 5 — timing, not value",
+  techSub:s=>`Composite score: ${s} (−1 to +1) — trend 30% + momentum 30% + MACD 20% + contrarian RSI 20%`,
+  legend:{price:"Price",s50:"SMA50",s200:"SMA200",fv:"Fair value"},
+  techRows:{score:"Composite technical score",sma:"SMA50 / SMA200",rsi:"RSI(14) Wilder",macd:"MACD histogram",mom:"12−1 momentum",vol:"Annualized volatility"},
+  golden:"golden cross ✓",noGolden:"no golden cross",ob:" (overbought)",os:" (oversold)",
+  secFc:"Three-horizon forecast",nFc:"Stage 6",subFc:"Short: technical | Medium: gap convergence | Long: growth + dividends + valuation reversion",
+  fcNames:{short:"Short term",medium:"Medium term",long:"Long term"},
+  fcH:{short:"1–3 months",medium:"12 months",long:"5 years"},
+  fcRows:{short:"Short (1–3 mo)",medium:"Medium (12 mo)",long:"Long (5 yr)"},
+  rangeLbl:"Range: ",erLbl:"Expected return",erALbl:"Expected annual return",perYear:" p.a.",
+  dirs:{up:"Bullish",down:"Bearish",flat:"Sideways"},
+  drv:{s:"Technical score & momentum",m:"Closing 40% of the value gap + dividends + momentum",l:"Earnings growth + dividends + valuation reversion"},
+  drvLbl:"Driver: ",
+  assumeSummary:"Assumptions & inputs — edit and recalculate instantly (no refetch)",
+  recalc:"Recalculate",exportJ:"Export JSON package",
+  assumeNote:"Large amounts in millions. Rates in percent. Leave a field empty to disable its model.",
+  logSummary:"Data quality log — what was fetched and what's missing?",logEmpty:"No log — manual mode.",
+  lSum:"Summary",lSumOk:"profile, metrics & statements ✓",lSumFail:"summary fetch failed — relying on chart & statements only",
+  lPrices:"Prices",lPricesOk:n=>`${n} daily closes (2 years) ✓`,
+  lStmts:"Statements",lStmtsOk:"annual statements ✓",lStmtsFail:"statements fetch failed",
+  lFcff:"FCFF",lFcffOk:"computed: EBIT×(1−t) + D&A − capex ✓",lFcffNone:"EBIT unavailable — FCFF model disabled (set manually if desired)",
+  lDiv:"Dividends",lDivOk:"computed from trailing-12-month events ✓",
+  lBeta:"Beta",lBetaTasi:b=>`computed vs TASI index (2y daily): ${b} ✓`,lBetaTasiFail:"could not compute vs TASI — using 1.00",lBetaNA:"unavailable — using 1.00",
+  lGrowth:"Growth",lGrowthMsg:(g,src)=>`stage-1 g = ${g}% (${src}) — clamped to [−5%, +20%]`,
+  srcAnalyst:"analyst +5y estimate",srcRecent:"latest earnings growth",srcCagr:"historical net-income CAGR",srcDefault:"default 5%",
+  lClass:"Classification",lClassMsg:(sec,a,sz)=>`Sector: ${sec} → archetype: ${a} · size: ${sz}`,unknownSector:"unknown",
+  lDemo:"Demo mode",lDemoMsg:"synthetic data for demonstration — not a real company",
+  demoName:"Saudi industrial company (demo)",
+  mTitle:'<b>Premium</b> subscription',mSub:"A detailed investment call + professional PDF report for every stock",mPer:"SAR / month",
+  feats:["Explicit Buy / Hold / Sell call — with quantitative reasons","Professional PDF report with charts, ready to save & share","All future methodology and model updates"],
+  stepsTitle:"How to subscribe:",
+  step1:"Transfer the fee (50 SAR) — ",payDefault:"contact the site operator for payment methods (bank transfer / STC Pay)",payHere:"pay directly here",
+  step2:"After payment confirmation you receive your personal <b>activation code</b>",step3:"Enter the code here and activate instantly",
+  activate:"Activate",close:"Close",
+  msgEnter:"Enter the activation code first.",msgChk:"Verifying…",msgOk:e=>"Activated ✓ subscription valid until "+e,msgFail:r=>"Activation failed: "+r,msgConn:"Could not reach the server — try again.",
+  subActive:e=>"Your subscription is active until "+e,codeInvalid:"invalid code",
+  popupErr:m=>"Could not open the print window: "+m,
+  footMeth:'<b>Methodology:</b> triangulation between intrinsic models (DCF-FCFF with dual terminal values, FCFE, two-stage DDM, residual income RIM, earnings power EPV, Graham number) and relative models (justified P/E & P/B, EV/EBITDA, EV/Sales) — archetype weights, trimmed mean & median, 20/60/20 scenarios, tiered margin of safety, reverse DCF, a technical layer separate from value, and three-horizon range forecasts.',
+  footData:'<b>Data:</b> Yahoo Finance (may be delayed 15 minutes; fundamentals for small Saudi companies can be incomplete — check the quality log). Market parameters from Damodaran (January 2026).',
+  footDisc:'<b>Disclaimer:</b> this system is a personal quantitative study tool, not investment advice, and not a licensed financial advisor. Outputs are sensitive to input quality and assumptions — review them before any decision.',
+  rptTitle:n=>`Fair Value Report — ${n}`,
+  rptMeta:(mk,sec,a,d,cur)=>`${mk}${sec?" · "+sec:""} · Archetype: ${a} · Report date: ${d} · Damodaran Jan-2026 parameters · Currency: ${cur}`,
+  rptRec:"Recommendation: ",rptRecSub:(n,d)=>`per a multi-model quantitative methodology — ${n} models, ${d} dispersion`,
+  rptBuyK:m=>`Max buy price (${m}% safety)`,
+  hReasons:"Reasons for the recommendation",hFF:"Valuation range — each model is a point (Football Field)",hModels:"Models & weights",hScen:"Probability-weighted scenarios (20/60/20)",hRates:"Discount rates",hFc:"Three-horizon forecast — central point and range",hTech:"Technical layer (timing, not value)",
+  pdfImplied:"Implied growth (reverse DCF)",pdfRf:"Risk-free rate (cleaned)",pdfKe:"Cost of equity (avg. of two methods)",
+  thHorizon:"Horizon",thTarget:"Target",thRange:"Range",thEr:"Expected return",thDir:"Direction",thDrv:"Driver",
+  rptFinal:"Final fair value",
+  rptFootMeth:'<b>Methodology:</b> institutional triangulation between intrinsic models (dual-terminal DCF, FCFE, DDM, residual income RIM, earnings power EPV, Graham number) and relative models (justified P/E & P/B, peer multiples) with archetype weights, probability-weighted scenarios, a tiered margin of safety and a separate technical layer.',
+  rptFootDisc:'<b>Important:</b> this report is the output of an automated quantitative model for study purposes; it is not personal investment advice and is not issued by a licensed financial advisor. Markets involve risk; results are sensitive to data quality and assumptions — review them before any decision. Prices may be delayed 15 minutes (Yahoo Finance).',
+},
+};
+let LANG=localStorage.getItem("fv_lang")||"ar";
+let S=STR[LANG];
+const mlabel=k=>MODEL_LABELS[k][LANG==="ar"?0:1];
+const archLabel=a=>S.arch[a]||a;
 
 /* =====================================================================
    المرحلة 2 — معدلات الخصم (متوسط طريقتين) + WACC
@@ -660,7 +892,7 @@ function forecasts(price,fv,c,tech){
   const gE=c.growth_stage1??0.05;
   const gap=price>0?fv/price-1:0;
   const band=(t,y)=>{const s=vol*Math.sqrt(y);return [t*(1-s),t*(1+s)];};
-  const dir=er=>er>0.03?"صاعد":(er<-0.03?"هابط":"عرضي");
+  const dir=er=>er>0.03?"up":(er<-0.03?"down":"flat");
   const erS=score*vol*Math.sqrt(0.25)*0.5;
   const tS=price*(1+erS);
   let erM=0.40*gap+dy+0.15*Math.max(Math.min(mom,0.5),-0.5);
@@ -671,9 +903,9 @@ function forecasts(price,fv,c,tech){
   const tL=price*Math.pow(1+erL,5);
   const [loS,hiS]=band(tS,0.25),[loM,hiM]=band(tM,1),[loL,hiL]=band(tL,2);
   return {
-    short:{h:"1–3 أشهر", er:erS, t:tS, lo:loS, hi:hiS, dir:dir(erS), drv:"الدرجة الفنية والزخم", annual:false},
-    medium:{h:"12 شهراً", er:erM, t:tM, lo:loM, hi:hiM, dir:dir(erM), drv:"إغلاق 40% من فجوة القيمة + التوزيعات + الزخم", annual:false},
-    long:{h:"5 سنوات", er:erL, t:tL, lo:loL, hi:hiL, dir:dir(erL), drv:"نمو الأرباح + التوزيعات + رجوع التقييم", annual:true},
+    short:{er:erS, t:tS, lo:loS, hi:hiS, dir:dir(erS), drv:"s", annual:false},
+    medium:{er:erM, t:tM, lo:loM, hi:hiM, dir:dir(erM), drv:"m", annual:false},
+    long:{er:erL, t:tL, lo:loL, hi:hiL, dir:dir(erL), drv:"l", annual:true},
   };
 }
 
@@ -682,28 +914,29 @@ function forecasts(price,fv,c,tech){
 ===================================================================== */
 function recommendation(c,pkg){
   const up=pkg.upside, mos=pkg.mos, disp=pkg.ens.dispersion, ts=pkg.tech?pkg.tech.score:null;
-  let rec,cls;
-  if(up>mos){rec="شراء";cls="buy";}
-  else if(up<-0.10){rec="بيع";cls="sell";}
-  else{rec="احتفاظ";cls="hold";}
+  let cls;
+  if(up>mos)cls="buy";
+  else if(up<-0.10)cls="sell";
+  else cls="hold";
   let note=null;
-  if(rec==="شراء"&&disp!=null&&disp>0.60){
-    rec="احتفاظ";cls="hold";
-    note="خُفضت التوصية من «شراء» إلى «احتفاظ»: تباعد النماذج شديد ("+Math.round(disp*100)+"٪) — قاعدة قرار المنهجية: لا شراء عند تباعد مفرط قبل إعادة فحص الافتراضات.";
+  if(cls==="buy"&&disp!=null&&disp>0.60){
+    cls="hold";
+    note=S.recNote(Math.round(disp*100));
   }
   const reasons=[];
-  reasons.push(`القيمة العادلة ${fmt(pkg.fair_value)} مقابل السعر ${fmt(c.price)} — فجوة ${fmtPct(up)} والمطلوب لهامش الأمان ${Math.round(mos*100)}٪+ (سعر شراء أقصى ${fmt(pkg.buyBelow)}).`);
-  if(disp!=null)reasons.push(disp>0.25
-    ?`تباعد النماذج ${Math.round(disp*100)}٪ يتجاوز عتبة 25٪ — الثقة أقل والافتراضات تحتاج مراجعة.`
-    :`تقارب جيد بين النماذج (تباعد ${Math.round(disp*100)}٪ فقط) — ثقة أعلى في التقدير.`);
-  if(ts!=null)reasons.push(`الطبقة الفنية ${ts>=0.15?"داعمة للتوقيت":ts<=-0.15?"ضاغطة على التوقيت":"محايدة"} — درجة مركبة ${ts>=0?"+":""}${ts.toFixed(2)}${pkg.tech.golden?" مع تقاطع ذهبي":""}.`);
-  reasons.push(`توقع 12 شهراً: ${fmt(pkg.fc.medium.t)} (${fmtPct(pkg.fc.medium.er)}) — اتجاه ${pkg.fc.medium.dir}؛ وطويل الأجل ${fmtPct(pkg.fc.long.er)} سنوياً.`);
+  reasons.push(S.r1(fmt(pkg.fair_value),fmt(c.price),fmtPct(up),Math.round(mos*100),fmt(pkg.buyBelow)));
+  if(disp!=null)reasons.push(disp>0.25?S.r2hi(Math.round(disp*100)):S.r2lo(Math.round(disp*100)));
+  if(ts!=null){
+    const state=ts>=0.15?S.techSupport:ts<=-0.15?S.techDrag:S.techNeutral;
+    reasons.push(S.r3(state,(ts>=0?"+":"")+ts.toFixed(2),pkg.tech.golden));
+  }
+  reasons.push(S.r4(fmt(pkg.fc.medium.t),fmtPct(pkg.fc.medium.er),S.dirs[pkg.fc.medium.dir],fmtPct(pkg.fc.long.er)));
   if(pkg.impliedG!=null){
     const a=c.growth_stage1??0.05;
-    reasons.push(`DCF العكسي: السوق يسعّر نمواً ${(pkg.impliedG*100).toFixed(1)}٪ مقابل افتراضنا ${(a*100).toFixed(1)}٪ — ${pkg.impliedG>a?"تفاؤل مُسعَّر يرفع مخاطر الخيبة":"تشاؤم مُسعَّر قد يتيح فرصة"}.`);
+    reasons.push(S.r5((pkg.impliedG*100).toFixed(1),(a*100).toFixed(1),pkg.impliedG>a));
   }
-  if(c.macro_stretched!==false)reasons.push("البيئة الكلية: مؤشرات التقييم العامة (بافيت/CAPE) في مناطق مرتفعة تاريخياً — تشدد إضافي في هامش الأمان.");
-  return {rec,cls,reasons,note};
+  if(c.macro_stretched!==false)reasons.push(S.r6);
+  return {rec:S.rec[cls],cls,reasons,note};
 }
 
 /* =====================================================================
@@ -715,7 +948,7 @@ function evaluate(c){
   const mv=runAll(c,rates);
   const impliedG=reverseDcf(c,rates);
   const ens=ensemble(mv,arch);
-  if(!ens)throw new Error("لا يوجد نموذج واحد قابل للتشغيل — أكمل المدخلات من لوحة الافتراضات.");
+  if(!ens)throw new Error(S.errNoModel);
   const scen={};
   for(const k in SCENARIOS){
     const s=SCENARIOS[k];
@@ -727,21 +960,21 @@ function evaluate(c){
   const fv=(ens.fair_value+probFv)/2;
   let mos=MOS[c.size||"large"]??0.25;
   const warnings=[];
-  if(ens.dispersion&&ens.dispersion>DISP_WARN){mos+=DISP_ADDON;warnings.push(`تباعد النماذج ${Math.round(ens.dispersion*100)}٪ يتجاوز عتبة 25٪ — أعد فحص الافتراضات ووسّع هامش الأمان قبل أي قرار.`);}
-  if(c.macro_stretched!==false){mos+=MACRO_ADDON;warnings.push("مؤشرات التقييم الكلية (بافيت/CAPE) في مناطق مرتفعة تاريخياً — أضيف 5٪ لهامش الأمان.");}
+  if(ens.dispersion&&ens.dispersion>DISP_WARN){mos+=DISP_ADDON;warnings.push({k:"disp",v:Math.round(ens.dispersion*100)});}
+  if(c.macro_stretched!==false){mos+=MACRO_ADDON;warnings.push({k:"macro"});}
   const tvShare=mv.dcf_fcff&&mv.dcf_fcff.d.tvShare;
-  if(tvShare&&tvShare>0.80)warnings.push(`القيمة النهائية تمثل ${Math.round(tvShare*100)}٪ من قيمة DCF — حساسية مفرطة للافتراضات الأبدية.`);
+  if(tvShare&&tvShare>0.80)warnings.push({k:"tv",v:Math.round(tvShare*100)});
   const buyBelow=fv*(1-mos);
   const tech=techSnapshot(c.price_history);
   const fc=forecasts(price,fv,c,tech);
   const upside=fv/price-1;
-  let verdict,tag;
-  if(upside>mos){verdict="مقيّم بأقل من قيمته — ضمن هامش الأمان";tag="buy";}
-  else if(upside>0){verdict="أقل من القيمة العادلة لكن خارج هامش الأمان — انتظار";tag="hold";}
-  else if(upside>-0.10){verdict="قريب من القيمة العادلة";tag="hold";}
-  else{verdict="مقيّم بأعلى من قيمته";tag="sell";}
+  let vkey,tag;
+  if(upside>mos){vkey="buy";tag="buy";}
+  else if(upside>0){vkey="wait";tag="hold";}
+  else if(upside>-0.10){vkey="near";tag="hold";}
+  else{vkey="over";tag="sell";}
   const pkg={c, rates, models:mv, impliedG, ens, scen, probFv, fair_value:fv, upside,
-          mos, buyBelow, verdict, tag, warnings, sens:sensitivity(c,rates), tech, fc};
+          mos, buyBelow, vkey, tag, warnings, sens:sensitivity(c,rates), tech, fc};
   pkg.rec=recommendation(c,pkg);
   return pkg;
 }
@@ -794,17 +1027,24 @@ async function fetchInputs(sym){
     jget(`${API}/api/fundamentals?symbol=${sym}`),
     jget(`${API}/api/chart?symbol=${encodeURIComponent(m.bench)}&range=2y&interval=1d`),
   ]);
-  const sum=sumRes.status==="fulfilled"?(sumRes.value.quoteSummary&&sumRes.value.quoteSummary.result||[])[0]:null;
+  let sum=sumRes.status==="fulfilled"?(sumRes.value.quoteSummary&&sumRes.value.quoteSummary.result||[])[0]:null;
+  if(!sum){ // إعادة محاولة واحدة — أول نداء بعد خمول قد يفشل أثناء تهيئة جلسة Yahoo
+    try{
+      await new Promise(r=>setTimeout(r,1200));
+      const j2=await jget(`${API}/api/summary?symbol=${sym}`);
+      sum=(j2.quoteSummary&&j2.quoteSummary.result||[])[0]||null;
+    }catch(e){}
+  }
   const chart=chartRes.status==="fulfilled"?(chartRes.value.chart&&chartRes.value.chart.result||[])[0]:null;
   const fund=fundRes.status==="fulfilled"?fundRes.value:null;
   const bench=benchRes.status==="fulfilled"?(benchRes.value.chart&&benchRes.value.chart.result||[])[0]:null;
-  dlog("الملخص",sum?"الملف والمؤشرات والقوائم ✓":"فشل جلب الملخص — سيُعتمد على الرسم والقوائم فقط",sum?"ok":"warn");
-  if(!chart)throw new Error("تعذر جلب أسعار الرمز "+sym+" — تحقق من الرمز.");
+  dlog(S.lSum,sum?S.lSumOk:S.lSumFail,sum?"ok":"warn");
+  if(!chart)throw new Error(S.errPrices(sym));
   const ts=chart.timestamp||[];
   const closesRaw=(chart.indicators.quote[0].close||[]);
   const closes=[],cts=[];
   closesRaw.forEach((x,i)=>{if(x!=null){closes.push(x);cts.push(ts[i]);}});
-  dlog("الأسعار",`${closes.length} إغلاق يومي (سنتان) ✓`,"ok");
+  dlog(S.lPrices,S.lPricesOk(closes.length),"ok");
   const meta=chart.meta||{};
   const p=sum&&sum.price||{};
   const ks=sum&&sum.defaultKeyStatistics||{};
@@ -814,9 +1054,13 @@ async function fetchInputs(sym){
 
   const price=fd.currentPrice??p.regularMarketPrice??meta.regularMarketPrice??closes[closes.length-1];
   let shares=ks.sharesOutstanding;
-  if(!shares){const so=latestFund(fund,"annualBasicAverageShares");if(so)shares=so.v;}
+  if(!shares){
+    const so=latestFund(fund,"annualOrdinarySharesNumber")||latestFund(fund,"annualShareIssued")
+           ||latestFund(fund,"annualDilutedAverageShares")||latestFund(fund,"annualBasicAverageShares");
+    if(so)shares=so.v;
+  }
   if(!shares&&(p.marketCap||sd.marketCap))shares=(p.marketCap||sd.marketCap)/price;
-  if(!shares)throw new Error("تعذر تحديد عدد الأسهم — أدخل البيانات يدوياً من لوحة الافتراضات.");
+  if(!shares)throw new Error(S.errShares);
 
   // القوائم المالية السنوية
   const F=t=>latestFund(fund,t);
@@ -825,12 +1069,12 @@ async function fetchInputs(sym){
   const rev=F("annualTotalRevenue"), ni=F("annualNetIncome"), eq=F("annualStockholdersEquity");
   const debtF=F("annualTotalDebt"), cashF=F("annualCashAndCashEquivalents"), intExp=F("annualInterestExpense");
   const ebitdaF=F("annualEBITDA");
-  dlog("القوائم",fund?`قوائم سنوية: ${["EBIT","D&A","Capex","OCF","FCF","الإيرادات","صافي الربح","حقوق الملكية"].filter((_,i)=>[ebit,da,capex,ocf,fcfY,rev,ni,eq][i]).join("، ")} ✓`:"فشل جلب القوائم","ok");
+  dlog(S.lStmts,fund?S.lStmtsOk+" ("+["EBIT","D&A","Capex","OCF","FCF","Rev","NI","Equity"].filter((_,i)=>[ebit,da,capex,ocf,fcfY,rev,ni,eq][i]).join(", ")+")":S.lStmtsFail,fund?"ok":"warn");
 
   const tax=m.tax;
   let fcff=null;
-  if(ebit&&ebit.v>0){fcff=ebit.v*(1-tax)+(da?da.v:0)+(capex?capex.v:0);dlog("FCFF","محسوب: EBIT×(1−t) + إهلاك − نفقات رأسمالية ✓","ok");}
-  else dlog("FCFF","EBIT غير متاح — نموذج FCFF معطل (عدّله يدوياً إن أردت)","warn");
+  if(ebit&&ebit.v>0){fcff=ebit.v*(1-tax)+(da?da.v:0)+(capex?capex.v:0);dlog(S.lFcff,S.lFcffOk,"ok");}
+  else dlog(S.lFcff,S.lFcffNone,"warn");
   let fcfe=fd.freeCashflow??(fcfY?fcfY.v:null);
   if(fcfe==null&&ocf&&capex)fcfe=ocf.v+capex.v;
 
@@ -839,32 +1083,32 @@ async function fetchInputs(sym){
   if(dps==null&&chart.events&&chart.events.dividends){
     const yr=Date.now()/1000-366*24*3600;
     dps=Object.values(chart.events.dividends).filter(d=>d.date>yr).reduce((s,d)=>s+d.amount,0)||null;
-    if(dps)dlog("التوزيعات","محسوبة من أحداث آخر 12 شهراً ✓","ok");
+    if(dps)dlog(S.lDiv,S.lDivOk,"ok");
   }
 
   // بيتا: للسعودية تُحسب مقابل تاسي (بيتا Yahoo غير موثوقة للرموز السعودية)
   let beta=null;
   if(market==="SA"){
     if(bench){const bts=bench.timestamp||[],bcl=bench.indicators.quote[0].close||[];beta=calcBeta(closesRaw,ts,bcl,bts);}
-    if(beta!=null)dlog("بيتا",`محسوبة مقابل مؤشر تاسي (سنتان يومي): ${beta.toFixed(2)} ✓`,"ok");
-    else{beta=1.0;dlog("بيتا","تعذر حسابها مقابل تاسي — اعتُمد 1.00","warn");}
+    if(beta!=null)dlog(S.lBeta,S.lBetaTasi(beta.toFixed(2)),"ok");
+    else{beta=1.0;dlog(S.lBeta,S.lBetaTasiFail,"warn");}
   }else{
     beta=ks.beta??sd.beta??null;
     if(beta==null&&bench){const bts=bench.timestamp||[],bcl=bench.indicators.quote[0].close||[];beta=calcBeta(closesRaw,ts,bcl,bts);}
-    if(beta==null){beta=1.0;dlog("بيتا","غير متاحة — اعتُمد 1.00","warn");}
+    if(beta==null){beta=1.0;dlog(S.lBeta,S.lBetaNA,"warn");}
   }
 
   // النمو: تقدير المحللين +5 سنوات ← نمو الأرباح ← CAGR تاريخي
   let g1=null,gSrc="";
   const et=sum&&sum.earningsTrend&&sum.earningsTrend.trend||[];
   const g5=et.find(x=>x.period==="+5y");
-  if(g5&&g5.growth!=null){g1=g5.growth;gSrc="تقدير المحللين +5 سنوات";}
-  else if(fd.earningsGrowth!=null){g1=fd.earningsGrowth;gSrc="نمو الأرباح الأخير";}
+  if(g5&&g5.growth!=null){g1=g5.growth;gSrc=S.srcAnalyst;}
+  else if(fd.earningsGrowth!=null){g1=fd.earningsGrowth;gSrc=S.srcRecent;}
   else if(ni&&ni.hist.length>=3&&ni.hist[0]>0&&ni.hist[ni.hist.length-1]>0){
-    g1=Math.pow(ni.hist[ni.hist.length-1]/ni.hist[0],1/(ni.hist.length-1))-1;gSrc="CAGR صافي الربح التاريخي";
+    g1=Math.pow(ni.hist[ni.hist.length-1]/ni.hist[0],1/(ni.hist.length-1))-1;gSrc=S.srcCagr;
   }
   g1=Math.max(Math.min(g1??0.05,0.20),-0.05);
-  dlog("النمو",`g المرحلة الأولى = ${(g1*100).toFixed(1)}٪ (${gSrc||"افتراضي 5٪"}) — قصّ على [−5٪، +20٪]`,"ok");
+  dlog(S.lGrowth,S.lGrowthMsg((g1*100).toFixed(1),gSrc||S.srcDefault),"ok");
 
   const mcap=p.marketCap??sd.marketCap??price*shares;
   const mcapUsd=market==="SA"?mcap/3.75:mcap;
@@ -880,7 +1124,7 @@ async function fetchInputs(sym){
   const eps=ks.trailingEps??(ni&&ni.v?ni.v/shares:null);
   const costDebt=(intExp&&totalDebt>0&&intExp.v!==0)?Math.min(Math.max(Math.abs(intExp.v)/totalDebt,0.02),0.12):null;
   const arch=detectArchetype(prof.sector,payout);
-  dlog("التصنيف",`القطاع: ${prof.sector||"غير معروف"} → نوع الشركة: ${ARCH_LABEL[arch]} · الحجم: ${size}`,"ok");
+  dlog(S.lClass,S.lClassMsg(prof.sector||S.unknownSector,archLabel(arch),size),"ok");
 
   return {
     ticker:sym, name:p.longName||meta.longName||(DIR.find(d=>d.sym===sym)||{}).name||sym, market, size, archetype:arch,
@@ -986,14 +1230,14 @@ function status(msg,err){const el=$("status");el.textContent=msg;el.classList.to
 async function run(){
   hideSug();
   const sym=resolveSymbol($("sym").value);
-  if(!sym){status("لم أتعرف على الشركة — اكتب اسمها أو رمزها واختر من القائمة.",true);return;}
+  if(!sym){status(S.errNoCompany,true);return;}
   $("sym").value=sym;
   $("btnRun").disabled=true;
   $("results").classList.add("hidden");
   try{
-    setStage(1);status("المرحلة 1: جلب الأسعار والقوائم المالية والمعايير لـ "+sym+" …");
+    setStage(1);status(S.statusFetch(sym));
     const c=await fetchInputs(sym);
-    setStage(2);status("المراحل 2–6: معدلات الخصم، النماذج، الدمج، الطبقة الفنية، التنبؤ …");
+    setStage(2);status(S.statusCalc);
     await new Promise(r=>setTimeout(r,30));
     const pkg=evaluate(c);
     CUR={c,pkg};
@@ -1001,7 +1245,7 @@ async function run(){
     $("status").classList.add("hidden");
     renderAll();
   }catch(e){
-    status("خطأ: "+e.message+" — جرّب رمزاً آخر أو «مثال توضيحي».",true);
+    status(S.errRun(e.message),true);
     setStage(0);
   }
   $("btnRun").disabled=false;
@@ -1016,7 +1260,7 @@ function runDemo(){
   const hist=ph.map(x=>+(x*scale).toFixed(2));
   const now=Date.now()/1000;
   const c={
-    ticker:"XXXX.SR", name:"شركة صناعية سعودية (مثال توضيحي)", market:"SA", size:"large",
+    ticker:"XXXX.SR", name:S.demoName, market:"SA", size:"large",
     archetype:"mature", sector:"Industrials", currency:"SAR", chgPct:null,
     price:54, shares:1e9, market_cap:54e9, beta:0.85,
     total_debt:12e9, cash:3e9, cost_of_debt:0.055,
@@ -1027,7 +1271,7 @@ function runDemo(){
     macro_stretched:true, price_history:hist,
     price_ts:hist.map((_,i)=>now-(hist.length-i)*86400*1.4),
   };
-  LOG.length=0;dlog("وضع تجريبي","بيانات افتراضية لأغراض العرض — ليست شركة حقيقية","warn");
+  LOG.length=0;dlog(S.lDemo,S.lDemoMsg,"warn");
   CUR={c,pkg:evaluate(c)};
   setStage(6,"done");
   $("status").classList.add("hidden");
@@ -1040,7 +1284,7 @@ function recalc(){
   try{
     CUR={c,pkg:evaluate(c)};
     renderAll();
-  }catch(e){status("خطأ في الحساب: "+e.message,true);}
+  }catch(e){status(S.errCalc(e.message),true);}
 }
 
 /* --------- العرض --------- */
@@ -1053,57 +1297,59 @@ function renderAll(){
 }
 function renderCard(c,pkg){
   $("coName").textContent=c.name;
-  $("coMeta").innerHTML=`<span class="num">${c.ticker}</span> · ${MARKETS[c.market].name}${c.sector?" · "+c.sector:""} · ${ARCH_LABEL[c.archetype]}`;
+  $("coMeta").innerHTML=`<span class="num">${c.ticker}</span> · ${S.markets[c.market]}${c.sector?" · "+c.sector:""} · ${archLabel(c.archetype)}`;
   $("coPrice").textContent=fmt(c.price);
-  $("coCur").textContent=c.currency==="SAR"?"ريال":c.currency;
+  $("coCur").textContent=c.currency==="SAR"?S.riyal:c.currency;
   const chg=$("coChg");
   if(c.chgPct!=null){chg.textContent=(c.chgPct>=0?"+":"")+c.chgPct.toFixed(2)+"%";chg.className="chg "+(c.chgPct>=0?"up":"down");chg.style.display="";}
   else chg.style.display="none";
   $("miniStats").innerHTML=[
-    ["القيمة السوقية",fmtM(c.market_cap)+" م"],
-    ["بيتا",fmt(c.beta,2)],
-    ["ربحية السهم",fmt(c.eps)],
-    ["ق. دفترية",fmt(c.bvps)],
-    ["ROE",c.roe!=null?(c.roe*100).toFixed(1)+"%":"—"],
-    ["التوزيعات",fmt(c.dps)],
+    [S.ms.mcap,fmtM(c.market_cap)+S.ms.mln],
+    [S.ms.beta,fmt(c.beta,2)],
+    [S.ms.eps,fmt(c.eps)],
+    [S.ms.bvps,fmt(c.bvps)],
+    [S.ms.roe,c.roe!=null?(c.roe*100).toFixed(1)+"%":"—"],
+    [S.ms.dps,fmt(c.dps)],
   ].map(([k,v])=>`<div class="ms"><div class="v num">${v}</div><div class="k">${k}</div></div>`).join("");
 }
+const warnText=w=>typeof S.warn[w.k]==="function"?S.warn[w.k](w.v):S.warn[w.k];
+const locDate=()=>new Date().toLocaleDateString(LANG==="ar"?"ar-SA-u-nu-latn":"en-GB");
 function renderVerdict(c,pkg){
   $("vPrice").textContent=fmt(c.price);
   $("vFV").textContent=fmt(pkg.fair_value);
   $("vGap").textContent=fmtPct(pkg.upside);
   $("vGapCell").className="vcell "+(pkg.upside>=0?"green":"red");
   $("vBuy").textContent=fmt(pkg.buyBelow);
-  $("vMosLbl").textContent=`(هامش أمان ${Math.round(pkg.mos*100)}٪)`;
+  $("vMosLbl").textContent=S.mosLbl(Math.round(pkg.mos*100));
   const tag=$("vTag");
-  tag.textContent=pkg.verdict;
+  tag.textContent=S.verdicts[pkg.vkey];
   tag.className="tag tag-"+(pkg.tag==="buy"?"buy":pkg.tag==="sell"?"sell":"hold");
-  $("vExplain").textContent=`${pkg.ens.n} نماذج · تباعد ${pkg.ens.dispersion!=null?Math.round(pkg.ens.dispersion*100)+"٪":"—"} · القيمة = متوسط (الدمج الأساسي ${fmt(pkg.ens.fair_value)}، المرجح بالسيناريوهات ${fmt(pkg.probFv)})`;
-  $("verdictSub").textContent="تاريخ التحليل: "+new Date().toLocaleDateString("ar-SA-u-nu-latn");
-  $("vWarnings").innerHTML=pkg.warnings.map(w=>`<div class="warn">⚠ ${w}</div>`).join("");
+  $("vExplain").textContent=S.explain(pkg.ens.n,pkg.ens.dispersion!=null?Math.round(pkg.ens.dispersion*100)+"%":"—",fmt(pkg.ens.fair_value),fmt(pkg.probFv));
+  $("verdictSub").textContent=S.dateLbl+locDate();
+  $("vWarnings").innerHTML=pkg.warnings.map(w=>`<div class="warn">⚠ ${warnText(w)}</div>`).join("");
   renderRec(c,pkg);
 }
 function renderRec(c,pkg){
   const wrap=$("recWrap");
   if(!isPremium()){
     wrap.innerHTML=`<div class="rec-box">
-      <div class="rec-head"><span class="rec-badge tag-hold">■ ■ ■</span><span class="rec-title">التوصية التفصيلية</span></div>
+      <div class="rec-head"><span class="rec-badge tag-hold">■ ■ ■</span><span class="rec-title">${S.recLockHead}</span></div>
       <div class="skel" style="width:88%"></div><div class="skel" style="width:72%"></div><div class="skel" style="width:80%"></div><div class="skel" style="width:64%"></div>
       <div class="lock-overlay"><div class="lk">🔒</div>
-        <p><b>التوصية الصريحة (شراء / احتفاظ / بيع) بأسبابها الكمية + تقرير PDF الاحترافي</b> — حصرية للمشتركين</p>
-        <button class="btn-run" onclick="openSub()">اشترك الآن — 50 ريال/شهر</button>
+        <p>${S.recLockP}</p>
+        <button class="btn-run" onclick="openSub()">${S.recLockBtn}</button>
       </div></div>`;
     return;
   }
   const r=pkg.rec;
   wrap.innerHTML=`<div class="rec-box">
-    <div class="rec-head"><span class="rec-badge tag-${r.cls}">${r.rec}</span><span class="rec-title">التوصية وفق المنهجية الكمية — ليست نصيحة استثمارية شخصية</span></div>
+    <div class="rec-head"><span class="rec-badge tag-${r.cls}">${r.rec}</span><span class="rec-title">${S.recTitle}</span></div>
     ${r.note?`<div class="warn">ℹ ${r.note}</div>`:""}
     <ul>${r.reasons.map(x=>`<li>${x}</li>`).join("")}</ul>
   </div>`;
 }
 function renderFF(c,pkg){
-  const rows=Object.entries(pkg.models).map(([k,m])=>({k,label:MODEL_LABELS[k],v:m.v})).sort((a,b)=>b.v-a.v);
+  const rows=Object.entries(pkg.models).map(([k,m])=>({k,label:mlabel(k),v:m.v})).sort((a,b)=>b.v-a.v);
   const all=rows.map(r=>r.v).concat([c.price,pkg.fair_value,pkg.buyBelow]);
   const lo=Math.min(...all)*0.93, hi=Math.max(...all)*1.05;
   const X=v=>((v-lo)/(hi-lo)*100).toFixed(1);
@@ -1111,16 +1357,16 @@ function renderFF(c,pkg){
   let html=rows.map(r=>{
     const x=+X(r.v);
     return `<div class="ffrow"><div class="fflabel">${r.label}<span class="w-badge">${w[r.k]?Math.round(w[r.k]*100)+"٪":""}</span></div>
-    <div class="fftrack"><div class="ffbar" style="left:calc(${x}% - 7px)" data-tip="${r.label}: ${fmt(r.v)} (${fmtPct(r.v/c.price-1)} عن السعر)"></div>
+    <div class="fftrack"><div class="ffbar" style="left:calc(${x}% - 7px)" data-tip="${r.label}: ${fmt(r.v)} (${fmtPct(r.v/c.price-1)}${S.tipVs})"></div>
     <span class="ffv" style="left:calc(${x}% + 11px)">${fmt(r.v)}</span></div></div>`;
   }).join("");
   html+=`<div class="ffmarks">
-    <div class="ffmark mprice" style="left:${X(c.price)}%"><span>السعر ${fmt(c.price)}</span></div>
-    <div class="ffmark mfv" style="left:${X(pkg.fair_value)}%"><span>القيمة العادلة ${fmt(pkg.fair_value)}</span></div>
-    <div class="ffmark mbuy" style="left:${X(pkg.buyBelow)}%"><span>سعر الشراء ${fmt(pkg.buyBelow)}</span></div>
+    <div class="ffmark mprice" style="left:${X(c.price)}%"><span>${S.mPrice} ${fmt(c.price)}</span></div>
+    <div class="ffmark mfv" style="left:${X(pkg.fair_value)}%"><span>${S.mFV} ${fmt(pkg.fair_value)}</span></div>
+    <div class="ffmark mbuy" style="left:${X(pkg.buyBelow)}%"><span>${S.mBuy} ${fmt(pkg.buyBelow)}</span></div>
   </div>`;
   $("ffChart").innerHTML=html;
-  $("ffStats").innerHTML=`متوسط مرجح: <b class="num">${fmt(pkg.ens.weighted)}</b> · متوسط مشذّب: <b class="num">${fmt(pkg.ens.trimmed)}</b> · وسيط: <b class="num">${fmt(pkg.ens.median)}</b> · المدى: <span class="num">${fmt(pkg.ens.min)} – ${fmt(pkg.ens.max)}</span> · عدد النماذج: <span class="num">${pkg.ens.n}</span>`;
+  $("ffStats").innerHTML=S.ffStats(fmt(pkg.ens.weighted),fmt(pkg.ens.trimmed),fmt(pkg.ens.median),fmt(pkg.ens.min),fmt(pkg.ens.max),pkg.ens.n);
   // tooltips
   document.querySelectorAll(".ffbar").forEach(el=>{
     el.addEventListener("mouseenter",e=>showTip(el,el.dataset.tip));
@@ -1128,53 +1374,53 @@ function renderFF(c,pkg){
   });
 }
 function renderModels(c,pkg){
-  $("archLbl").textContent=`أوزان نوع «${ARCH_LABEL[c.archetype]}» — تُعاد معايرتها على النماذج المتاحة`;
+  $("archLbl").textContent=S.archW(archLabel(c.archetype));
   const w=WEIGHTS[c.archetype]||WEIGHTS.mature;
   const row=(k)=>{
     const m=pkg.models[k];
-    const note=m&&k==="dcf_fcff"&&m.d.tvShare!=null?`القيمة النهائية ${Math.round(m.d.tvShare*100)}٪ من EV`
-      :m&&k==="pe_peer"?`مبرر ${fmt(m.d.just,1)}×${m.d.peer?" · أقران "+fmt(m.d.peer,1)+"×":""}`
-      :m&&k==="pb_just"?`مبرر ${fmt(m.d.just,2)}×`
-      :m&&(k==="ev_ebitda"||k==="ev_sales")?`مضاعف ${fmt(m.d.mult,1)}×`:"";
-    return `<tr><td>${MODEL_LABELS[k]}</td>
-      <td class="num">${m?fmt(m.v):"<span style='color:var(--faint)'>غير منطبق</span>"}</td>
+    const note=m&&k==="dcf_fcff"&&m.d.tvShare!=null?S.noteTv(Math.round(m.d.tvShare*100))
+      :m&&k==="pe_peer"?S.noteJust(fmt(m.d.just,1),m.d.peer?fmt(m.d.peer,1):null)
+      :m&&k==="pb_just"?S.noteJust(fmt(m.d.just,2),null)
+      :m&&(k==="ev_ebitda"||k==="ev_sales")?S.noteMult(fmt(m.d.mult,1)):"";
+    return `<tr><td>${mlabel(k)}</td>
+      <td class="num">${m?fmt(m.v):"<span style='color:var(--faint)'>"+S.na+"</span>"}</td>
       <td class="num">${m?fmtPct(m.v/c.price-1):"—"}</td>
-      <td class="num w-badge">${w[k]?Math.round(w[k]*100)+"٪":"0٪"}</td>
+      <td class="num w-badge">${w[k]?Math.round(w[k]*100)+"%":"0%"}</td>
       <td style="font-size:12px;color:var(--muted)">${note}</td></tr>`;
   };
-  let html=`<tr><th>النموذج</th><th class="num">القيمة/سهم</th><th class="num">عن السعر</th><th class="num">الوزن</th><th>ملاحظة</th></tr>`;
-  html+=`<tr class="group"><td colspan="5">المرحلة 3أ — النماذج الجوهرية</td></tr>`;
+  let html=`<tr><th>${S.thModel}</th><th class="num">${S.thVal}</th><th class="num">${S.thVs}</th><th class="num">${S.thW}</th><th>${S.thNote}</th></tr>`;
+  html+=`<tr class="group"><td colspan="5">${S.grpIntr}</td></tr>`;
   html+=INTRINSIC.map(row).join("");
-  html+=`<tr class="group"><td colspan="5">المرحلة 3ب — النماذج النسبية</td></tr>`;
+  html+=`<tr class="group"><td colspan="5">${S.grpRel}</td></tr>`;
   html+=Object.keys(MODEL_LABELS).filter(k=>!INTRINSIC.includes(k)).map(row).join("");
-  html+=`<tr class="total"><td>القيمة العادلة النهائية (دمج ثلاثي × سيناريوهات)</td><td class="num">${fmt(pkg.fair_value)}</td><td class="num">${fmtPct(pkg.upside)}</td><td colspan="2"></td></tr>`;
+  html+=`<tr class="total"><td>${S.finalRow}</td><td class="num">${fmt(pkg.fair_value)}</td><td class="num">${fmtPct(pkg.upside)}</td><td colspan="2"></td></tr>`;
   $("modelsTable").innerHTML=html;
 }
 function renderRates(pkg){
-  const r=pkg.rates;
+  const r=pkg.rates, R=S.rateRows;
   $("ratesTable").innerHTML=[
-    ["المعدل الخالي من المخاطر (نظيف من فرق التخلف)",(r.rf_clean*100).toFixed(2)+"%"],
-    ["بيتا المستخدمة",fmt(r.beta,2)],
-    ["تكلفة حقوق الملكية — CAPM + علاوة الدولة",(r.re_capm*100).toFixed(2)+"%"],
-    ["تكلفة حقوق الملكية — عائد الدين + 3.5%",r.re_bond?(r.re_bond*100).toFixed(2)+"%":"—"],
-    ["<b>تكلفة حقوق الملكية المعتمدة (المتوسط)</b>","<b>"+(r.ke*100).toFixed(2)+"%</b>"],
-    ["<b>WACC</b>","<b>"+(r.wacc*100).toFixed(2)+"%</b>"],
-    ["سقف النمو الأبدي g (نمو الناتج الاسمي)",(r.g_cap*100).toFixed(1)+"%"],
+    [R.rf,(r.rf_clean*100).toFixed(2)+"%"],
+    [R.beta,fmt(r.beta,2)],
+    [R.capm,(r.re_capm*100).toFixed(2)+"%"],
+    [R.bond,r.re_bond?(r.re_bond*100).toFixed(2)+"%":"—"],
+    ["<b>"+R.ke+"</b>","<b>"+(r.ke*100).toFixed(2)+"%</b>"],
+    ["<b>"+R.wacc+"</b>","<b>"+(r.wacc*100).toFixed(2)+"%</b>"],
+    [R.gcap,(r.g_cap*100).toFixed(1)+"%"],
   ].map(([k,v])=>`<tr><td>${k}</td><td class="num">${v}</td></tr>`).join("");
 }
 function renderScen(c,pkg){
-  let html=`<tr><th>سيناريو</th><th class="num">الاحتمال</th><th class="num">القيمة العادلة</th></tr>`;
+  let html=`<tr><th>${S.thScen}</th><th class="num">${S.thProb}</th><th class="num">${S.thFV}</th></tr>`;
   html+=["bear","base","bull"].map(k=>{
     const s=pkg.scen[k];
-    return `<tr><td>${s.label}</td><td class="num">${Math.round(s.prob*100)}%</td><td class="num">${fmt(s.fv)}</td></tr>`;
+    return `<tr><td>${S.scen[k]}</td><td class="num">${Math.round(s.prob*100)}%</td><td class="num">${fmt(s.fv)}</td></tr>`;
   }).join("");
-  html+=`<tr class="total"><td>المرجح بالاحتمالات</td><td class="num">—</td><td class="num">${fmt(pkg.probFv)}</td></tr>`;
+  html+=`<tr class="total"><td>${S.probW}</td><td class="num">—</td><td class="num">${fmt(pkg.probFv)}</td></tr>`;
   $("scenTable").innerHTML=html;
   const el=$("reverseDcf");
   if(pkg.impliedG!=null){
     const a=c.growth_stage1??0.05;
-    el.innerHTML=`<b style="color:var(--gold)">DCF عكسي:</b> السوق يسعّر ضمنياً نمواً قدره <b class="num">${(pkg.impliedG*100).toFixed(1)}٪</b> مقابل افتراضك <b class="num">${(a*100).toFixed(1)}٪</b> — ${pkg.impliedG>a?"توقعات السوق أعلى من توقعاتك (تفاؤل مُسعَّر)":"توقعات السوق أدنى من توقعاتك (تشاؤم مُسعَّر)"}.`;
-  }else el.innerHTML=`<b style="color:var(--gold)">DCF عكسي:</b> السعر الحالي خارج نطاق الحل [−30٪، +60٪] أو نموذج FCFF غير متاح.`;
+    el.innerHTML=`<b style="color:var(--gold)">${S.revTitle}</b> `+S.rev((pkg.impliedG*100).toFixed(1),(a*100).toFixed(1),pkg.impliedG>a);
+  }else el.innerHTML=`<b style="color:var(--gold)">${S.revTitle}</b> ${S.revNA}`;
 }
 function renderSens(c,pkg){
   const s=pkg.sens;
@@ -1198,29 +1444,31 @@ function renderTech(c,pkg){
   const t=pkg.tech, sec=$("sec-tech");
   if(!t){sec.classList.add("hidden");return;}
   sec.classList.remove("hidden");
-  $("techSub").textContent=`الدرجة المركبة: ${t.score>=0?"+":""}${t.score.toFixed(2)} (من −1 إلى +1) — اتجاه 30٪ + زخم 30٪ + MACD 20٪ + RSI ارتدادي 20٪`;
+  $("techSub").textContent=S.techSub((t.score>=0?"+":"")+t.score.toFixed(2));
   drawChart(c,pkg);
+  const TR=S.techRows;
   $("techTable").innerHTML=[
-    ["الدرجة الفنية المركبة",`<b>${t.score>=0?"+":""}${t.score.toFixed(2)}</b>`],
-    ["SMA50 / SMA200",`${fmt(t.s50)} / ${fmt(t.s200)} — ${t.golden?"تقاطع ذهبي ✓":"لا تقاطع ذهبي"}`],
-    ["RSI(14) وايلدر",t.rsi!=null?t.rsi.toFixed(1)+(t.rsi>70?" (تشبع شرائي)":t.rsi<30?" (تشبع بيعي)":""):"—"],
-    ["MACD هيستوغرام",t.macd!=null?fmt(t.macd,3):"—"],
-    ["زخم 12−1 شهراً",t.mom!=null?fmtPct(t.mom):"—"],
-    ["التقلب السنوي",t.vol!=null?(t.vol*100).toFixed(1)+"%":"—"],
+    [TR.score,`<b>${t.score>=0?"+":""}${t.score.toFixed(2)}</b>`],
+    [TR.sma,`${fmt(t.s50)} / ${fmt(t.s200)} — ${t.golden?S.golden:S.noGolden}`],
+    [TR.rsi,t.rsi!=null?t.rsi.toFixed(1)+(t.rsi>70?S.ob:t.rsi<30?S.os:""):"—"],
+    [TR.macd,t.macd!=null?fmt(t.macd,3):"—"],
+    [TR.mom,t.mom!=null?fmtPct(t.mom):"—"],
+    [TR.vol,t.vol!=null?(t.vol*100).toFixed(1)+"%":"—"],
   ].map(([k,v])=>`<tr><td>${k}</td><td class="num">${v}</td></tr>`).join("");
 }
 function renderFc(c,pkg){
   const F=pkg.fc;
-  $("fcGrid").innerHTML=[F.short,F.medium,F.long].map(f=>{
-    const cls=f.dir==="صاعد"?"dir-up":f.dir==="هابط"?"dir-down":"dir-flat";
-    const icon=f.dir==="صاعد"?"▲":f.dir==="هابط"?"▼":"◆";
+  $("fcGrid").innerHTML=["short","medium","long"].map(key=>{
+    const f=F[key];
+    const cls=f.dir==="up"?"dir-up":f.dir==="down"?"dir-down":"dir-flat";
+    const icon=f.dir==="up"?"▲":f.dir==="down"?"▼":"◆";
     return `<div class="fcard">
-      <div class="fhead">${f===F.short?"قصير الأجل":f===F.medium?"متوسط الأجل":"طويل الأجل"} <span class="fh">${f.h}</span></div>
+      <div class="fhead">${S.fcNames[key]} <span class="fh">${S.fcH[key]}</span></div>
       <div class="ftarget">${fmt(f.t)}</div>
-      <div class="frange">النطاق: <span class="num">${fmt(f.lo)} – ${fmt(f.hi)}</span></div>
-      <div class="frange">${f.annual?"عائد سنوي متوقع":"عائد متوقع"}: <b class="num">${fmtPct(f.er)}</b></div>
-      <span class="dirchip ${cls}">${icon} ${f.dir}</span>
-      <div class="fdriver">المحرك: ${f.drv}</div>
+      <div class="frange">${S.rangeLbl}<span class="num">${fmt(f.lo)} – ${fmt(f.hi)}</span></div>
+      <div class="frange">${f.annual?S.erALbl:S.erLbl}: <b class="num">${fmtPct(f.er)}</b></div>
+      <span class="dirchip ${cls}">${icon} ${S.dirs[f.dir]}</span>
+      <div class="fdriver">${S.drvLbl}${S.drv[f.drv]}</div>
     </div>`;
   }).join("");
 }
@@ -1307,50 +1555,58 @@ window.addEventListener("resize",()=>{if(CUR)drawChart(CUR.c,CUR.pkg);});
 
 /* --------- لوحة الافتراضات --------- */
 const AFIELDS=[
-  ["h","التصنيف"],
-  ["archetype","نوع الشركة","select",Object.entries(ARCH_LABEL)],
-  ["size","الحجم (هامش الأمان)","select",[["large","كبيرة (15٪)"],["mid","متوسطة (25٪)"],["small","صغيرة (40٪)"]]],
-  ["macro_stretched","تشدد كلي (بافيت/CAPE) +5٪","select",[["1","نعم"],["0","لا"]]],
-  ["h","النمو والتوقع"],
-  ["growth_stage1","نمو المرحلة الأولى ٪","pct"],
-  ["growth_terminal","النمو الأبدي g ٪","pct"],
-  ["forecast_years","سنوات التوقع","num"],
-  ["exit_multiple","مضاعف الخروج EV/EBITDA","num"],
-  ["h","معدلات الخصم"],
-  ["beta","بيتا","num"],
-  ["risk_free","المعدل الخالي من المخاطر ٪","pct"],
-  ["cost_of_debt","تكلفة الدين ٪","pct"],
-  ["tax_rate","الضريبة/الزكاة ٪","pct"],
-  ["h","لكل سهم"],
-  ["price","السعر","num"],
-  ["eps","ربحية السهم","num"],
-  ["eps_forward","ربحية متوقعة","num"],
-  ["bvps","القيمة الدفترية","num"],
-  ["roe","ROE ٪","pct"],
-  ["dps","التوزيعات النقدية","num"],
-  ["payout_ratio","نسبة التوزيع ٪","pct"],
-  ["h","مجاميع (بالمليون)"],
-  ["shares","عدد الأسهم","mln"],
-  ["total_debt","إجمالي الدين","mln"],
-  ["cash","النقد","mln"],
-  ["revenue","الإيرادات","mln"],
-  ["ebitda","EBITDA","mln"],
-  ["ebit","EBIT","mln"],
-  ["fcff","FCFF","mln"],
-  ["fcfe","FCFE","mln"],
-  ["h","مضاعفات الأقران"],
-  ["peer_pe","P/E الأقران","num"],
-  ["peer_ev_ebitda","EV/EBITDA الأقران","num"],
-  ["peer_ev_sales","EV/Sales الأقران","num"],
-  ["peer_pb","P/B الأقران","num"],
+  ["h",["التصنيف","Classification"]],
+  ["archetype",["نوع الشركة","Archetype"],"select","arch"],
+  ["size",["الحجم (هامش الأمان)","Size (margin of safety)"],"select","size"],
+  ["macro_stretched",["تشدد كلي (بافيت/CAPE) +5٪","Macro strictness (Buffett/CAPE) +5%"],"select","yn"],
+  ["h",["النمو والتوقع","Growth & forecast"]],
+  ["growth_stage1",["نمو المرحلة الأولى ٪","Stage-1 growth %"],"pct"],
+  ["growth_terminal",["النمو الأبدي g ٪","Terminal growth g %"],"pct"],
+  ["forecast_years",["سنوات التوقع","Forecast years"],"num"],
+  ["exit_multiple",["مضاعف الخروج EV/EBITDA","Exit multiple EV/EBITDA"],"num"],
+  ["h",["معدلات الخصم","Discount rates"]],
+  ["beta",["بيتا","Beta"],"num"],
+  ["risk_free",["المعدل الخالي من المخاطر ٪","Risk-free rate %"],"pct"],
+  ["cost_of_debt",["تكلفة الدين ٪","Cost of debt %"],"pct"],
+  ["tax_rate",["الضريبة/الزكاة ٪","Tax/Zakat %"],"pct"],
+  ["h",["لكل سهم","Per share"]],
+  ["price",["السعر","Price"],"num"],
+  ["eps",["ربحية السهم","EPS"],"num"],
+  ["eps_forward",["ربحية متوقعة","Forward EPS"],"num"],
+  ["bvps",["القيمة الدفترية","Book value/share"],"num"],
+  ["roe",["ROE ٪","ROE %"],"pct"],
+  ["dps",["التوزيعات النقدية","Dividend/share"],"num"],
+  ["payout_ratio",["نسبة التوزيع ٪","Payout ratio %"],"pct"],
+  ["h",["مجاميع (بالمليون)","Totals (millions)"]],
+  ["shares",["عدد الأسهم","Shares"],"mln"],
+  ["total_debt",["إجمالي الدين","Total debt"],"mln"],
+  ["cash",["النقد","Cash"],"mln"],
+  ["revenue",["الإيرادات","Revenue"],"mln"],
+  ["ebitda",["EBITDA","EBITDA"],"mln"],
+  ["ebit",["EBIT","EBIT"],"mln"],
+  ["fcff",["FCFF","FCFF"],"mln"],
+  ["fcfe",["FCFE","FCFE"],"mln"],
+  ["h",["مضاعفات الأقران","Peer multiples"]],
+  ["peer_pe",["P/E الأقران","Peer P/E"],"num"],
+  ["peer_ev_ebitda",["EV/EBITDA الأقران","Peer EV/EBITDA"],"num"],
+  ["peer_ev_sales",["EV/Sales الأقران","Peer EV/Sales"],"num"],
+  ["peer_pb",["P/B الأقران","Peer P/B"],"num"],
 ];
+function aOpts(kind){
+  if(kind==="arch")return Object.keys(S.arch).map(k=>[k,S.arch[k]]);
+  if(kind==="size")return LANG==="ar"?[["large","كبيرة (15٪)"],["mid","متوسطة (25٪)"],["small","صغيرة (40٪)"]]
+                                      :[["large","Large (15%)"],["mid","Mid (25%)"],["small","Small (40%)"]];
+  return LANG==="ar"?[["1","نعم"],["0","لا"]]:[["1","Yes"],["0","No"]];
+}
 function renderAssumptions(c){
+  const li=LANG==="ar"?0:1;
   $("agrid").innerHTML=AFIELDS.map(f=>{
-    if(f[0]==="h")return `<div class="ahead">${f[1]}</div>`;
-    const [key,label,type,opts]=f;
+    if(f[0]==="h")return `<div class="ahead">${f[1][li]}</div>`;
+    const [key,labels,type,kind]=f;
+    const label=labels[li];
     if(type==="select"){
       let val=key==="macro_stretched"?(c[key]!==false?"1":"0"):(c[key]??"");
-      return `<div class="field"><label>${label}</label><select id="a_${key}">${opts.map(([v,l])=>`<option value="${v}" ${String(val)===String(v)?"selected":""}>${l}</option>`).join("")}</select></div>`;
+      return `<div class="field"><label>${label}</label><select id="a_${key}">${aOpts(kind).map(([v,l])=>`<option value="${v}" ${String(val)===String(v)?"selected":""}>${l}</option>`).join("")}</select></div>`;
     }
     let v=c[key];
     if(v!=null){
@@ -1384,7 +1640,7 @@ function readAssumptions(){
   return c;
 }
 function renderLog(){
-  $("datalog").innerHTML=LOG.map(l=>`<div class="${l.cls}">${l.cls==="ok"?"✓":"⚠"} <b>${l.src}:</b> ${l.msg}</div>`).join("")||"<div>لا سجل — وضع يدوي.</div>";
+  $("datalog").innerHTML=LOG.map(l=>`<div class="${l.cls}">${l.cls==="ok"?"✓":"⚠"} <b>${l.src}:</b> ${l.msg}</div>`).join("")||`<div>${S.logEmpty}</div>`;
 }
 function exportJson(){
   if(!CUR)return;
@@ -1408,35 +1664,65 @@ function getSub(){
   return null;
 }
 const isPremium=()=>!!getSub();
+/* --------- تطبيق اللغة --------- */
+const tGet=key=>key.split(".").reduce((o,k)=>o&&o[k],S);
+function applyStatic(){
+  document.title=S.title;
+  document.documentElement.lang=LANG;
+  document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+  document.querySelectorAll("[data-i18n]").forEach(el=>{const v=tGet(el.dataset.i18n);if(v!=null)el.textContent=v;});
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>{const v=tGet(el.dataset.i18nHtml);if(v!=null)el.innerHTML=v;});
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{const v=tGet(el.dataset.i18nPh);if(v!=null)el.placeholder=v;});
+}
+const CHIP_SYMS=["2222.SR","1120.SR","2010.SR","7010.SR","1180.SR","2280.SR","AAPL","MSFT","NVDA","GOOGL"];
+function renderChips(){
+  $("chips").innerHTML=CHIP_SYMS.map(sym=>{
+    const d=DIR.find(x=>x.sym===sym);if(!d)return "";
+    const nm=LANG==="ar"?d.name:(d.en||d.name);
+    return `<span class="chip" onclick="pick('${sym}')">${nm} <b>${d.code}</b></span>`;
+  }).join("");
+}
+function setLang(l){
+  LANG=l;S=STR[l];localStorage.setItem("fv_lang",l);
+  $("btnLang").textContent=l==="ar"?"EN":"عربي";
+  applyStatic();renderChips();updateSubUI();
+  if(CUR){
+    CUR.pkg.rec=recommendation(CUR.c,CUR.pkg);
+    renderAll();
+  }else if(!$("status").classList.contains("hidden")&&!$("status").classList.contains("err")){
+    $("status").textContent=S.statusIdle;
+  }
+}
+
 function updateSubUI(){
   const b=$("btnSub"), s=getSub();
-  if(s){b.className="subchip";b.textContent="★ مشترك حتى "+s.expires;}
-  else{b.className="btn-gold-line";b.textContent="★ الاشتراك المميز";}
+  if(s){b.className="subchip";b.textContent=S.subUntil(s.expires);}
+  else{b.className="btn-gold-line";b.textContent=S.subBtn;}
 }
 function openSub(){
   const s=getSub();
   $("subMsg").className="msg";
-  $("subMsg").textContent=s?("اشتراكك فعّال حتى "+s.expires):"";
-  if(PAYMENT_LINK)$("payHow").innerHTML=`<a href="${PAYMENT_LINK}" target="_blank" rel="noopener">ادفع من هنا مباشرة</a>`;
+  $("subMsg").textContent=s?S.subActive(s.expires):"";
+  $("payHow").innerHTML=PAYMENT_LINK?`<a href="${PAYMENT_LINK}" target="_blank" rel="noopener">${S.payHere}</a>`:S.payDefault;
   $("subModal").classList.remove("hidden");
 }
 function closeSub(){$("subModal").classList.add("hidden");}
 async function activateSub(){
   const code=$("subCode").value.trim();
   const msg=$("subMsg");
-  if(!code){msg.className="msg err";msg.textContent="أدخل شفرة التفعيل أولاً.";return;}
-  msg.className="msg";msg.textContent="جارٍ التحقق…";
+  if(!code){msg.className="msg err";msg.textContent=S.msgEnter;return;}
+  msg.className="msg";msg.textContent=S.msgChk;
   try{
     const r=await fetch(API+"/api/activate?code="+encodeURIComponent(code));
     const j=await r.json();
     if(j.ok){
       localStorage.setItem("fv_sub",JSON.stringify({code,expires:j.expires}));
-      msg.className="msg ok";msg.textContent="تم التفعيل ✓ اشتراكك سارٍ حتى "+j.expires;
+      msg.className="msg ok";msg.textContent=S.msgOk(j.expires);
       updateSubUI();
       if(CUR)renderRec(CUR.c,CUR.pkg);
       setTimeout(closeSub,1600);
-    }else{msg.className="msg err";msg.textContent="فشل التفعيل: "+(j.reason||"شفرة غير صالحة");}
-  }catch(e){msg.className="msg err";msg.textContent="تعذر الاتصال بالخادم — حاول مجدداً.";}
+    }else{msg.className="msg err";msg.textContent=S.msgFail(j.reason||S.codeInvalid);}
+  }catch(e){msg.className="msg err";msg.textContent=S.msgConn;}
 }
 $("subModal").addEventListener("click",e=>{if(e.target.id==="subModal")closeSub();});
 
@@ -1455,78 +1741,102 @@ function downloadPdf(){
   document.body.appendChild(fr);
   fr.onload=()=>setTimeout(()=>{
     try{fr.contentWindow.focus();fr.contentWindow.print();}
-    catch(e){status("تعذر فتح نافذة الطباعة: "+e.message,true);}
+    catch(e){status(S.popupErr(e.message),true);}
   },300);
   fr.srcdoc=html;
 }
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+/* رسومات التقرير — اتجاه نص صريح (يمنع انعكاس RTL)، عمود تسميات منفصل،
+   القيم فوق النقاط بهالة بيضاء (paint-order) */
+const HALO='paint-order="stroke" stroke="#fff" stroke-width="3.5"';
+function svgOpen(W,H){return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;direction:ltr;font-family:Segoe UI,Tahoma,sans-serif">`;}
+function svgLabel(x,y,txt,ar,size=10.5,fill="#3d3c35",weight=400){
+  // ar=true: نص عربي يمتد يساراً من x — ar=false: يمتد يميناً
+  return `<text x="${x}" y="${y}" direction="${ar?"rtl":"ltr"}" text-anchor="start" font-size="${size}" font-weight="${weight}" fill="${fill}" ${HALO}>${txt}</text>`;
+}
+function svgVal(x,y,txt,fill="#333",size=10,weight=700){
+  return `<text x="${x}" y="${y}" direction="ltr" text-anchor="middle" font-size="${size}" font-weight="${weight}" fill="${fill}" ${HALO}>${txt}</text>`;
+}
 function svgFF(c,pkg){
-  const rows=Object.entries(pkg.models).map(([k,m])=>({label:MODEL_LABELS[k],v:m.v})).sort((a,b)=>b.v-a.v);
+  const AR=LANG==="ar";
+  const rows=Object.entries(pkg.models).map(([k,m])=>({label:mlabel(k),v:m.v})).sort((a,b)=>b.v-a.v);
   const all=rows.map(r=>r.v).concat([c.price,pkg.fair_value,pkg.buyBelow]);
-  const lo=Math.min(...all)*0.92, hi=Math.max(...all)*1.06;
-  const W=680,LB=200,RB=10,rowH=26,H=rows.length*rowH+66;
-  const X=v=>LB+((v-lo)/(hi-lo))*(W-LB-RB);
-  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:Segoe UI,Tahoma,sans-serif">`;
+  const lo=Math.min(...all)*0.90, hi=Math.max(...all)*1.08;
+  const W=680,LW=192,rowH=30,H=rows.length*rowH+78;
+  const pL=AR?12:LW+14, pR=AR?W-LW-14:W-12;      // منطقة الرسم
+  const X=v=>pL+((v-lo)/(hi-lo))*(pR-pL);
+  const labX=AR?W-4:4;
+  let s=svgOpen(W,H);
   rows.forEach((r,i)=>{
-    const y=18+i*rowH;
-    s+=`<text x="${LB-8}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#444">${esc(r.label)}</text>`;
-    s+=`<line x1="${LB}" y1="${y}" x2="${W-RB}" y2="${y}" stroke="#e7e2d5" stroke-width="1"/>`;
-    s+=`<rect x="${X(r.v)-5}" y="${y-6}" width="10" height="12" rx="3" fill="#2456b8"/>`;
-    s+=`<text x="${X(r.v)+9}" y="${y+4}" font-size="10" fill="#666">${fmt(r.v)}</text>`;
+    const y=20+i*rowH;
+    s+=`<line x1="${pL-4}" y1="${y}" x2="${pR+4}" y2="${y}" stroke="#e7e2d5" stroke-width="1"/>`;
+    s+=svgLabel(labX,y+4,esc(r.label),AR);
+    s+=`<circle cx="${X(r.v)}" cy="${y}" r="5.5" fill="#2456b8"/>`;
+    s+=svgVal(X(r.v),y-9,fmt(r.v),"#2b2a25");
   });
-  const yb=rows.length*rowH+14;
+  const yb=rows.length*rowH+16;
   const mark=(v,color,label,dy)=>{
     s+=`<line x1="${X(v)}" y1="8" x2="${X(v)}" y2="${yb}" stroke="${color}" stroke-width="1.6" stroke-dasharray="5 3"/>`;
-    s+=`<text x="${X(v)}" y="${yb+dy}" text-anchor="middle" font-size="10.5" font-weight="700" fill="${color}">${label} ${fmt(v)}</text>`;
+    s+=`<text x="${X(v)}" y="${yb+dy}" direction="${AR?"rtl":"ltr"}" text-anchor="middle" font-size="10.5" font-weight="700" fill="${color}" ${HALO}>${label} ${fmt(v)}</text>`;
   };
-  mark(c.price,"#a32d2d","السعر",14);
-  mark(pkg.fair_value,"#0e6e56","القيمة العادلة",30);
-  mark(pkg.buyBelow,"#b07a17","سعر الشراء",46);
+  mark(c.price,"#a32d2d",S.mPrice,16);
+  mark(pkg.fair_value,"#0e6e56",S.mFV,34);
+  mark(pkg.buyBelow,"#b07a17",S.mBuy,52);
   return s+"</svg>";
 }
 function svgScen(pkg){
-  const rows=["bear","base","bull"].map(k=>pkg.scen[k]).filter(s=>s.fv);
-  const hi=Math.max(...rows.map(r=>r.fv))*1.15;
-  const W=340,LB=70,H=rows.length*30+14;
-  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:Segoe UI,Tahoma,sans-serif">`;
+  const AR=LANG==="ar";
+  const rows=["bear","base","bull"].map(k=>({...pkg.scen[k],name:S.scen[k]})).filter(r=>r.fv);
+  const hi=Math.max(...rows.map(r=>r.fv))*1.18;
+  const W=340,LW=96,barH=17,H=rows.length*31+12;
+  const pL=AR?8:LW+10, pR=AR?W-LW-10:W-8;
+  const labX=AR?W-4:4;
+  let s=svgOpen(W,H);
   rows.forEach((r,i)=>{
-    const y=10+i*30, w=(r.fv/hi)*(W-LB-58);
-    s+=`<text x="${LB-6}" y="${y+12}" text-anchor="end" font-size="10.5" fill="#444">${r.label} ${Math.round(r.prob*100)}٪</text>`;
-    s+=`<rect x="${LB}" y="${y}" width="${w}" height="16" rx="4" fill="${i===0?"#a32d2d":i===1?"#b07a17":"#0e6e56"}" opacity="0.85"/>`;
-    s+=`<text x="${LB+w+6}" y="${y+12}" font-size="10.5" fill="#333">${fmt(r.fv)}</text>`;
+    const y=9+i*31, w=(r.fv/hi)*(pR-pL-46);
+    const x0=AR?pL:pL, col=i===0?"#a32d2d":i===1?"#b07a17":"#0e6e56";
+    s+=svgLabel(labX,y+12,`${r.name} ${Math.round(r.prob*100)}%`,AR,10.5,"#3d3c35",600);
+    s+=`<rect x="${x0}" y="${y}" width="${Math.max(w,3)}" height="${barH}" rx="4" fill="${col}" opacity="0.88"/>`;
+    s+=`<text x="${x0+Math.max(w,3)+6}" y="${y+12}" direction="ltr" text-anchor="start" font-size="10.5" font-weight="700" fill="#333" ${HALO}>${fmt(r.fv)}</text>`;
   });
   return s+"</svg>";
 }
 function svgFc(c,pkg){
-  const F=[["قصير 1–3 أشهر",pkg.fc.short],["متوسط 12 شهراً",pkg.fc.medium],["طويل 5 سنوات",pkg.fc.long]];
+  const AR=LANG==="ar";
+  const F=[[S.fcRows.short,pkg.fc.short],[S.fcRows.medium,pkg.fc.medium],[S.fcRows.long,pkg.fc.long]];
   const all=F.flatMap(([,f])=>[f.lo,f.hi]).concat([c.price]);
   const lo=Math.min(...all)*0.95, hi=Math.max(...all)*1.05;
-  const W=680,LB=140,RB=44,H=F.length*32+30;
-  const X=v=>LB+((v-lo)/(hi-lo))*(W-LB-RB);
-  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:Segoe UI,Tahoma,sans-serif">`;
-  s+=`<line x1="${X(c.price)}" y1="6" x2="${X(c.price)}" y2="${H-22}" stroke="#a32d2d" stroke-width="1.4" stroke-dasharray="5 3"/>`;
-  s+=`<text x="${X(c.price)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#a32d2d">السعر ${fmt(c.price)}</text>`;
+  const W=680,LW=150,rowH=36,H=F.length*rowH+34;
+  const pL=AR?46:LW+14, pR=AR?W-LW-14:W-46;
+  const X=v=>pL+((v-lo)/(hi-lo))*(pR-pL);
+  const labX=AR?W-4:4;
+  let s=svgOpen(W,H);
+  s+=`<line x1="${X(c.price)}" y1="8" x2="${X(c.price)}" y2="${H-24}" stroke="#a32d2d" stroke-width="1.4" stroke-dasharray="5 3"/>`;
+  s+=`<text x="${X(c.price)}" y="${H-9}" direction="${AR?"rtl":"ltr"}" text-anchor="middle" font-size="10" font-weight="700" fill="#a32d2d" ${HALO}>${S.mPrice} ${fmt(c.price)}</text>`;
   F.forEach(([lbl,f],i)=>{
-    const y=20+i*32;
-    const col=f.dir==="صاعد"?"#0e6e56":f.dir==="هابط"?"#a32d2d":"#b07a17";
-    s+=`<text x="${LB-8}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#444">${lbl}</text>`;
-    s+=`<line x1="${X(f.lo)}" y1="${y}" x2="${X(f.hi)}" y2="${y}" stroke="#c9c2b0" stroke-width="4" stroke-linecap="round"/>`;
-    s+=`<circle cx="${X(f.t)}" cy="${y}" r="6" fill="${col}"/>`;
-    s+=`<text x="${X(f.t)}" y="${y-9}" text-anchor="middle" font-size="10" font-weight="700" fill="${col}">${fmt(f.t)}</text>`;
+    const y=26+i*rowH;
+    const col=f.dir==="up"?"#0e6e56":f.dir==="down"?"#a32d2d":"#b07a17";
+    s+=svgLabel(labX,y+4,lbl,AR);
+    s+=`<line x1="${X(f.lo)}" y1="${y}" x2="${X(f.hi)}" y2="${y}" stroke="#d5cfbf" stroke-width="5" stroke-linecap="round"/>`;
+    s+=svgVal(X(f.lo),y+15,fmt(f.lo),"#8b8674",9);
+    s+=svgVal(X(f.hi),y+15,fmt(f.hi),"#8b8674",9);
+    s+=`<circle cx="${X(f.t)}" cy="${y}" r="6" fill="${col}" stroke="#fff" stroke-width="1.5"/>`;
+    s+=svgVal(X(f.t),y-10,fmt(f.t),col,10.5);
   });
   return s+"</svg>";
 }
 function buildReport(c,pkg){
-  const r=pkg.rec, rt=pkg.rates, cur=c.currency==="SAR"?"ريال":c.currency;
+  const AR=LANG==="ar";
+  const r=pkg.rec, rt=pkg.rates, cur=c.currency==="SAR"?S.riyal:c.currency;
   const recColor=r.cls==="buy"?"#0e6e56":r.cls==="sell"?"#a32d2d":"#b07a17";
   const recBg=r.cls==="buy"?"#eaf3ec":r.cls==="sell"?"#f7e9e9":"#fbf1dc";
   const w=WEIGHTS[c.archetype]||WEIGHTS.mature;
   const modelRows=Object.keys(MODEL_LABELS).map(k=>{
     const m=pkg.models[k];
-    return `<tr><td>${MODEL_LABELS[k]}</td><td class="n">${m?fmt(m.v):"—"}</td><td class="n">${m?fmtPct(m.v/c.price-1):"—"}</td><td class="n">${w[k]?Math.round(w[k]*100)+"٪":"—"}</td></tr>`;
+    return `<tr><td>${mlabel(k)}</td><td class="n">${m?fmt(m.v):"—"}</td><td class="n">${m?fmtPct(m.v/c.price-1):"—"}</td><td class="n">${w[k]?Math.round(w[k]*100)+"%":"—"}</td></tr>`;
   }).join("");
   const t=pkg.tech;
-  return `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="utf-8"><title>تقرير القيمة العادلة — ${esc(c.name)}</title>
+  return `<!DOCTYPE html><html dir="${AR?"rtl":"ltr"}" lang="${LANG}"><head><meta charset="utf-8"><title>${S.rptTitle(esc(c.name))}</title>
 <style>
 @page{size:A4;margin:13mm}
 *{box-sizing:border-box}
@@ -1541,10 +1851,10 @@ h2{font-size:14px;color:#0e6e56;margin:16px 0 7px;border-bottom:1.5px solid #dcd
 .rec{display:flex;align-items:center;gap:14px;background:${recBg};border:1.5px solid ${recColor};border-radius:10px;padding:10px 16px;margin:10px 0}
 .rec .b{font-size:22px;font-weight:800;color:${recColor}}
 .rec .t{font-size:11px;color:#555}
-ul.rs{margin:6px 18px 0 0;padding:0}
+ul.rs{margin:6px 0 0;padding-inline-start:20px}
 ul.rs li{margin:4px 0}
 table{border-collapse:collapse;width:100%;font-size:11.5px}
-td,th{border:1px solid #dcd6c8;padding:4px 8px;text-align:right}
+td,th{border:1px solid #dcd6c8;padding:4px 8px;text-align:start}
 th{background:#f2efe6;font-weight:600}
 td.n,th.n{direction:ltr;text-align:center;font-family:Consolas,monospace}
 .warn{background:#fbf1dc;border:1px solid #e3c684;border-radius:6px;padding:6px 10px;margin:6px 0;font-size:11.5px}
@@ -1553,62 +1863,62 @@ td.n,th.n{direction:ltr;text-align:center;font-family:Consolas,monospace}
 .card{border:1px solid #dcd6c8;border-radius:10px;padding:10px 12px}
 .nobreak{break-inside:avoid}
 </style></head><body>
-<h1>تقرير القيمة العادلة — ${esc(c.name)} <span style="color:#6b6a60;font-size:14px">(${c.ticker})</span></h1>
-<div class="sub">${MARKETS[c.market].name}${c.sector?" · "+esc(c.sector):""} · نوع الشركة: ${ARCH_LABEL[c.archetype]} · تاريخ التقرير: ${new Date().toLocaleDateString("ar-SA-u-nu-latn")} · معايير Damodaran يناير 2026 · العملة: ${cur}</div>
+<h1>${S.rptTitle(esc(c.name))} <span style="color:#6b6a60;font-size:14px">(${c.ticker})</span></h1>
+<div class="sub">${S.rptMeta(S.markets[c.market],esc(c.sector),archLabel(c.archetype),locDate(),cur)}</div>
 
-<div class="rec nobreak"><span class="b">التوصية: ${r.rec}</span><span class="t">وفق منهجية كمية متعددة النماذج — ${pkg.ens.n} نماذج، تباعد ${pkg.ens.dispersion!=null?Math.round(pkg.ens.dispersion*100)+"٪":"—"}</span></div>
+<div class="rec nobreak"><span class="b">${S.rptRec}${r.rec}</span><span class="t">${S.rptRecSub(pkg.ens.n,pkg.ens.dispersion!=null?Math.round(pkg.ens.dispersion*100)+"%":"—")}</span></div>
 
 <div class="hero nobreak">
-<div><div class="k">السعر الحالي</div><div class="v">${fmt(c.price)}</div></div>
-<div><div class="k">القيمة العادلة</div><div class="v" style="color:#0e6e56">${fmt(pkg.fair_value)}</div></div>
-<div><div class="k">الفجوة</div><div class="v" style="color:${pkg.upside>=0?"#0e6e56":"#a32d2d"}">${fmtPct(pkg.upside)}</div></div>
-<div><div class="k">سعر الشراء الأقصى (أمان ${Math.round(pkg.mos*100)}٪)</div><div class="v" style="color:#b07a17">${fmt(pkg.buyBelow)}</div></div>
+<div><div class="k">${S.kPrice}</div><div class="v">${fmt(c.price)}</div></div>
+<div><div class="k">${S.mFV}</div><div class="v" style="color:#0e6e56">${fmt(pkg.fair_value)}</div></div>
+<div><div class="k">${S.rptGapK||S.kGap}</div><div class="v" style="color:${pkg.upside>=0?"#0e6e56":"#a32d2d"}">${fmtPct(pkg.upside)}</div></div>
+<div><div class="k">${S.rptBuyK(Math.round(pkg.mos*100))}</div><div class="v" style="color:#b07a17">${fmt(pkg.buyBelow)}</div></div>
 </div>
 
-<h2>أسباب التوصية</h2>
+<h2>${S.hReasons}</h2>
 ${r.note?`<div class="warn">ℹ ${esc(r.note)}</div>`:""}
 <ul class="rs">${r.reasons.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
-${pkg.warnings.map(x=>`<div class="warn">⚠ ${esc(x)}</div>`).join("")}
+${pkg.warnings.map(x=>`<div class="warn">⚠ ${esc(warnText(x))}</div>`).join("")}
 
-<h2>نطاق التقييم — كل نموذج نقطة (Football Field)</h2>
+<h2>${S.hFF}</h2>
 <div class="nobreak">${svgFF(c,pkg)}</div>
 
 <div class="grid2 nobreak">
-<div><h2>النماذج والأوزان</h2>
-<table><tr><th>النموذج</th><th class="n">القيمة</th><th class="n">عن السعر</th><th class="n">الوزن</th></tr>${modelRows}
-<tr><th>القيمة العادلة النهائية</th><th class="n">${fmt(pkg.fair_value)}</th><th class="n">${fmtPct(pkg.upside)}</th><th></th></tr></table></div>
-<div><h2>السيناريوهات المرجحة (20/60/20)</h2>
-<div class="card">${svgScen(pkg)}<div style="font-size:11px;color:#555;margin-top:4px">المرجح بالاحتمالات: <b>${fmt(pkg.probFv)}</b></div></div>
-<h2>معدلات الخصم</h2>
+<div><h2>${S.hModels}</h2>
+<table><tr><th>${S.thModel}</th><th class="n">${S.thVal}</th><th class="n">${S.thVs}</th><th class="n">${S.thW}</th></tr>${modelRows}
+<tr><th>${S.rptFinal}</th><th class="n">${fmt(pkg.fair_value)}</th><th class="n">${fmtPct(pkg.upside)}</th><th></th></tr></table></div>
+<div><h2>${S.hScen}</h2>
+<div class="card">${svgScen(pkg)}<div style="font-size:11px;color:#555;margin-top:4px">${S.probW}: <b>${fmt(pkg.probFv)}</b></div></div>
+<h2>${S.hRates}</h2>
 <table>
-<tr><td>المعدل الخالي من المخاطر (نظيف)</td><td class="n">${(rt.rf_clean*100).toFixed(2)}%</td></tr>
-<tr><td>بيتا</td><td class="n">${fmt(rt.beta,2)}</td></tr>
-<tr><td>تكلفة حقوق الملكية (متوسط طريقتين)</td><td class="n">${(rt.ke*100).toFixed(2)}%</td></tr>
+<tr><td>${S.pdfRf}</td><td class="n">${(rt.rf_clean*100).toFixed(2)}%</td></tr>
+<tr><td>${S.ms.beta}</td><td class="n">${fmt(rt.beta,2)}</td></tr>
+<tr><td>${S.pdfKe}</td><td class="n">${(rt.ke*100).toFixed(2)}%</td></tr>
 <tr><td>WACC</td><td class="n">${(rt.wacc*100).toFixed(2)}%</td></tr>
-${pkg.impliedG!=null?`<tr><td>النمو المسعّر ضمنياً (DCF عكسي)</td><td class="n">${(pkg.impliedG*100).toFixed(1)}%</td></tr>`:""}
+${pkg.impliedG!=null?`<tr><td>${S.pdfImplied}</td><td class="n">${(pkg.impliedG*100).toFixed(1)}%</td></tr>`:""}
 </table></div>
 </div>
 
-<h2>التنبؤ بثلاثة آفاق — نقطة مركزية ونطاق</h2>
+<h2>${S.hFc}</h2>
 <div class="nobreak">${svgFc(c,pkg)}
-<table style="margin-top:6px"><tr><th>الأفق</th><th class="n">الهدف</th><th class="n">النطاق</th><th class="n">العائد المتوقع</th><th>الاتجاه</th><th>المحرك</th></tr>
-${[["قصير (1–3 أشهر)",pkg.fc.short],["متوسط (12 شهراً)",pkg.fc.medium],["طويل (5 سنوات)",pkg.fc.long]].map(([l,f])=>
-`<tr><td>${l}</td><td class="n">${fmt(f.t)}</td><td class="n">${fmt(f.lo)} – ${fmt(f.hi)}</td><td class="n">${fmtPct(f.er)}${f.annual?" سنوياً":""}</td><td>${f.dir}</td><td style="font-size:10.5px">${f.drv}</td></tr>`).join("")}
+<table style="margin-top:6px"><tr><th>${S.thHorizon}</th><th class="n">${S.thTarget}</th><th class="n">${S.thRange}</th><th class="n">${S.thEr}</th><th>${S.thDir}</th><th>${S.thDrv}</th></tr>
+${["short","medium","long"].map(key=>{const f=pkg.fc[key];
+return `<tr><td>${S.fcRows[key]}</td><td class="n">${fmt(f.t)}</td><td class="n">${fmt(f.lo)} – ${fmt(f.hi)}</td><td class="n">${fmtPct(f.er)}${f.annual?S.perYear:""}</td><td>${S.dirs[f.dir]}</td><td style="font-size:10.5px">${S.drv[f.drv]}</td></tr>`;}).join("")}
 </table></div>
 
-${t?`<h2>الطبقة الفنية (توقيت لا قيمة)</h2>
-<table class="nobreak"><tr><th>الدرجة المركبة</th><th class="n">SMA50/200</th><th class="n">RSI(14)</th><th class="n">زخم 12−1</th><th class="n">التقلب السنوي</th></tr>
+${t?`<h2>${S.hTech}</h2>
+<table class="nobreak"><tr><th class="n">${S.techRows.score}</th><th class="n">SMA50/200</th><th class="n">RSI(14)</th><th class="n">${S.techRows.mom}</th><th class="n">${S.techRows.vol}</th></tr>
 <tr><td class="n">${t.score>=0?"+":""}${t.score.toFixed(2)}</td><td class="n">${fmt(t.s50)} / ${fmt(t.s200)}${t.golden?" ✓":""}</td><td class="n">${t.rsi!=null?t.rsi.toFixed(1):"—"}</td><td class="n">${t.mom!=null?fmtPct(t.mom):"—"}</td><td class="n">${t.vol!=null?(t.vol*100).toFixed(1)+"%":"—"}</td></tr></table>`:""}
 
 <div class="foot">
-<b>المنهجية:</b> تثليث مؤسسي بين نماذج جوهرية (DCF بقيمتين نهائيتين، FCFE، توزيعات، دخل متبقٍ RIM، قوة أرباح EPV، رقم جراهم) ونسبية (P/E وP/B مبررة، مضاعفات أقران) بأوزان حسب نوع الشركة، مع سيناريوهات مرجحة وهامش أمان متدرج وطبقة فنية منفصلة.
-<b>تنويه مهم:</b> هذا التقرير ناتج نموذج كمي آلي لأغراض الدراسة وليس نصيحة استثمارية شخصية ولا يصدر عن مستشار مالي مرخص. الأسواق تنطوي على مخاطر، والنتائج حساسة لجودة البيانات والافتراضات — راجعها قبل أي قرار. بيانات الأسعار قد تتأخر 15 دقيقة (Yahoo Finance).
-<br>محرك القيمة العادلة — motl1234.github.io/fair-value-engine
+${S.rptFootMeth}
+${S.rptFootDisc}
+<br>Fair Value Engine — motl1234.github.io/fair-value-engine
 </div>
 </body></html>`;
 }
 
-updateSubUI();
+setLang(LANG);
 $("sym").addEventListener("input",showSug);
 $("sym").addEventListener("focus",showSug);
 $("sym").addEventListener("blur",()=>setTimeout(hideSug,150));
