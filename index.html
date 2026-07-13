@@ -56,6 +56,11 @@ button{cursor:pointer;border:none;border-radius:8px;font-family:var(--font);font
 .chip:hover{color:var(--gold);border-color:var(--gold-dim)}
 .chip b{font-family:var(--mono);color:var(--text);font-weight:600;margin-inline-start:5px}
 .chip:hover b{color:var(--gold)}
+.pagenav{max-width:1180px;margin:16px auto 0;padding:0 20px;display:flex;gap:8px;flex-wrap:wrap}
+.pagenav a{text-decoration:none;font-size:13.5px;font-weight:600;padding:9px 20px;border-radius:10px 10px 0 0;border:1px solid var(--border);border-bottom:none;color:var(--muted);background:var(--surface2);cursor:pointer}
+.pagenav a.active{color:var(--gold);background:var(--surface);border-color:var(--gold-dim)}
+.pagenav a:hover{color:var(--text)}
+.pagenav a.active:hover{color:var(--gold)}
 
 /* Pipeline strip */
 .pipeline{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
@@ -236,6 +241,10 @@ details.assume[open] summary::before{content:"▾ "}
     </div>
   </div>
   <div class="chips" id="chips"></div>
+  <div class="pagenav">
+    <a class="active" data-i18n="navFin"></a>
+    <a id="navTech" href="technical.html" data-i18n="navTech"></a>
+  </div>
 </header>
 
 <div class="container">
@@ -289,6 +298,7 @@ details.assume[open] summary::before{content:"▾ "}
       <div class="sec-head"><h2><span data-i18n="secFF"></span><span class="n" data-i18n="nFF"></span></h2><div class="sub" data-i18n="subFF"></div></div>
       <div class="ff" id="ffChart"></div>
       <div class="ffstats" id="ffStats"></div>
+      <div id="tooltip"></div>
     </section>
 
     <section id="sec-models">
@@ -311,21 +321,6 @@ details.assume[open] summary::before{content:"▾ "}
     <section id="sec-sens">
       <div class="sec-head"><h2><span data-i18n="secSens"></span><span class="n" data-i18n="nSens"></span></h2><div class="sub" data-i18n="subSens"></div></div>
       <div style="overflow-x:auto"><table class="sens" id="sensTable"></table></div>
-    </section>
-
-    <section id="sec-tech">
-      <div class="sec-head"><h2><span data-i18n="secTech"></span><span class="n" data-i18n="nTech"></span></h2><div class="sub" id="techSub"></div></div>
-      <div class="legend" id="chartLegend">
-        <span><i style="background:#5B8DEF"></i><span data-i18n="legend.price"></span></span>
-        <span><i style="background:#B98328"></i>SMA50</span>
-        <span><i style="background:#9B7BE8"></i>SMA200</span>
-        <span><i style="background:repeating-linear-gradient(90deg,#B98328 0 5px,transparent 5px 9px)"></i><span data-i18n="legend.fv"></span></span>
-      </div>
-      <div class="chart-wrap">
-        <canvas id="priceChart" height="300"></canvas>
-        <div id="tooltip"></div>
-      </div>
-      <table id="techTable" style="margin-top:14px"></table>
     </section>
 
     <section id="sec-fc">
@@ -383,7 +378,6 @@ details.assume[open] summary::before{content:"▾ "}
 </div>
 
 <script src="companies.js"></script>
-<script src="trading.js" defer></script>
 <script>
 "use strict";
 /* =====================================================================
@@ -446,6 +440,7 @@ ar:{
   errPrices:s=>`تعذر جلب أسعار الرمز ${s} — تحقق من الرمز.`,
   errShares:"تعذر تحديد عدد الأسهم — أدخل البيانات يدوياً من لوحة الافتراضات.",
   markets:{SA:"السعودية (تداول)",US:"الولايات المتحدة"}, riyal:"ريال",
+  navFin:"📊 التحليل المالي والتوصية",navTech:"📈 التحليل الفني ومناطق التداول",
   arch:{mature:"ناضجة غير مالية",growth:"نمو / تقنية",financial:"بنك / مالية",dividend:"توزيعات مستقرة"},
   ms:{mcap:"القيمة السوقية",beta:"بيتا",eps:"ربحية السهم",bvps:"ق. دفترية",roe:"ROE",dps:"التوزيعات",mln:" م"},
   secVerdict:"الخلاصة",nVerdict:"حزمة القيمة",pdfBtn:"⬇ تقرير PDF",dateLbl:"تاريخ التحليل: ",
@@ -559,6 +554,7 @@ en:{
   errPrices:s=>`Could not fetch prices for ${s} — check the ticker.`,
   errShares:"Could not determine share count — enter data manually in the assumptions panel.",
   markets:{SA:"Saudi Arabia (Tadawul)",US:"United States"},riyal:"SAR",
+  navFin:"📊 Financial Analysis & Recommendation",navTech:"📈 Technical Analysis & Trade Zones",
   arch:{mature:"Mature non-financial",growth:"Growth / Tech",financial:"Bank / Financial",dividend:"Stable dividend"},
   ms:{mcap:"Market cap",beta:"Beta",eps:"EPS",bvps:"Book value",roe:"ROE",dps:"Dividend",mln:" M"},
   secVerdict:"Summary",nVerdict:"Valuation package",pdfBtn:"⬇ PDF Report",dateLbl:"Analysis date: ",
@@ -1303,9 +1299,10 @@ function renderAll(){
   const {c,pkg}=CUR;
   $("results").classList.remove("hidden");
   renderCard(c,pkg);renderVerdict(c,pkg);renderFF(c,pkg);renderModels(c,pkg);
-  renderRates(pkg);renderScen(c,pkg);renderSens(c,pkg);renderTech(c,pkg);
+  renderRates(pkg);renderScen(c,pkg);renderSens(c,pkg);
   renderFc(c,pkg);renderAssumptions(c);renderLog();
-  if(typeof renderTrading==="function")renderTrading();
+  const nt=$("navTech");
+  if(nt)nt.href="technical.html?symbol="+encodeURIComponent(c.ticker)+"&fv="+pkg.fair_value.toFixed(4);
 }
 function renderCard(c,pkg){
   $("coName").textContent=c.name;
@@ -1546,24 +1543,7 @@ function showTip(el,text){
   tip.style.top=(r.top-pr.top-34)+"px";
 }
 function hideTip(){$("tooltip").style.display="none";}
-$("priceChart").addEventListener("pointermove",e=>{
-  if(!chartState)return;
-  const {p,s50,s200,X,Y,ML,MR,W,c}=chartState;
-  const rect=e.currentTarget.getBoundingClientRect();
-  const x=e.clientX-rect.left;
-  const i=Math.round((x-ML)/(W-ML-MR)*(p.length-1));
-  if(i<0||i>=p.length){hideTip();return;}
-  const tip=$("tooltip");
-  const d=c.price_ts&&c.price_ts[i]?new Date(c.price_ts[i]*1000).toISOString().slice(0,10):"#"+i;
-  tip.innerHTML=`${d}<br>السعر ${fmt(p[i])}${s50[i]!=null?" · S50 "+fmt(s50[i],1):""}${s200[i]!=null?" · S200 "+fmt(s200[i],1):""}`;
-  tip.style.display="block";
-  const wrap=e.currentTarget.parentElement;
-  tip.remove();wrap.appendChild(tip);
-  tip.style.left=Math.min(Math.max(x-60,0),wrap.clientWidth-150)+"px";
-  tip.style.top="8px";
-});
-$("priceChart").addEventListener("pointerleave",hideTip);
-window.addEventListener("resize",()=>{if(CUR)drawChart(CUR.c,CUR.pkg);});
+// الرسم الفني انتقل إلى صفحة technical.html المستقلة
 
 /* --------- لوحة الافتراضات --------- */
 const AFIELDS=[
@@ -1932,6 +1912,10 @@ ${S.rptFootDisc}
 }
 
 setLang(LANG);
+(function(){
+  const q=new URLSearchParams(location.search).get("symbol");
+  if(q){$("sym").value=q;run();}
+})();
 $("sym").addEventListener("input",showSug);
 $("sym").addEventListener("focus",showSug);
 $("sym").addEventListener("blur",()=>setTimeout(hideSug,150));
