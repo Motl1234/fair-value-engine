@@ -35,8 +35,9 @@ async function yahooJson(url, useAuth) {
     target = url + (url.includes("?") ? "&" : "?") + "crumb=" + encodeURIComponent(a.crumb);
   }
   let r = await fetch(target, { headers });
-  if (useAuth && (r.status === 401 || r.status === 403)) {
-    const a = await getAuth(true); // refresh crumb once
+  for (let i = 0; i < 2 && useAuth && (r.status === 401 || r.status === 403); i++) {
+    if (i) await new Promise(res => setTimeout(res, 350));
+    const a = await getAuth(true); // تحديث الكوكي والـ crumb
     headers.Cookie = a.cookie;
     target = url + (url.includes("?") ? "&" : "?") + "crumb=" + encodeURIComponent(a.crumb);
     r = await fetch(target, { headers });
