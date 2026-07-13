@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أفضل 20 شركة | Fair Value Engine</title>
+<style>
+:root{--bg:#0B1220;--surface:#121B2E;--surface2:#0E1626;--border:#1F2B45;--text:#E8EDF7;--muted:#8FA0BF;--faint:#5A6A8A;--gold:#D8A93D;--gold-dim:#8a6d2a;--green:#2EBD85;--red:#F0616D;--blue:#5B8DEF;--purple:#9B7BE8;--font:"Segoe UI",Tahoma,system-ui,sans-serif;--mono:"Cascadia Mono","Consolas",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:15px;line-height:1.65}
+.container{max-width:1180px;margin:0 auto;padding:0 20px 70px}
+.num{font-family:var(--mono);direction:ltr;unicode-bidi:isolate}
+.hidden{display:none!important}
+header{border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0E1830,#0B1220);padding:24px 0 0;margin-bottom:20px}
+.header-inner{max-width:1180px;margin:0 auto;padding:0 20px;display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end;justify-content:space-between}
+.brand h1{font-size:25px;font-weight:700}
+.brand h1 b{color:var(--gold)}
+.brand p{color:var(--muted);font-size:12.5px;margin-top:4px}
+button{cursor:pointer;border:none;border-radius:8px;font-family:var(--font);font-size:14px;font-weight:600}
+.btn-run{background:var(--gold);color:#1a1408;padding:10px 24px}
+.btn-run:disabled{background:var(--gold-dim);cursor:wait}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);padding:9px 16px}
+.btn-ghost:hover{color:var(--text)}
+.pagenav{max-width:1180px;margin:16px auto 0;padding:0 20px;display:flex;gap:8px;flex-wrap:wrap}
+.pagenav a{text-decoration:none;font-size:13.5px;font-weight:600;padding:9px 20px;border-radius:10px 10px 0 0;border:1px solid var(--border);border-bottom:none;color:var(--muted);background:var(--surface2)}
+.pagenav a.active{color:var(--gold);background:var(--surface);border-color:var(--gold-dim)}
+section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:18px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:9px 20px;border-radius:9px;font-size:13.5px}
+.tabs button.on{color:var(--gold);border-color:var(--gold-dim);background:rgba(216,169,61,.08)}
+.opts{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;font-size:13px;color:var(--muted)}
+select{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-family:var(--font)}
+#prog{font-size:13px;color:var(--muted);margin:10px 0}
+.pbar{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-top:6px;direction:ltr}
+.pbar i{display:block;height:100%;background:var(--gold);border-radius:4px;transition:width .3s}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{color:var(--muted);font-weight:500;font-size:12px;text-align:start;padding:8px 10px;border-bottom:1px solid var(--border)}
+td{padding:8px 10px;border-bottom:1px solid rgba(31,43,69,.55)}
+td.num,th.num{text-align:end}
+tr:hover td{background:rgba(216,169,61,.04)}
+a{color:var(--blue);text-decoration:none}
+.up{color:var(--green)}.dn{color:var(--red)}
+.badge{font-size:10.5px;padding:1px 8px;border-radius:5px;background:rgba(46,189,133,.13);color:var(--green)}
+.meth{font-size:12.5px;color:var(--muted);line-height:2;margin-top:14px}
+.meth b{color:var(--gold)}
+.warn{background:rgba(216,169,61,.08);border:1px solid rgba(216,169,61,.35);border-radius:8px;padding:8px 13px;margin-top:12px;font-size:12.5px;color:#e8cd8a}
+.foot{font-size:12px;color:var(--faint);border-top:1px solid var(--border);padding-top:14px;line-height:2}
+.rankc{font-family:var(--mono);color:var(--gold);font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="brand"><h1 id="hBrand"></h1><p id="hTag"></p></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn-run" id="btnScan"></button>
+      <button class="btn-ghost" id="btnLang"></button>
+    </div>
+  </div>
+  <div class="pagenav">
+    <a id="navFin" href="index.html"></a>
+    <a id="navTech" href="technical.html"></a>
+    <a class="active" id="navTop"></a>
+  </div>
+</header>
+<div class="container">
+  <section>
+    <div class="tabs" id="tabs"></div>
+    <div class="opts">
+      <span id="lblMarket"></span>
+      <select id="selMarket"><option value="SA">—</option><option value="US">—</option></select>
+      <span id="cacheInfo" style="color:var(--faint)"></span>
+    </div>
+    <div id="prog" class="hidden"><span id="progTxt"></span><div class="pbar"><i id="progBar" style="width:0%"></i></div></div>
+    <div style="overflow-x:auto"><table id="tbl"></table></div>
+    <div class="meth" id="meth"></div>
+    <div class="warn" id="disc"></div>
+  </section>
+  <div class="foot" id="foot"></div>
+</div>
+
+<script src="companies.js"></script>
+<script>
+"use strict";
+const TT={
+ar:{
+  brand:'أفضل <b>20 شركة</b>',
+  tag:"فحص شامل للسوق: قائمة استثمارية حسب فجوة القيمة العادلة + قائمتا مضاربة أسبوعية وشهرية حسب المؤشرات الفنية",
+  scan:"افحص السوق",scanning:"جارٍ الفحص…",
+  tabs:{inv:"💎 استثمار — القيمة العادلة",wk:"⚡ مضاربة أسبوعية",mo:"📈 مضاربة شهرية"},
+  market:"السوق:",mkts:{SA:"السعودية (السوق الرئيسية)",US:"أمريكا (أفضل 200)"},
+  prog:(a,b)=>`فحص ${a} من ${b} شركة…`,
+  cache:t=>"آخر فحص: "+t+" — اضغط «افحص السوق» للتحديث",
+  thInv:["#","الشركة","السعر","القيمة العادلة السريعة","الفجوة","P/E","ROE","النماذج",""],
+  thSpec:["#","الشركة","السعر","الدرجة","الزخم","RSI","الاتجاه","RVOL","قرب القادح",""],
+  full:"التحليل الكامل",tech:"الفني",
+  trendStates:["هابط","ضعيف","متوسط","صاعد"],
+  methInv:'<b>منهجية القائمة الاستثمارية:</b> قيمة عادلة سريعة = وسيط (رقم جراهم √(22.5×EPS×BVPS)، P/E المبرر × الربحية المتوقعة، P/B المبرر (ROE−g)/(ke−g) × القيمة الدفترية) — بفلاتر جودة: ربحية موجبة وROE موجب. القائمة فرز أولي: افتح «التحليل الكامل» (10 نماذج + سيناريوهات) قبل أي قرار.',
+  methWk:'<b>منهجية المضاربة الأسبوعية:</b> 40٪ زخم 3 أشهر (ترتيب مئيني في السوق) + 30٪ قالب الاتجاه (فوق MA200/MA50 وEMA50>EMA200) + 15٪ RSI في النطاق الصحي 50–70 + 15٪ حجم نسبي RVOL — مع عمود «قرب القادح»: المسافة لقمة دونشيان 20 (كلما صغرت كان السهم أقرب لاختراق قابل للتداول).',
+  methMo:'<b>منهجية المضاربة الشهرية:</b> 40٪ زخم 12−1 شهراً (أقوى شذوذ موثق أكاديمياً — ترتيب مئيني) + 30٪ قالب الاتجاه + 15٪ RSI + 15٪ MACD موجب — وفق الآلية الموحدة (مينيرفيني/أونيل).',
+  disc:"⚠ قوائم فرز آلية وليست توصيات جاهزة — راجع بوابة السوق والتحليل الكامل وخطة الصفقة قبل أي دخول. البيانات قد تتأخر 15 دقيقة، والفحص يستغرق 1–3 دقائق ويُخزن 12 ساعة.",
+  foot:"محرك القيمة العادلة — الفحص يعمل في متصفحك مباشرة عبر وسيط Yahoo Finance الخاص.",
+  noData:"اضغط «افحص السوق» لبدء الفحص.",
+  failed:"تعذر الفحص — أعد المحاولة.",
+},
+en:{
+  brand:'Top <b>20 Companies</b>',
+  tag:"Full-market scan: an investment list by fair-value gap + weekly & monthly trading lists by technical indicators",
+  scan:"Scan market",scanning:"Scanning…",
+  tabs:{inv:"💎 Invest — Fair Value",wk:"⚡ Weekly Trading",mo:"📈 Monthly Trading"},
+  market:"Market:",mkts:{SA:"Saudi (Main Market)",US:"US (Top 200)"},
+  prog:(a,b)=>`Scanned ${a} of ${b} companies…`,
+  cache:t=>"Last scan: "+t+" — press “Scan market” to refresh",
+  thInv:["#","Company","Price","Quick Fair Value","Gap","P/E","ROE","Models",""],
+  thSpec:["#","Company","Price","Score","Momentum","RSI","Trend","RVOL","To trigger",""],
+  full:"Full analysis",tech:"Technical",
+  trendStates:["Down","Weak","Mid","Up"],
+  methInv:'<b>Investment list methodology:</b> quick fair value = median of (Graham number √(22.5×EPS×BVPS), justified P/E × forward EPS, justified P/B (ROE−g)/(ke−g) × book value) — with quality filters: positive EPS and ROE. This is a first screen: open the full analysis (10 models + scenarios) before any decision.',
+  methWk:'<b>Weekly methodology:</b> 40% 3-month momentum (market percentile) + 30% trend template (above MA200/MA50, EMA50>EMA200) + 15% RSI in the healthy 50–70 zone + 15% relative volume — with a “to trigger” column: distance to the Donchian-20 high (smaller = closer to a tradable breakout).',
+  methMo:'<b>Monthly methodology:</b> 40% 12−1 month momentum (the strongest documented anomaly — percentile) + 30% trend template + 15% RSI + 15% positive MACD — per the unified mechanism (Minervini/O\'Neil).',
+  disc:"⚠ Automated screening lists, not ready-made recommendations — check the market gate, full analysis and trade plan before any entry. Data may be delayed 15 min; a scan takes 1–3 minutes and is cached for 12 hours.",
+  foot:"Fair Value Engine — the scan runs in your browser via the private Yahoo Finance proxy.",
+  noData:"Press “Scan market” to start.",
+  failed:"Scan failed — try again.",
+},
+};
+let LANG=localStorage.getItem("fv_lang")||"ar";
+let T=TT[LANG];
+const API="https://fair-value.mohammed-almutlaq-1983-459.workers.dev";
+const $=id=>document.getElementById(id);
+const fmt=(x,d=2)=>x==null||!isFinite(x)?"—":(+x).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const fmtPct=(x,d=1)=>x==null?"—":((x>=0?"+":"")+(x*100).toFixed(d)+"%");
+let TAB="inv",MKT="SA",SCANNING=false;
+
+function universe(){
+  if(MKT==="US")return US_COMPANIES.map(c=>({sym:c.s,code:c.s,name:LANG==="ar"?(c.n||c.e):c.e}));
+  return SA_COMPANIES.filter(c=>c.m==="تداول").map(c=>({sym:c.s+".SR",code:c.s,name:LANG==="ar"?c.n:(c.e||c.n),sec:c.sec}));
+}
+async function pool(items,fn,conc,onStep){
+  const out=new Array(items.length);let i=0,done=0;
+  async function worker(){
+    while(i<items.length){
+      const k=i++;
+      try{out[k]=await fn(items[k]);}catch(e){out[k]=null;}
+      done++;if(done%5===0||done===items.length)onStep(done,items.length);
+    }
+  }
+  await Promise.all(Array.from({length:conc},worker));
+  return out;
+}
+const sma=(p,n)=>p.length<n?null:p.slice(-n).reduce((a,b)=>a+b,0)/n;
+function emaLast(p,n){if(p.length<n)return null;const k=2/(n+1);let e=p.slice(0,n).reduce((a,b)=>a+b,0)/n;for(let i=n;i<p.length;i++)e=p[i]*k+e*(1-k);return e;}
+function rsiW(p,n=14){if(p.length<n+1)return null;let g=0,l=0;for(let i=1;i<=n;i++){const d=p[i]-p[i-1];g+=Math.max(d,0);l+=Math.max(-d,0);}let ag=g/n,al=l/n;for(let i=n+1;i<p.length;i++){const d=p[i]-p[i-1];ag=(ag*(n-1)+Math.max(d,0))/n;al=(al*(n-1)+Math.max(-d,0))/n;}return al===0?100:100-100/(1+ag/al);}
+function macdPos(p){if(p.length<35)return null;const ema=(arr,n)=>{const k=2/(n+1);let e=arr.slice(0,n).reduce((a,b)=>a+b,0)/n;const o=[e];for(let i=n;i<arr.length;i++){e=arr[i]*k+e*(1-k);o.push(e);}return o;};const ef=ema(p,12),es=ema(p,26);const line=es.map((v,i)=>ef[ef.length-es.length+i]-v);const sl=ema(line,9);return line[line.length-1]-sl[sl.length-1]>0;}
+
+/* فحص الاستثمار: fundamentals + chart (نقطتان بلا crumb — موثوقتان تحت الضغط) */
+function lastFund(fund,type){
+  const item=(fund.timeseries&&fund.timeseries.result||[]).find(x=>x.meta&&x.meta.type&&x.meta.type[0]===type);
+  if(!item||!item[type])return null;
+  const arr=item[type].filter(x=>x&&x.reportedValue&&x.reportedValue.raw!=null);
+  return arr.length?arr[arr.length-1].reportedValue.raw:null;
+}
+async function scanInvest(onStep){
+  const u=universe();
+  const rows=await pool(u,async it=>{
+    const [fj,cj]=await Promise.all([
+      fetch(`${API}/api/fundamentals?symbol=${encodeURIComponent(it.sym)}`).then(r=>r.json()),
+      fetch(`${API}/api/chart?symbol=${encodeURIComponent(it.sym)}&range=5d&interval=1d`).then(r=>r.json()),
+    ]);
+    const cr=cj.chart&&cj.chart.result&&cj.chart.result[0];
+    let price=cr&&cr.meta&&cr.meta.regularMarketPrice;
+    if(!price&&cr)price=(cr.indicators.quote[0].close||[]).filter(x=>x!=null).pop();
+    if(!price||price<0.3)return null;
+    const eps=lastFund(fj,"annualDilutedEPS");
+    const eq=lastFund(fj,"annualStockholdersEquity");
+    const sh=lastFund(fj,"annualOrdinarySharesNumber")||lastFund(fj,"annualShareIssued")||lastFund(fj,"annualDilutedAverageShares");
+    const ni=lastFund(fj,"annualNetIncome");
+    if(!eps||eps<=0||!eq||eq<=0||!sh)return null;
+    const bvps=eq/sh, roe=ni!=null?ni/eq:null;
+    if(roe==null||roe<=0)return null;
+    const ke=MKT==="SA"?0.088:0.086,g=0.025,payout=0.5;
+    const models=[Math.sqrt(22.5*eps*bvps), eps*payout*(1+g)/(ke-g)];
+    if(roe>g)models.push(bvps*(roe-g)/(ke-g));
+    models.sort((a,b)=>a-b);
+    const fv=models.length===3?models[1]:(models[0]+models[1])/2;
+    return {sym:it.sym,code:it.code,name:it.name,price,fv,up:fv/price-1,pe:price/eps,roe,n:models.length};
+  },6,onStep);
+  return rows.filter(Boolean).filter(r=>r.up>0).sort((a,b)=>b.up-a.up).slice(0,20);
+}
+/* فحص المضاربة: chart لكل شركة ثم ترتيب مئيني */
+async function scanSpec(onStep){
+  const u=universe();
+  const raw=await pool(u,async it=>{
+    const j=await (await fetch(`${API}/api/chart?symbol=${encodeURIComponent(it.sym)}&range=2y&interval=1d`)).json();
+    const r=j.chart&&j.chart.result&&j.chart.result[0];if(!r)return null;
+    const q=r.indicators.quote[0];
+    const cl=[],hs=[],vs=[];
+    (q.close||[]).forEach((c,i)=>{if(c!=null){cl.push(c);hs.push(q.high&&q.high[i]!=null?q.high[i]:c);vs.push(q.volume&&q.volume[i]!=null?q.volume[i]:0);}});
+    if(cl.length<220)return null;
+    const price=cl[cl.length-1];
+    if(price<0.3)return null;
+    const s200=sma(cl,200),s50=sma(cl,50);
+    const e50=emaLast(cl,50),e200=emaLast(cl,200);
+    const trend=(price>s200?1:0)+(price>s50?1:0)+(e50>e200?1:0);
+    const rsi=rsiW(cl);
+    const mp=macdPos(cl);
+    const mom12=cl.length>=252?cl[cl.length-21]/cl[cl.length-252]-1:null;
+    const mom3=cl[cl.length-1]/cl[cl.length-63]-1;
+    let rvol=null;
+    if(vs.length>21&&vs[vs.length-1]>0){const avg=vs.slice(-21,-1).reduce((a,b)=>a+b,0)/20;if(avg>0)rvol=vs[vs.length-1]/avg;}
+    const piv=Math.max(...hs.slice(-21,-1));
+    const dist=piv/price-1;
+    // سيولة دنيا: متوسط قيمة تداول 20 يوم
+    const avgVal=vs.slice(-20).reduce((a,b)=>a+b,0)/20*price;
+    if(avgVal<(MKT==="SA"?2e6:5e6))return null;
+    return {sym:it.sym,code:it.code,name:it.name,price,trend,rsi,mp,mom12,mom3,rvol,dist};
+  },6,onStep);
+  const rows=raw.filter(Boolean);
+  const pct=(arr,key)=>{const sorted=arr.map(r=>r[key]).filter(x=>x!=null).sort((a,b)=>a-b);
+    return v=>v==null?0.5:sorted.findIndex(x=>x>=v)/Math.max(sorted.length-1,1);};
+  const p12=pct(rows,"mom12"),p3=pct(rows,"mom3");
+  rows.forEach(r=>{
+    const rsiS=r.rsi==null?0.5:(r.rsi>=50&&r.rsi<=70?1:r.rsi>40&&r.rsi<80?0.5:0);
+    const rvS=r.rvol==null?0.3:Math.max(0,Math.min(1,(r.rvol-0.8)/1.5));
+    r.wk=0.40*p3(r.mom3)+0.30*(r.trend/3)+0.15*rsiS+0.15*rvS;
+    r.mo=0.40*p12(r.mom12)+0.30*(r.trend/3)+0.15*rsiS+0.15*(r.mp?1:0);
+  });
+  return rows;
+}
+function cacheKey(type){return `fv_top20_${MKT}_${type}`;}
+function loadCache(type){
+  try{const c=JSON.parse(localStorage.getItem(cacheKey(type)));
+    if(c&&Date.now()-c.ts<12*3600*1000)return c;}catch(e){}
+  return null;
+}
+async function scan(force){
+  if(SCANNING)return;
+  const type=TAB==="inv"?"inv":"spec";
+  if(!force){const c=loadCache(type);if(c){render(c);return;}}
+  SCANNING=true;
+  $("btnScan").disabled=true;$("btnScan").textContent=T.scanning;
+  $("prog").classList.remove("hidden");
+  $("tbl").innerHTML="";
+  const onStep=(a,b)=>{$("progTxt").textContent=T.prog(a,b);$("progBar").style.width=Math.round(a/b*100)+"%";};
+  try{
+    const rows=type==="inv"?await scanInvest(onStep):await scanSpec(onStep);
+    const c={ts:Date.now(),rows};
+    localStorage.setItem(cacheKey(type),JSON.stringify(c));
+    render(c);
+  }catch(e){$("tbl").innerHTML=`<tr><td style="color:var(--red)">${T.failed}</td></tr>`;}
+  SCANNING=false;
+  $("btnScan").disabled=false;$("btnScan").textContent=T.scan;
+  $("prog").classList.add("hidden");
+}
+function linkCell(r){
+  return `<a href="index.html?symbol=${encodeURIComponent(r.sym)}">${T.full}</a> · <a href="technical.html?symbol=${encodeURIComponent(r.sym)}">${T.tech}</a>`;
+}
+function render(c){
+  $("cacheInfo").textContent=T.cache(new Date(c.ts).toLocaleString(LANG==="ar"?"ar-SA-u-nu-latn":"en-GB"));
+  const tbl=$("tbl");
+  if(TAB==="inv"){
+    $("meth").innerHTML=T.methInv;
+    let h=`<tr>${T.thInv.map((x,i)=>`<th class="${i>=2&&i<=7?"num":""}">${x}</th>`).join("")}</tr>`;
+    c.rows.slice(0,20).forEach((r,i)=>{
+      h+=`<tr><td class="rankc">${i+1}</td><td><b>${r.name}</b> <span class="num" style="color:var(--faint);font-size:11px">${r.code}</span></td>
+      <td class="num">${fmt(r.price)}</td><td class="num" style="color:var(--gold)">${fmt(r.fv)}</td>
+      <td class="num up"><b>${fmtPct(r.up)}</b></td><td class="num">${r.pe?fmt(r.pe,1):"—"}</td>
+      <td class="num">${r.roe!=null?(r.roe*100).toFixed(1)+"%":"—"}</td><td class="num">${r.n}/3</td>
+      <td>${linkCell(r)}</td></tr>`;
+    });
+    tbl.innerHTML=h;
+  }else{
+    const key=TAB==="wk"?"wk":"mo";
+    $("meth").innerHTML=TAB==="wk"?T.methWk:T.methMo;
+    const rows=[...c.rows].sort((a,b)=>b[key]-a[key]).slice(0,20);
+    let h=`<tr>${T.thSpec.map((x,i)=>`<th class="${i>=2&&i<=8?"num":""}">${x}</th>`).join("")}</tr>`;
+    rows.forEach((r,i)=>{
+      const mom=TAB==="wk"?r.mom3:r.mom12;
+      h+=`<tr><td class="rankc">${i+1}</td><td><b>${r.name}</b> <span class="num" style="color:var(--faint);font-size:11px">${r.code}</span></td>
+      <td class="num">${fmt(r.price)}</td><td class="num" style="color:var(--gold)"><b>${r[key].toFixed(2)}</b></td>
+      <td class="num ${mom>=0?"up":"dn"}">${fmtPct(mom)}</td><td class="num">${r.rsi!=null?r.rsi.toFixed(0):"—"}</td>
+      <td>${T.trendStates[r.trend]}</td><td class="num">${r.rvol!=null?r.rvol.toFixed(2):"—"}</td>
+      <td class="num">${fmtPct(Math.max(r.dist,0))}</td><td>${linkCell(r)}</td></tr>`;
+    });
+    tbl.innerHTML=h;
+  }
+}
+function renderTabs(){
+  $("tabs").innerHTML=["inv","wk","mo"].map(k=>`<button class="${TAB===k?"on":""}" onclick="setTab('${k}')">${T.tabs[k]}</button>`).join("");
+}
+function setTab(k){
+  TAB=k;renderTabs();
+  const c=loadCache(k==="inv"?"inv":"spec");
+  if(c)render(c);
+  else{$("tbl").innerHTML=`<tr><td style="color:var(--muted)">${T.noData}</td></tr>`;$("meth").innerHTML=k==="inv"?T.methInv:k==="wk"?T.methWk:T.methMo;$("cacheInfo").textContent="";}
+}
+function applyLang(){
+  T=TT[LANG];
+  document.documentElement.lang=LANG;
+  document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+  document.title=LANG==="ar"?"أفضل 20 شركة | Fair Value Engine":"Top 20 Companies | Fair Value Engine";
+  $("hBrand").innerHTML=T.brand;$("hTag").textContent=T.tag;
+  $("btnScan").textContent=SCANNING?T.scanning:T.scan;
+  $("btnLang").textContent=LANG==="ar"?"EN":"عربي";
+  $("navFin").textContent=TT[LANG]===TT.ar?"📊 التحليل المالي والتوصية":"📊 Financial Analysis & Recommendation";
+  $("navTech").textContent=LANG==="ar"?"📈 التحليل الفني ومناطق التداول":"📈 Technical Analysis & Trade Zones";
+  $("navTop").textContent=LANG==="ar"?"⭐ أفضل 20":"⭐ Top 20";
+  $("lblMarket").textContent=T.market;
+  const sel=$("selMarket");sel.options[0].text=T.mkts.SA;sel.options[1].text=T.mkts.US;
+  $("disc").textContent=T.disc;$("foot").textContent=T.foot;
+  renderTabs();
+  const c=loadCache(TAB==="inv"?"inv":"spec");
+  if(c)render(c);else setTab(TAB);
+}
+$("btnLang").onclick=()=>{LANG=LANG==="ar"?"en":"ar";localStorage.setItem("fv_lang",LANG);applyLang();};
+$("btnScan").onclick=()=>scan(true);
+$("selMarket").onchange=e=>{MKT=e.target.value;applyLang();};
+applyLang();
+</script>
+</body>
+</html>
