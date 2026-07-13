@@ -383,6 +383,7 @@ details.assume[open] summary::before{content:"▾ "}
 </div>
 
 <script src="companies.js"></script>
+<script src="trading.js" defer></script>
 <script>
 "use strict";
 /* =====================================================================
@@ -1041,9 +1042,13 @@ async function fetchInputs(sym){
   dlog(S.lSum,sum?S.lSumOk:S.lSumFail,sum?"ok":"warn");
   if(!chart)throw new Error(S.errPrices(sym));
   const ts=chart.timestamp||[];
-  const closesRaw=(chart.indicators.quote[0].close||[]);
-  const closes=[],cts=[];
-  closesRaw.forEach((x,i)=>{if(x!=null){closes.push(x);cts.push(ts[i]);}});
+  const q0=chart.indicators.quote[0];
+  const closesRaw=(q0.close||[]);
+  const closes=[],cts=[],highs=[],lows=[],vols=[];
+  closesRaw.forEach((x,i)=>{if(x!=null){closes.push(x);cts.push(ts[i]);
+    highs.push(q0.high&&q0.high[i]!=null?q0.high[i]:x);
+    lows.push(q0.low&&q0.low[i]!=null?q0.low[i]:x);
+    vols.push(q0.volume&&q0.volume[i]!=null?q0.volume[i]:0);}});
   dlog(S.lPrices,S.lPricesOk(closes.length),"ok");
   const meta=chart.meta||{};
   const p=sum&&sum.price||{};
@@ -1144,6 +1149,8 @@ async function fetchInputs(sym){
     peer_ev_sales:null, peer_pb:null,
     macro_stretched:true,
     price_history:closes, price_ts:cts,
+    highs, lows, vols,
+    bench_closes:bench?(bench.indicators.quote[0].close||[]).filter(x=>x!=null):null,
   };
 }
 
@@ -1270,6 +1277,10 @@ function runDemo(){
     peer_pe:19, peer_ev_ebitda:10, peer_ev_sales:2.6, peer_pb:2.4,
     macro_stretched:true, price_history:hist,
     price_ts:hist.map((_,i)=>now-(hist.length-i)*86400*1.4),
+    highs:hist.map(x=>+(x*(1+0.006+rnd()*0.012)).toFixed(2)),
+    lows:hist.map(x=>+(x*(1-0.006-rnd()*0.012)).toFixed(2)),
+    vols:hist.map(()=>Math.round(8e5*(0.5+rnd()))),
+    bench_closes:hist.map(x=>+(x*0.9+5+rnd()).toFixed(2)),
   };
   LOG.length=0;dlog(S.lDemo,S.lDemoMsg,"warn");
   CUR={c,pkg:evaluate(c)};
@@ -1294,6 +1305,7 @@ function renderAll(){
   renderCard(c,pkg);renderVerdict(c,pkg);renderFF(c,pkg);renderModels(c,pkg);
   renderRates(pkg);renderScen(c,pkg);renderSens(c,pkg);renderTech(c,pkg);
   renderFc(c,pkg);renderAssumptions(c);renderLog();
+  if(typeof renderTrading==="function")renderTrading();
 }
 function renderCard(c,pkg){
   $("coName").textContent=c.name;
@@ -1692,6 +1704,7 @@ function setLang(l){
   }else if(!$("status").classList.contains("hidden")&&!$("status").classList.contains("err")){
     $("status").textContent=S.statusIdle;
   }
+  window.dispatchEvent(new Event("fv:langchange"));
 }
 
 function updateSubUI(){
@@ -1922,6 +1935,7 @@ setLang(LANG);
 $("sym").addEventListener("input",showSug);
 $("sym").addEventListener("focus",showSug);
 $("sym").addEventListener("blur",()=>setTimeout(hideSug,150));
+window.addEventListener("fv:langchange",()=>{if(typeof renderTrading==="function"&&CUR)renderTrading();});
 $("sym").addEventListener("keydown",e=>{
   const open=!$("sug").classList.contains("hidden");
   if(e.key==="ArrowDown"&&open){e.preventDefault();sugIdx=Math.min(sugIdx+1,sugItems.length-1);markActive();}
