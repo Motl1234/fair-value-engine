@@ -311,7 +311,9 @@ function trEnsureSection(){
   document.head.appendChild(st);
   const sec=document.createElement("section");
   sec.id="sec-trade";
-  document.getElementById("sec-fc").insertAdjacentElement("afterend",sec);
+  const anchor=document.getElementById("trAnchor")||document.getElementById("sec-fc");
+  if(anchor.id==="trAnchor")anchor.appendChild(sec);
+  else anchor.insertAdjacentElement("afterend",sec);
 }
 function trGateHtml(gate,market){
   const T=trs();
