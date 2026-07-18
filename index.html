@@ -128,11 +128,18 @@ tr.total td{background:rgba(216,169,61,.1);font-weight:700;color:var(--gold);bor
 .ffrow{display:flex;align-items:center;margin:8px 0;position:relative;z-index:2}
 .fflabel{width:225px;font-size:12.5px;flex-shrink:0;padding-inline-end:10px}
 .fflabel .w-badge{margin:0 7px;opacity:.8}
+.ffkeys{display:none;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:12px}
+.ffkeys span{padding:3px 11px;border-radius:6px;border:1px solid;background:var(--surface2);font-family:var(--font)}
+.ffkeys b{font-family:var(--mono);direction:ltr;unicode-bidi:isolate}
 @media(max-width:680px){
-  .fflabel{width:118px;font-size:10.5px;line-height:1.4}
+  .fflabel{width:112px;font-size:10.5px;line-height:1.4}
   .fflabel .w-badge{display:block;margin:0}
-  .ffmarks{inset-inline-start:118px}
+  .ffmarks{inset-inline-start:112px;bottom:10px}
   .ffv{font-size:10px}
+  .ff{padding-bottom:14px}
+  .ffmark{bottom:0!important}
+  .ffmark span{display:none}
+  .ffkeys{display:flex}
 }
 .fftrack{position:relative;flex:1;height:24px;background:#0d1526;border-radius:6px;direction:ltr}
 .ffbar{position:absolute;top:5px;height:14px;width:14px;border-radius:4px;background:var(--blue);cursor:pointer}
@@ -1402,6 +1409,11 @@ function renderFF(c,pkg){
     <div class="ffmark mprice" style="left:${X(c.price)}%"><span style="${clampLbl(+X(c.price))}">${S.mPrice} ${fmt(c.price)}</span></div>
     <div class="ffmark mfv" style="left:${X(pkg.fair_value)}%"><span style="${clampLbl(+X(pkg.fair_value))}">${S.mFV} ${fmt(pkg.fair_value)}</span></div>
     <div class="ffmark mbuy" style="left:${X(pkg.buyBelow)}%"><span style="${clampLbl(+X(pkg.buyBelow))}">${S.mBuy} ${fmt(pkg.buyBelow)}</span></div>
+  </div>
+  <div class="ffkeys">
+    <span style="color:var(--red);border-color:rgba(225,73,83,.5)">${S.mPrice} <b>${fmt(c.price)}</b></span>
+    <span style="color:var(--gold);border-color:rgba(185,131,40,.6)">${S.mFV} <b>${fmt(pkg.fair_value)}</b></span>
+    <span style="color:var(--green);border-color:rgba(39,168,118,.5)">${S.mBuy} <b>${fmt(pkg.buyBelow)}</b></span>
   </div>`;
   $("ffChart").innerHTML=html;
   $("ffStats").innerHTML=S.ffStats(fmt(pkg.ens.weighted),fmt(pkg.ens.trimmed),fmt(pkg.ens.median),fmt(pkg.ens.min),fmt(pkg.ens.max),pkg.ens.n);
