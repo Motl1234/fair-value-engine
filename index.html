@@ -124,8 +124,11 @@ tr.total td{background:rgba(216,169,61,.1);font-weight:700;color:var(--gold);bor
 .w-badge{font-family:var(--mono);font-size:11px;color:var(--muted)}
 
 /* Football field */
-.ff{position:relative;padding-bottom:104px}
-.ffrow{display:flex;align-items:center;margin:8px 0;position:relative;z-index:2}
+.ff{position:relative;padding-top:42px;padding-bottom:70px}
+.ffgh{font-size:11.5px;font-weight:700;padding:3px 12px;margin:10px 0 2px;border-radius:6px;display:inline-block}
+.ffgh.g0{background:rgba(91,141,239,.13);color:var(--blue)}
+.ffgh.g1{background:rgba(155,123,232,.13);color:var(--purple)}
+.ffrow{display:flex;align-items:center;margin:7px 0;position:relative;z-index:2}
 .fflabel{width:225px;font-size:12.5px;flex-shrink:0;padding-inline-end:10px}
 .fflabel .w-badge{margin:0 7px;opacity:.8}
 .ffkeys{display:none;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:12px}
@@ -134,23 +137,31 @@ tr.total td{background:rgba(216,169,61,.1);font-weight:700;color:var(--gold);bor
 @media(max-width:680px){
   .fflabel{width:112px;font-size:10.5px;line-height:1.4}
   .fflabel .w-badge{display:block;margin:0}
-  .ffmarks{inset-inline-start:112px;bottom:10px}
-  .ffv{font-size:10px}
-  .ff{padding-bottom:14px}
-  .ffmark{bottom:0!important}
+  .ffmarks{inset-inline-start:112px;bottom:34px}
+  .ffv{font-size:9.5px}
+  .ff{padding-top:8px;padding-bottom:14px}
+  .ffmark{top:0!important;bottom:0!important}
   .ffmark span{display:none}
   .ffkeys{display:flex}
 }
-.fftrack{position:relative;flex:1;height:24px;background:#0d1526;border-radius:6px;direction:ltr}
-.ffbar{position:absolute;top:5px;height:14px;width:14px;border-radius:4px;background:var(--blue);cursor:pointer}
-.ffbar:hover{outline:2px solid var(--text)}
-.ffv{position:absolute;top:3px;font-size:11px;color:var(--muted);font-family:var(--mono);white-space:nowrap}
-.ffmarks{position:absolute;top:0;bottom:104px;inset-inline-start:225px;inset-inline-end:0;direction:ltr;z-index:1}
-.ffmark{position:absolute;top:0;bottom:0;border-left:2px dashed;z-index:1}
-.ffmark span{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:11px;white-space:nowrap;background:var(--surface);padding:2px 9px;border-radius:5px;border:1px solid var(--border2);z-index:6}
-.ffmark.mprice{border-color:var(--red-mark);color:var(--red);bottom:-2px}
-.ffmark.mfv{border-color:var(--gold-mark);color:var(--gold);bottom:-36px}
-.ffmark.mbuy{border-color:var(--green-mark);color:var(--green);bottom:-70px}
+.fftrack{position:relative;flex:1;height:24px;direction:ltr;background:rgba(13,21,38,.5);border-radius:5px}
+.ffbarR{position:absolute;top:3px;height:18px;border-radius:4px}
+.ffbarR.g0{background:rgba(91,141,239,.5);border:1px solid rgba(91,141,239,.95)}
+.ffbarR.g1{background:rgba(155,123,232,.45);border:1px solid rgba(155,123,232,.95)}
+.ffbase{position:absolute;top:1px;height:22px;width:2.5px;background:var(--text);border-radius:2px;z-index:2}
+.ffv{position:absolute;top:5px;font-size:10.5px;color:var(--muted);font-family:var(--mono);white-space:nowrap}
+.ffaxisrow{margin-top:12px}
+.ffaxis{position:relative;flex:1;height:22px;direction:ltr;border-top:1.5px solid var(--border2)}
+.ffaxis span{position:absolute;top:5px;transform:translateX(-50%);font-size:10px;color:var(--faint);font-family:var(--mono)}
+.ffgrid{position:absolute;top:0;bottom:0;width:1px;background:rgba(31,43,69,.55)}
+.ffmarks{position:absolute;top:0;bottom:68px;inset-inline-start:225px;inset-inline-end:0;direction:ltr;z-index:3}
+.ffmark{position:absolute;top:0;bottom:0;border-left:2px dashed;z-index:3}
+.ffmark span{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:11px;white-space:nowrap;background:var(--surface);padding:2px 9px;border-radius:5px;border:1px solid var(--border2);z-index:6}
+.ffmark.mprice{border-color:var(--red-mark);color:var(--red);top:-10px}
+.ffmark.mprice span{bottom:auto;top:-30px;font-weight:700;border-color:rgba(225,73,83,.6)}
+.ffmark.mfv{border-color:var(--gold-mark);color:var(--gold);bottom:-4px}
+.ffmark.mbuy{border-color:var(--green-mark);color:var(--green);bottom:-4px}
+.ffmark.mbuy span{bottom:-52px}
 .ffstats{font-size:12.5px;color:var(--muted);margin-top:26px}
 
 /* Grids */
@@ -1393,22 +1404,49 @@ function renderRec(c,pkg){
   </div>`;
 }
 function renderFF(c,pkg){
-  const rows=Object.entries(pkg.models).map(([k,m])=>({k,label:mlabel(k),v:m.v})).sort((a,b)=>b.v-a.v);
-  const all=rows.map(r=>r.v).concat([c.price,pkg.fair_value,pkg.buyBelow]);
-  const lo=Math.min(...all)*0.93, hi=Math.max(...all)*1.05;
-  const X=v=>((v-lo)/(hi-lo)*100).toFixed(1);
   const w=WEIGHTS[c.archetype]||WEIGHTS.mature;
-  let html=rows.map(r=>{
-    const x=+X(r.v);
-    return `<div class="ffrow"><div class="fflabel">${r.label}<span class="w-badge">${w[r.k]?Math.round(w[r.k]*100)+"٪":""}</span></div>
-    <div class="fftrack"><div class="ffbar" style="left:calc(${x}% - 7px)" data-tip="${r.label}: ${fmt(r.v)} (${fmtPct(r.v/c.price-1)}${S.tipVs})"></div>
-    <span class="ffv" style="left:calc(${x}% + 11px)">${fmt(r.v)}</span></div></div>`;
-  }).join("");
+  // نطاق كل نموذج من السيناريوهات (متشائم/أساسي/متفائل) — أسلوب Football Field المؤسسي
+  const rangeOf=k=>{
+    const vals=[];
+    for(const sk of ["bear","base","bull"]){
+      const s=SCENARIOS[sk];
+      try{const r=MODELS[k](c,pkg.rates,s.gs,s.mm,s.rs);if(r&&isFinite(r.v)&&r.v>0)vals.push(r.v);}catch(e){}
+    }
+    return vals.length?{lo:Math.min(...vals),hi:Math.max(...vals)}:null;
+  };
+  const rows=Object.entries(pkg.models).map(([k,m])=>{
+    const rg=rangeOf(k)||{lo:m.v,hi:m.v};
+    return {k,label:mlabel(k),base:m.v,lo:Math.min(rg.lo,m.v),hi:Math.max(rg.hi,m.v),grp:INTRINSIC.includes(k)?0:1};
+  }).sort((a,b)=>a.grp-b.grp||b.base-a.base);
+  const all=rows.flatMap(r=>[r.lo,r.hi]).concat([c.price,pkg.fair_value,pkg.buyBelow]);
+  let lo=Math.min(...all),hi=Math.max(...all);
+  const pad=(hi-lo)*0.06||hi*0.05;lo-=pad;hi+=pad;
+  const X=v=>+((v-lo)/(hi-lo)*100).toFixed(2);
+  const ticks=[0,1,2,3,4].map(i=>lo+(hi-lo)*i/4);
+  const dec=hi<20?2:1;
+  let html="",curGrp=-1;
+  rows.forEach(r=>{
+    if(r.grp!==curGrp){curGrp=r.grp;html+=`<div class="ffgh g${r.grp}">${r.grp===0?S.grpIntr:S.grpRel}</div>`;}
+    const x1=X(r.lo),x2=Math.max(X(r.hi),x1+1.8),wp=x2-x1;
+    const loIn=x1<10,hiIn=x2>90;
+    const loStyle=loIn?`left:${x1}%;transform:translateX(4px);color:var(--text)`:`left:${x1}%;transform:translateX(calc(-100% - 5px))`;
+    const hiStyle=hiIn?`left:${x2}%;transform:translateX(calc(-100% - 4px));color:var(--text)`:`left:${x2}%;transform:translateX(5px)`;
+    const loLbl=(loIn&&wp<16)?"":`<span class="ffv" style="${loStyle}">${fmt(r.lo,dec)}</span>`;
+    const hiLbl=(hiIn&&wp<16)?"":`<span class="ffv" style="${hiStyle}">${fmt(r.hi,dec)}</span>`;
+    html+=`<div class="ffrow"><div class="fflabel">${r.label}<span class="w-badge">${w[r.k]?Math.round(w[r.k]*100)+"%":""}</span></div>
+      <div class="fftrack" title="${r.label}: ${fmt(r.lo)} – ${fmt(r.hi)} (${fmtPct(r.base/c.price-1)}${S.tipVs})">
+        <div class="ffbarR g${r.grp}" style="left:${x1}%;width:${wp}%"></div>
+        <div class="ffbase" style="left:${X(r.base)}%"></div>
+        ${loLbl}${hiLbl}
+      </div></div>`;
+  });
+  html+=`<div class="ffrow ffaxisrow"><div class="fflabel"></div><div class="ffaxis">${ticks.map(t=>`<span style="left:${X(t)}%">${fmt(t,dec)}</span>`).join("")}</div></div>`;
   const clampLbl=x=>x>84?"left:auto;right:-4px;transform:none;":x<16?"left:-4px;transform:none;":"";
   html+=`<div class="ffmarks">
-    <div class="ffmark mprice" style="left:${X(c.price)}%"><span style="${clampLbl(+X(c.price))}">${S.mPrice} ${fmt(c.price)}</span></div>
-    <div class="ffmark mfv" style="left:${X(pkg.fair_value)}%"><span style="${clampLbl(+X(pkg.fair_value))}">${S.mFV} ${fmt(pkg.fair_value)}</span></div>
-    <div class="ffmark mbuy" style="left:${X(pkg.buyBelow)}%"><span style="${clampLbl(+X(pkg.buyBelow))}">${S.mBuy} ${fmt(pkg.buyBelow)}</span></div>
+    ${ticks.map(t=>`<i class="ffgrid" style="left:${X(t)}%"></i>`).join("")}
+    <div class="ffmark mfv" style="left:${X(pkg.fair_value)}%"><span style="${clampLbl(X(pkg.fair_value))}">${S.mFV} ${fmt(pkg.fair_value)}</span></div>
+    <div class="ffmark mbuy" style="left:${X(pkg.buyBelow)}%"><span style="${clampLbl(X(pkg.buyBelow))}">${S.mBuy} ${fmt(pkg.buyBelow)}</span></div>
+    <div class="ffmark mprice" style="left:${X(c.price)}%"><span style="${clampLbl(X(c.price))}">${S.mPrice} ${fmt(c.price)}</span></div>
   </div>
   <div class="ffkeys">
     <span style="color:var(--red);border-color:rgba(225,73,83,.5)">${S.mPrice} <b>${fmt(c.price)}</b></span>
@@ -1417,11 +1455,6 @@ function renderFF(c,pkg){
   </div>`;
   $("ffChart").innerHTML=html;
   $("ffStats").innerHTML=S.ffStats(fmt(pkg.ens.weighted),fmt(pkg.ens.trimmed),fmt(pkg.ens.median),fmt(pkg.ens.min),fmt(pkg.ens.max),pkg.ens.n);
-  // tooltips
-  document.querySelectorAll(".ffbar").forEach(el=>{
-    el.addEventListener("mouseenter",e=>showTip(el,el.dataset.tip));
-    el.addEventListener("mouseleave",hideTip);
-  });
 }
 function renderModels(c,pkg){
   $("archLbl").textContent=S.archW(archLabel(c.archetype));
