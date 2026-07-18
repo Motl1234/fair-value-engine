@@ -135,14 +135,15 @@ tr.total td{background:rgba(216,169,61,.1);font-weight:700;color:var(--gold);bor
 .ffkeys span{padding:3px 11px;border-radius:6px;border:1px solid;background:var(--surface2);font-family:var(--font)}
 .ffkeys b{font-family:var(--mono);direction:ltr;unicode-bidi:isolate}
 @media(max-width:680px){
-  .fflabel{width:112px;font-size:10.5px;line-height:1.4}
-  .fflabel .w-badge{display:block;margin:0}
-  .ffmarks{inset-inline-start:112px;bottom:34px}
-  .ffv{font-size:9.5px}
+  .ff .fflabel{width:112px;font-size:10.5px;line-height:1.4}
+  .ff .fflabel .w-badge{display:block;margin:0}
+  .ff .ffmarks{left:0;right:112px;bottom:34px;top:0}
+  [dir="ltr"] .ff .ffmarks{left:112px;right:0}
+  .ff .ffv{font-size:9.5px}
   .ff{padding-top:8px;padding-bottom:14px}
-  .ffmark{top:0!important;bottom:0!important}
-  .ffmark span{display:none}
-  .ffkeys{display:flex}
+  .ff .ffmark{top:0!important;bottom:0!important}
+  .ff .ffmark span{display:none}
+  .ff .ffkeys{display:flex}
 }
 .fftrack{position:relative;flex:1;height:24px;direction:ltr;background:rgba(13,21,38,.5);border-radius:5px}
 .ffbarR{position:absolute;top:3px;height:18px;border-radius:4px}
@@ -154,7 +155,8 @@ tr.total td{background:rgba(216,169,61,.1);font-weight:700;color:var(--gold);bor
 .ffaxis{position:relative;flex:1;height:22px;direction:ltr;border-top:1.5px solid var(--border2)}
 .ffaxis span{position:absolute;top:5px;transform:translateX(-50%);font-size:10px;color:var(--faint);font-family:var(--mono)}
 .ffgrid{position:absolute;top:0;bottom:0;width:1px;background:rgba(31,43,69,.55)}
-.ffmarks{position:absolute;top:0;bottom:68px;inset-inline-start:225px;inset-inline-end:0;direction:ltr;z-index:3}
+.ffmarks{position:absolute;top:0;bottom:68px;left:0;right:225px;direction:ltr;z-index:3}
+[dir="ltr"] .ffmarks{left:225px;right:0}
 .ffmark{position:absolute;top:0;bottom:0;border-left:2px dashed;z-index:3}
 .ffmark span{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:11px;white-space:nowrap;background:var(--surface);padding:2px 9px;border-radius:5px;border:1px solid var(--border2);z-index:6}
 .ffmark.mprice{border-color:var(--red-mark);color:var(--red);top:-10px}
