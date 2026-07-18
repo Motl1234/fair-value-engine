@@ -127,14 +127,20 @@ tr.total td{background:rgba(216,169,61,.1);font-weight:700;color:var(--gold);bor
 .ff{position:relative;padding-bottom:104px}
 .ffrow{display:flex;align-items:center;margin:8px 0;position:relative;z-index:2}
 .fflabel{width:225px;font-size:12.5px;flex-shrink:0;padding-inline-end:10px}
-.fflabel .w-badge{margin-inline-start:6px}
+.fflabel .w-badge{margin:0 7px;opacity:.8}
+@media(max-width:680px){
+  .fflabel{width:118px;font-size:10.5px;line-height:1.4}
+  .fflabel .w-badge{display:block;margin:0}
+  .ffmarks{inset-inline-start:118px}
+  .ffv{font-size:10px}
+}
 .fftrack{position:relative;flex:1;height:24px;background:#0d1526;border-radius:6px;direction:ltr}
 .ffbar{position:absolute;top:5px;height:14px;width:14px;border-radius:4px;background:var(--blue);cursor:pointer}
 .ffbar:hover{outline:2px solid var(--text)}
 .ffv{position:absolute;top:3px;font-size:11px;color:var(--muted);font-family:var(--mono);white-space:nowrap}
 .ffmarks{position:absolute;top:0;bottom:104px;inset-inline-start:225px;inset-inline-end:0;direction:ltr;z-index:1}
-.ffmark{position:absolute;top:0;bottom:0;border-left:2px dashed}
-.ffmark span{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:11px;white-space:nowrap;background:var(--surface2);padding:1px 8px;border-radius:4px;border:1px solid var(--border)}
+.ffmark{position:absolute;top:0;bottom:0;border-left:2px dashed;z-index:1}
+.ffmark span{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:11px;white-space:nowrap;background:var(--surface);padding:2px 9px;border-radius:5px;border:1px solid var(--border2);z-index:6}
 .ffmark.mprice{border-color:var(--red-mark);color:var(--red);bottom:-2px}
 .ffmark.mfv{border-color:var(--gold-mark);color:var(--gold);bottom:-36px}
 .ffmark.mbuy{border-color:var(--green-mark);color:var(--green);bottom:-70px}
@@ -345,6 +351,20 @@ details.assume[open] summary::before{content:"▾ "}
 
   </div>
 
+  <section id="sec-fb">
+    <div class="sec-head"><h2 data-i18n="fbTitle"></h2><div class="sub" data-i18n="fbSub"></div></div>
+    <div style="display:grid;gap:12px;max-width:640px">
+      <div class="field"><label data-i18n="fbMsg"></label>
+        <textarea id="fbMsg" rows="4" data-i18n-ph="fbMsgPh" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px 12px;font-family:var(--font);font-size:14px;resize:vertical"></textarea></div>
+      <div class="field"><label data-i18n="fbEmail"></label>
+        <input id="fbEmail" type="email" style="width:100%;direction:ltr" placeholder="name@example.com"></div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <button class="btn-run" id="fbBtn" onclick="sendFeedback()" data-i18n="fbSend"></button>
+        <span id="fbStatus" style="font-size:13px"></span>
+      </div>
+    </div>
+  </section>
+
   <div class="foot">
     <span data-i18n-html="footMeth"></span>
     <br><span data-i18n-html="footData"></span>
@@ -441,6 +461,10 @@ ar:{
   errShares:"تعذر تحديد عدد الأسهم — أدخل البيانات يدوياً من لوحة الافتراضات.",
   markets:{SA:"السعودية (تداول)",US:"الولايات المتحدة"}, riyal:"ريال",
   navFin:"📊 التحليل المالي والتوصية",navTech:"📈 التحليل الفني ومناطق التداول",navTop:"⭐ أفضل 20",
+  fbTitle:"الاقتراحات والشكاوى",fbSub:"رأيك يطوّر المنصة — رسالتك تصل مباشرة لمشغّل الموقع",
+  fbMsg:"رسالتك",fbMsgPh:"اكتب اقتراحك أو شكواك هنا…",
+  fbEmail:"بريدك الإلكتروني (اختياري — إن أردت الرد عليك)",
+  fbSend:"إرسال",fbSending:"جارٍ الإرسال…",fbOk:"وصلت رسالتك — شكراً لك ✓",fbFail:"تعذر الإرسال — حاول مجدداً.",fbEmpty:"اكتب الرسالة أولاً.",
   arch:{mature:"ناضجة غير مالية",growth:"نمو / تقنية",financial:"بنك / مالية",dividend:"توزيعات مستقرة"},
   ms:{mcap:"القيمة السوقية",beta:"بيتا",eps:"ربحية السهم",bvps:"ق. دفترية",roe:"ROE",dps:"التوزيعات",mln:" م"},
   secVerdict:"الخلاصة",nVerdict:"حزمة القيمة",pdfBtn:"⬇ تقرير PDF",dateLbl:"تاريخ التحليل: ",
@@ -555,6 +579,10 @@ en:{
   errShares:"Could not determine share count — enter data manually in the assumptions panel.",
   markets:{SA:"Saudi Arabia (Tadawul)",US:"United States"},riyal:"SAR",
   navFin:"📊 Financial Analysis & Recommendation",navTech:"📈 Technical Analysis & Trade Zones",navTop:"⭐ Top 20",
+  fbTitle:"Suggestions & Complaints",fbSub:"Your feedback improves the platform — messages go straight to the site operator",
+  fbMsg:"Your message",fbMsgPh:"Write your suggestion or complaint here…",
+  fbEmail:"Your email (optional — if you'd like a reply)",
+  fbSend:"Send",fbSending:"Sending…",fbOk:"Message received — thank you ✓",fbFail:"Could not send — try again.",fbEmpty:"Write the message first.",
   arch:{mature:"Mature non-financial",growth:"Growth / Tech",financial:"Bank / Financial",dividend:"Stable dividend"},
   ms:{mcap:"Market cap",beta:"Beta",eps:"EPS",bvps:"Book value",roe:"ROE",dps:"Dividend",mln:" M"},
   secVerdict:"Summary",nVerdict:"Valuation package",pdfBtn:"⬇ PDF Report",dateLbl:"Analysis date: ",
@@ -1635,6 +1663,20 @@ function readAssumptions(){
 function renderLog(){
   $("datalog").innerHTML=LOG.map(l=>`<div class="${l.cls}">${l.cls==="ok"?"✓":"⚠"} <b>${l.src}:</b> ${l.msg}</div>`).join("")||`<div>${S.logEmpty}</div>`;
 }
+async function sendFeedback(){
+  const msg=$("fbMsg").value.trim(), em=$("fbEmail").value.trim(), st=$("fbStatus"), btn=$("fbBtn");
+  if(!msg){st.style.color="var(--red)";st.textContent=S.fbEmpty;return;}
+  btn.disabled=true;st.style.color="var(--muted)";st.textContent=S.fbSending;
+  try{
+    const r=await fetch("https://formsubmit.co/ajax/mohammed.almutlaq.1983@gmail.com",{
+      method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
+      body:JSON.stringify({message:msg,sender_email:em||"(not provided)",page:location.href,_subject:"Fair Value Engine — اقتراح/شكوى"})});
+    const j=await r.json();
+    if(String(j.success)==="true"){st.style.color="var(--green)";st.textContent=S.fbOk;$("fbMsg").value="";$("fbEmail").value="";}
+    else throw 0;
+  }catch(e){st.style.color="var(--red)";st.textContent=S.fbFail;}
+  btn.disabled=false;
+}
 function exportJson(){
   if(!CUR)return;
   const {c,pkg}=CUR;
@@ -1656,7 +1698,7 @@ function getSub(){
   }catch(e){}
   return null;
 }
-const isPremium=()=>!!getSub();
+const isPremium=()=>true; // الاشتراك معطّل حالياً — كل المميزات متاحة للجميع
 /* --------- تطبيق اللغة --------- */
 const tGet=key=>key.split(".").reduce((o,k)=>o&&o[k],S);
 function applyStatic(){
@@ -1689,9 +1731,8 @@ function setLang(l){
 }
 
 function updateSubUI(){
-  const b=$("btnSub"), s=getSub();
-  if(s){b.className="subchip";b.textContent=S.subUntil(s.expires);}
-  else{b.className="btn-gold-line";b.textContent=S.subBtn;}
+  const b=$("btnSub");
+  if(b)b.style.display="none";
 }
 function openSub(){
   const s=getSub();
