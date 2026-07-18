@@ -206,7 +206,7 @@ const fmtPct=(x,d=1)=>x==null?"—":((x>=0?"+":"")+(x*100).toFixed(d)+"%");
 /* ============ توافق trading.js ============ */
 const S={markets:{SA:LANG==="ar"?"السعودية (تداول)":"Saudi Arabia (Tadawul)",US:LANG==="ar"?"الولايات المتحدة":"United States"}};
 function getSub(){try{const s=JSON.parse(localStorage.getItem("fv_sub"));if(s&&s.expires>=new Date().toISOString().slice(0,10))return s;}catch(e){}return null;}
-const isPremium=()=>!!getSub();
+const isPremium=()=>true; // كل المميزات متاحة حالياً
 function openSub(){location.href="index.html";}
 let CUR=null;
 
